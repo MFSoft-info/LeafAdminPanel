@@ -1,0 +1,1 @@
+export  const BASE_API_URL = 'http://3.65.218.99:3000/'
