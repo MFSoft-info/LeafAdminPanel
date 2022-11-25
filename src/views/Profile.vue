@@ -3,6 +3,7 @@
     <b-row>
       <b-col md="8">
         <h4 class="heading-users m-0">Profile</h4>
+        {{getUserInfo}}
       </b-col>
     </b-row>
     <div class="row-team-1">
@@ -123,8 +124,48 @@
   </div>
 </template>
 <script>
+import { mapGetters } from "vuex";
+
 export default {
   name: 'Profile',
+  // data() {
+  //   return {
+  //     isPassword: false,
+  //     password: '',
+  //     isUser: false,
+  //     User: '',
+  //   }
+  // },
+  computed: {
+    ...mapGetters([
+      "getUserInfo",
+    ]),
+  },
+  methods: {
+    submit(e) {
+      e.preventDefault();
+        let payload= JSON.stringify({
+          username: this.$refs.User.value,
+          password: this.password,
+
+        })
+         this.$store.dispatch("signInUser", payload).then((response) => {
+          if (response.status == true) {
+            this.$router.push({ name: "Home" });
+            let payload = JSON.stringify({
+              "user_id": this.getUserId
+            })
+            this.$store.dispatch("getUserProfile", payload);
+          } else {
+            Swal.fire({
+              title: "Error!",
+              text: response.content,
+              icon: "error",
+            });
+          }
+        })
+    },
+  },
 }
 </script>
 <style lang="scss" scoped>

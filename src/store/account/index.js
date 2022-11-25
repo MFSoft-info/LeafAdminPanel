@@ -1,3 +1,5 @@
+import JwtService from "../jwt";
+
 import axios from 'axios'
 import { BASE_API_URL } from '../../../constants'
 export default {
@@ -8,21 +10,22 @@ export default {
     email: null,
     name: null,
     route: null,
-    userId: null,
+    userId: null,    
+    isAuthenticated: !!JwtService.getToken(),
   },
   getters: {
-    userDetails(state) {
-      return state.user;
+    getUserId(state) {
+      return state.userId;
+    },
+    getUserInfo(state){
+      return state.userInfo;
     },
     isUserAuthenticated(state) {
       return state.isAuthenticated;
     },
   },
   actions: {
-    async signInUser({ commit, getters, dispatch }, data) {
-    console.log("DATA-->", data)
-
-      console.log("SIGN IN IS CALLED ", `${BASE_API_URL}admin/login`)
+    async signInUser({ commit }, data) {
       return await axios
         .post(`${BASE_API_URL}admin/login`, data, 
         {
@@ -31,15 +34,33 @@ export default {
       }})
         .then((response) => {
           commit("setSignInUsers", response.data);
+          commit("setUserId", response.data.iduser);
           return response.data;
         })
         .catch((error) => {
-          console.log("ERRRO", error)
           if (error.response) {
             return error.response.data
           }
         });
     },
+    async getUserProfile({ commit }, data) {
+        return await axios
+          .post(`${BASE_API_URL}admin/get_user/info`, data, 
+          {
+            headers:{
+            'Content-Type': 'application/json',
+            'Authorization': `Bearer ${JwtService.getToken()}`
+        }})
+          .then((response) => {
+            commit("setUserInfo", response.data);
+            return response.data;
+          })
+          .catch((error) => {
+            if (error.response) {
+              return error.response.data
+            }
+          });
+      },
     async logOut({ commit }) {
 
       await commit("resetStateOnLogOut");
@@ -51,10 +72,23 @@ export default {
   mutations: {
     setSignInUsers(state, payload) {
       state.user = payload;
+      JwtService.saveToken(payload.token);
       state.isAuthenticated = true;
+    },
+    setUserId(state, payload) {
+      state.userId = payload;
+    },
+    setUserInfo(state, payload) {
+      state.userInfo = payload;
     },
     setroutes(state, payload) {
       state.route = payload;
     },
+    resetStateOnLogOut(state) {
+      JwtService.destroyToken();
+      state.user = null;
+      state.jwtToken = null;
+      state.isAuthenticated = false;
+    }
   },
 };

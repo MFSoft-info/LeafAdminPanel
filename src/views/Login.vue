@@ -32,6 +32,9 @@
   </div>
 </template>
 <script>
+import Swal from "sweetalert2";
+import { mapGetters } from "vuex";
+
 export default {
   name: 'Login',
   data() {
@@ -41,6 +44,11 @@ export default {
       isUser: false,
       User: '',
     }
+  },
+  computed: {
+    ...mapGetters([
+      "getUserId",
+    ]),
   },
   methods: {
     //check the password length is max 8
@@ -78,11 +86,21 @@ export default {
 
         })
          this.$store.dispatch("signInUser", payload).then((response) => {
-          console.log("RESPONSE---->>", response)
-        }).catch((e=> console.log("e---->", e)));
+          if (response.status == true) {
+            this.$router.push({ name: "Home" });
+            let payload = JSON.stringify({
+              "user_id": this.getUserId
+            })
+            this.$store.dispatch("getUserProfile", payload);
+          } else {
+            Swal.fire({
+              title: "Error!",
+              text: response.content,
+              icon: "error",
+            });
+          }
+        })
       }
-
-      
     },
   },
 }
