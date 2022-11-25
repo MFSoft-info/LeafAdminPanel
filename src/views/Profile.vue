@@ -3,7 +3,6 @@
     <b-row>
       <b-col md="8">
         <h4 class="heading-users m-0">Profile</h4>
-        {{getUserInfo}}
       </b-col>
     </b-row>
     <div class="row-team-1">
@@ -11,15 +10,17 @@
         <div class="mb-3 col-md-6">
           <label class="form-label">Full name </label>
           <input
-            placeholder="e.g Alfrdo zaid nini"
-            type="text"
-            class="form-control"
-            aria-describedby="emailHelp"
+          placeholder="e.g Alfrdo zaid nini"
+          v-model="profileInfo.full_nombre"
+          type="text"
+          class="form-control"
+          aria-describedby="emailHelp"
           />
         </div>
         <div class="mb-3 col-md-6">
           <label class="form-label">User name</label>
           <input
+            v-model="profileInfo.nombre_usuario"
             placeholder="e.g nino123"
             type="text"
             class="form-control"
@@ -29,6 +30,7 @@
         <div class="mb-3 col-md-6">
           <label class="form-label">Mail</label>
           <input
+            v-model="profileInfo.email"
             placeholder="e.g nino123@gmail.com"
             type="text"
             class="form-control"
@@ -38,6 +40,7 @@
         <div class="mb-3 col-md-6">
           <label class="form-label">Phone</label>
           <input
+            v-model="profileInfo.telefono"
             placeholder="e.g +51928464842"
             type="text"
             class="form-control"
@@ -47,6 +50,7 @@
         <div class="mb-3 col-md-6">
           <label class="form-label">Country</label>
           <input
+            v-model="profileInfo.codigo_pais"
             placeholder="peru"
             type="text"
             class="form-control"
@@ -65,6 +69,7 @@
         <div class="mb-3 col-md-6">
           <label class="form-label">Currency</label>
           <input
+            v-model="profileInfo.usd_direction"
             placeholder="usd"
             type="text"
             class="form-control"
@@ -74,6 +79,7 @@
         <div class="mb-3 col-md-6">
           <label class="form-label">Password 1</label>
           <input
+            v-model="profileInfo.password1"
             autocomplete="new-password"
             placeholder="e.g d-block-5th street"
             type="password"
@@ -84,6 +90,7 @@
         <div class="mb-3 col-md-6">
           <label class="form-label">Password 2</label>
           <input
+            v-model="profileInfo.password2"
             autocomplete="new-password"
             placeholder="e.g d-block-5th street"
             type="password"
@@ -93,7 +100,7 @@
         </div>
         <div class="mb-3 col-md-6">
           <label class="form-label">Describe Your Ability</label>
-          <textarea class="form-control" id="floatingTextarea"></textarea>
+          <textarea class="form-control" v-model="profileInfo.habilidades" id="floatingTextarea"></textarea>
         </div>
         <div class="mb-3 col-md-6 ok d-inline-flex justify-content-between">
           <label class="form-label">Notification</label>
@@ -117,7 +124,7 @@
 
       <b-row>
         <b-col md="12" class="d-flex justify-content-center">
-          <button type="submit" class="common w-0X">Submit</button>
+          <button type="submit" @click="submit"  class="common w-0X">Submit</button>
         </b-col>
       </b-row>
     </div>
@@ -128,34 +135,59 @@ import { mapGetters } from "vuex";
 
 export default {
   name: 'Profile',
-  // data() {
-  //   return {
-  //     isPassword: false,
-  //     password: '',
-  //     isUser: false,
-  //     User: '',
-  //   }
-  // },
+    data: function() {
+    return {
+      profileInfo: {
+      full_nombre: "",
+      nombre_usuario:"",
+      email:"",
+      telefono:"",
+      codigo_pais:"",
+      password1:"",
+      password2:"",
+      habilidades:"",
+      usd_direction:"",
+      payment_methods:[]
+      }
+    };
+  },
   computed: {
     ...mapGetters([
       "getUserInfo",
     ]),
   },
+  beforeMount(){
+    this.getProfile()
+ },
   methods: {
+    getProfile() {
+    let payload = JSON.stringify({
+                 "user_id": this.getUserId || localStorage.getItem("userId")
+                 })
+            this.$store.dispatch("getUserProfile", payload).then((response) => {
+            if(response.status){
+            this.profileInfo = response.content
+            }
+        })
+    },
     submit(e) {
       e.preventDefault();
         let payload= JSON.stringify({
-          username: this.$refs.User.value,
-          password: this.password,
-
+           "user_id": localStorage.getItem("userId"),
+            "data": {
+                    full_nombre: this.profileInfo.full_nombre,
+                    email:this.profileInfo.email,
+                    telefono:this.profileInfo.telefono,
+                    codigo_pais:this.profileInfo.codigo_pais,
+                    habilidades:this.profileInfo.habilidades,
+                    usd_direction:this.profileInfo.usd_direction,
+                    payment_methods:this.profileInfo.payment_methods
+            }
         })
-         this.$store.dispatch("signInUser", payload).then((response) => {
+         this.$store.dispatch("updateUserProfile", payload).then((response) => {
           if (response.status == true) {
             this.$router.push({ name: "Home" });
-            let payload = JSON.stringify({
-              "user_id": this.getUserId
-            })
-            this.$store.dispatch("getUserProfile", payload);
+            this.profileInfo = response
           } else {
             Swal.fire({
               title: "Error!",

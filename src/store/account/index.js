@@ -61,6 +61,24 @@ export default {
             }
           });
       },
+    async updateUserProfile({ commit }, data) {
+        return await axios
+          .put(`${BASE_API_URL}admin/user/update_info`, data,
+          {
+            headers:{
+            'Content-Type': 'application/json',
+            'Authorization': `Bearer ${JwtService.getToken()}`
+        }})
+          .then((response) => {
+            commit("setUserInfo", response.data);
+            return response.data;
+          })
+          .catch((error) => {
+            if (error.response) {
+              return error.response.data
+            }
+          });
+      },
     async logOut({ commit }) {
 
       await commit("resetStateOnLogOut");
@@ -76,6 +94,7 @@ export default {
       state.isAuthenticated = true;
     },
     setUserId(state, payload) {
+      localStorage.setItem("userId",payload)
       state.userId = payload;
     },
     setUserInfo(state, payload) {
