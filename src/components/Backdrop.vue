@@ -14,7 +14,7 @@
   background: rgba(0, 0, 0, 0.3);
   top: 0;
   left: 0;
-  z-index: 9999;
+  z-index: 99;
 
   overflow-x: hidden;
   overflow-y: scroll;

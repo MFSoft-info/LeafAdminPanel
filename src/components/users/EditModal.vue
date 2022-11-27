@@ -69,6 +69,7 @@
             <input
               class="form-check-input custom-checkbox float-right"
               type="checkbox"
+              @change="handleMarkAdmin($event)"
               value=""
             />
           </div>
@@ -117,7 +118,7 @@
           <span class="fs-14 d-block"
             >Bloquear los botones de compra y venta a este usuario:
           </span>
-          <button class="common chw mt-2">blocked</button>
+          <button class="common chw mt-2" @click="handleBlockUser" >blocked</button>
         </div>
         <div class="mb-3">
           <span class="fs-14 d-block">Reenviar correo: </span>
@@ -142,7 +143,60 @@ function save() {
   // emit('close')
 }
 </script>
-
+<script>
+import Swal from "sweetalert2";
+export default {
+  name:"Add Balance Modal",
+  props: ['userDetail'],
+  methods:{
+  handleMarkAdmin(e) {
+      e.preventDefault();
+      if(e.target.checked){
+      let payload= JSON.stringify({
+                  "user_id":this.userDetail.id,
+        })
+      this.$store.dispatch("makeAdmin", payload).then((response) => {
+          if (response && response.status == true) {
+            Swal.fire({
+              title: "Success!",
+              text: response.content,
+              icon: "success",
+            });
+          } else {
+            Swal.fire({
+              title: "Error!",
+              text: "Failed to update",
+              icon: "error",
+            });
+          }
+        });
+    }
+    },
+     handleBlockUser(e) {
+      e.preventDefault();
+      let payload= JSON.stringify({
+            "user_id":this.userDetail.id,
+        })
+      this.$store.dispatch("blockUser", payload).then((response) => {
+          if (response && response.status == true) {
+            Swal.fire({
+              title: "Success!",
+              text: response.content,
+              icon: "success",
+            });
+          } else {
+            Swal.fire({
+              title: "Error!",
+              text: "Failed to update",
+              icon: "error",
+            });
+          }
+        });
+    }
+  },
+ 
+}
+</script>
 <style scoped>
 .modal-wrapper {
   margin: 1.75rem auto;

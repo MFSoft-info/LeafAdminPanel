@@ -1,7 +1,7 @@
 import JwtService from "../jwt";
 
 import axios from 'axios'
-import { BASE_API_URL } from '../../../constants'
+import { BASE_API_URL, LOGIN_API, USER_INFO, USERS_LIST, UPDATE_USER_INFO, ADD_BALANCE,BLOCK_USER, DECREASE_BALANCE, MAKE_ADMIN } from '../../../constants'
 export default {
   state: {
     user: [],
@@ -27,7 +27,7 @@ export default {
   actions: {
     async signInUser({ commit }, data) {
       return await axios
-        .post(`${BASE_API_URL}admin/login`, data, 
+        .post(`${BASE_API_URL}${LOGIN_API}`, data, 
         {
           headers:{
           'Content-Type': 'application/json',
@@ -44,15 +44,34 @@ export default {
         });
     },
     async getUserProfile({ commit }, data) {
+      return await axios
+        .post(`${BASE_API_URL}${USER_INFO}`, data, 
+        {
+          headers:{
+          'Content-Type': 'application/json',
+          'Authorization': `Bearer ${JwtService.getToken()}`
+      }})
+        .then((response) => {
+          commit("setUserInfo", response.data);
+          return response.data;
+        })
+        .catch((error) => {
+          if (error.response) {
+            return error.response.data
+          }
+        });
+    },
+  
+    async getUsersList({ commit }, data) {
         return await axios
-          .post(`${BASE_API_URL}admin/get_user/info`, data, 
+          .post(`${BASE_API_URL}${USERS_LIST}`, data,
           {
             headers:{
             'Content-Type': 'application/json',
             'Authorization': `Bearer ${JwtService.getToken()}`
         }})
           .then((response) => {
-            commit("setUserInfo", response.data);
+            commit("setUsersList", response.data);
             return response.data;
           })
           .catch((error) => {
@@ -63,7 +82,7 @@ export default {
       },
     async updateUserProfile({ commit }, data) {
         return await axios
-          .put(`${BASE_API_URL}admin/user/update_info`, data,
+          .put(`${BASE_API_URL}${UPDATE_USER_INFO}`, data,
           {
             headers:{
             'Content-Type': 'application/json',
@@ -79,6 +98,74 @@ export default {
             }
           });
       },
+    async addBalance({ commit }, data) {
+        return await axios
+          .post(`${BASE_API_URL}${ADD_BALANCE}`, data,
+          {
+            headers:{
+            'Content-Type': 'application/json',
+            'Authorization': `Bearer ${JwtService.getToken()}`
+        }})
+          .then((response) => {
+            return response.data;
+          })
+          .catch((error) => {
+            if (error.response) {
+              return error.response.data
+            }
+          });
+      },
+    async removeBalance({ commit }, data) {
+        return await axios
+          .post(`${BASE_API_URL}${DECREASE_BALANCE}`, data,
+          {
+            headers:{
+            'Content-Type': 'application/json',
+            'Authorization': `Bearer ${JwtService.getToken()}`
+        }})
+          .then((response) => {
+            return response.data;
+          })
+          .catch((error) => {
+            if (error.response) {
+              return error.response.data
+            }
+          });
+      },
+    async makeAdmin({ commit }, data) {
+        return await axios
+          .post(`${BASE_API_URL}${MAKE_ADMIN}`, data,
+          {
+            headers:{
+            'Content-Type': 'application/json',
+            'Authorization': `Bearer ${JwtService.getToken()}`
+        }})
+          .then((response) => {
+            return response.data;
+          })
+          .catch((error) => {
+            if (error.response) {
+              return error.response.data
+            }
+          });
+      }, 
+    async  blockUser({ commit }, data) {
+        return await axios
+          .post(`${BASE_API_URL}${BLOCK_USER}`, data,
+          {
+            headers:{
+            'Content-Type': 'application/json',
+            'Authorization': `Bearer ${JwtService.getToken()}`
+        }})
+          .then((response) => {
+            return response.data;
+          })
+          .catch((error) => {
+            if (error.response) {
+              return error.response.data
+            }
+          });
+      }, 
     async logOut({ commit }) {
 
       await commit("resetStateOnLogOut");
@@ -99,6 +186,9 @@ export default {
     },
     setUserInfo(state, payload) {
       state.userInfo = payload;
+    },
+    setUsersList(state, payload) {
+      state.usersList = payload;
     },
     setroutes(state, payload) {
       state.route = payload;

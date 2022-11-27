@@ -38,7 +38,7 @@
         </div>
       </b-col>
       <b-col cols="12" sm="6" md="2" class="total-res">
-        <span>TOTAL: </span><strong>230</strong>
+        <span>TOTAL: </span><strong>{{usersList.length}}</strong>
       </b-col>
     </b-row>
     <b-row style="color: #ffffff" class="mt-4">
@@ -57,7 +57,7 @@
               </tr>
             </thead>
             <tbody class="c-table__body">
-              <tr v-for="(value, index) in tableData" :key="value">
+              <tr v-for="(value, index) in usersList" :key="value">
                 <td class="c-table__cell">
                   <div class="form-check">
                     <input
@@ -68,34 +68,35 @@
                   </div>
                 </td>
                 <td class="c-table__cell">
-                  <img class="c-img-table" src="/img/profile.jpg" />
+                  <img class="c-img-table" v-if="value.avatar" :src="value.avatar" />
+                  <img class="c-img-table" v-else src="/img/profile.jpg" />
                 </td>
                 <td class="c-table__cell">
-                  {{ value.nombre }}
+                  {{ value.full_nombre }}
                 </td>
                 <td class="c-table__cell">
-                  {{ value.Correo }}
+                  {{ value.email }}
                 </td>
                 <td class="c-table__cell">
-                  {{ value.Telefono }}
+                  {{ value.telefono }}
                 </td>
                 <td class="c-table__cell">
                   <span
-                    v-if="value.Estatus === 'Activo'"
+                    v-if="value.status_p2p === 'active'"
                     class="badge bg-success"
                   >
-                    {{ value.Estatus }}</span
+                    {{ value.status_p2p }}</span
                   >
                   <span
-                    v-else-if="value.Estatus === 'Inactivo'"
+                    v-else-if="value.status_p2p === 'inactive'"
                     class="badge bg-danger"
                   >
-                    {{ value.Estatus }}</span
+                    {{ value.status_p2p }}</span
                   >
-                  <span v-else class="badge c-color"> {{ value.Estatus }}</span>
+                  <span v-else class="badge c-color"> {{ value.status_p2p }}</span>
                 </td>
                 <td class="c-table__cell">
-                  <button @click="openEditModal" class="common w-c me-2">
+                  <button @click="openEditModal(value)" class="common w-c me-2">
                     <i class="fas fa-edit"></i>
                   </button>
                   <button
@@ -112,7 +113,7 @@
       </b-col>
     </b-row>
     <!-- edit modal -->
-    <EditModal v-show="editModalOpen" @close="closeEditModal" />
+    <EditModal v-show="editModalOpen" @close="closeEditModal" :userDetail="editUserDetail" />
     <!-- delete modal -->
     <DeleteModal
       v-show="deleteModalOpen"
@@ -120,13 +121,13 @@
       @delete="deleteUser"
     />
     <!--    ANADIR SALDO MODAL-->
-    <AddBalance v-show="addBalanceOpen" @close="closeAddBalance" />
+    <AddBalance v-show="addBalanceOpen" @close="closeAddBalance" :data="usersList"  />
     <!--    QUITAR SALDO MODAL-->
-    <RemoveBalance v-show="removeBalanceOpen" @close="closeRemoveBalance" />
+    <RemoveBalance v-show="removeBalanceOpen" @close="closeRemoveBalance" :data="usersList" />
   </div>
 </template>
 <script setup>
-import { ref, watchEffect } from 'vue'
+import { ref, watchEffect, watch } from 'vue';
 import { useRoute } from 'vue-router'
 
 import Backdrop from '@/components/Backdrop.vue'
@@ -143,7 +144,7 @@ const removeBalanceOpen = ref(false)
 const deleteModalOpen = ref(false)
 const editModalOpen = ref(false)
 const deleteIndex = ref(null)
-const tableData = ref([
+var tableData = ref([
   {
     nombre: 'Alice Blue',
     Correo: 'aliceblue@example.com',
@@ -175,6 +176,8 @@ const tableData = ref([
     Estatus: 'Inactivo',
   },
 ])
+var editUserDetail = ref({})
+
 // Add Balance
 function openAddBalance() {
   addBalanceOpen.value = true
@@ -194,7 +197,8 @@ function closeRemoveBalance() {
 }
 
 // Edit user modal
-function openEditModal() {
+function openEditModal(value) {
+  editUserDetail = value
   editModalOpen.value = true
 }
 
@@ -219,8 +223,43 @@ function deleteUser() {
 }
 
 watchEffect(() => {
-  routeName.value = route.meta.title
-})
+  routeName.value = route.meta.title;
+});
+</script>
+<script>
+import { mapGetters } from "vuex";
+
+export default {
+  name: 'Users',
+    data: function() {
+    return {
+    usersList: ref([])
+    };
+  },
+  watch: {
+  $route: function(to, from) {
+      this.getUserList(to.meta.title)
+  }
+},
+ created(){
+  const nav_route = useRoute().meta.title;
+  this.getUserList(nav_route)
+ },
+
+  methods: {
+    getUserList(currentRoute) {
+    let data = JSON.stringify({
+    condition: currentRoute === "Activos" ? "active" : currentRoute === "Inactivos" ? "inactive" : currentRoute === "Bloqueados" ? "blocked" : currentRoute === "ConCompras" ? "with buys" : currentRoute === "Conventas" ? "with sells" : currentRoute === "Eliminados" ? "deleted" : currentRoute === "Admin" ? "admins" : ''
+    })
+
+    this.$store.dispatch("getUsersList", data).then((response) => {
+        if(response.content){
+            this.usersList = response.content;
+        }
+    })
+    },
+  },
+}
 </script>
 <style lang="scss">
 @import '../assets/scss/variables';

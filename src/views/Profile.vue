@@ -50,7 +50,7 @@
         <div class="mb-3 col-md-6">
           <label class="form-label">Country</label>
           <input
-            v-model="profileInfo.codigo_pais"
+            v-model="profileInfo.country_name"
             placeholder="peru"
             type="text"
             class="form-control"
@@ -69,7 +69,7 @@
         <div class="mb-3 col-md-6">
           <label class="form-label">Currency</label>
           <input
-            v-model="profileInfo.usd_direction"
+            v-model="profileInfo.currency"
             placeholder="usd"
             type="text"
             class="form-control"
@@ -143,6 +143,8 @@ export default {
       email:"",
       telefono:"",
       codigo_pais:"",
+      currency:"",
+      country_name:"",
       password1:"",
       password2:"",
       habilidades:"",
