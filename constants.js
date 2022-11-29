@@ -7,6 +7,10 @@ export const ADD_BALANCE = 'admin/wallet/add_balance'
 export const DECREASE_BALANCE = 'admin/wallet/decrease_balance'
 export const MAKE_ADMIN = 'admin/make_admin'
 export const BLOCK_USER = 'admin/block/user'
+export const UN_BLOCK_USER = 'admin/unblock/user'
+export const HANDLE_SWITCHES = 'admin/handle_switches'
+export const GET_WITHDRAWLS = 'admin/withdrawals/list'
+export const GET_ADVERTISES_LIST = 'admin/advertises/list'
 
 
 // export const LOGIN_API = 'admin/login'

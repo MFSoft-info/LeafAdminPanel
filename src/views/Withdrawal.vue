@@ -241,10 +241,11 @@
 </template>
 <script setup>
 import { ref } from 'vue'
+import { useStore } from 'vuex'
 import UserDataModal from '@/components/withdrawal/UserDataModal.vue'
 import ModalDelete from '@/components/withdrawal/ModalDelete.vue'
 
-const users = ref([
+let users = ref([
   {
     name: 'Alice Blue',
     email: 'aliceblue@example.com',
@@ -287,10 +288,16 @@ const users = ref([
     amount: '763012721',
     picture: '/img/profile.jpg',
   },
-])
-
+]);
+const store = useStore();
 const userDataVisible = ref(false)
-const modalDeleteVisible = ref(false)
+const modalDeleteVisible = ref(false);
+const data= JSON.stringify({status:"successful"})
+ store.dispatch("getWithdrawlsList", data ).then((response) => {
+        if(response.content){
+            users.value = response.content;
+        }
+    })
 
 function openUserData() {
   userDataVisible.value = true

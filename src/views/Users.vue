@@ -238,6 +238,7 @@ export default {
   },
   watch: {
   $route: function(to, from) {
+  console.log("to--", to)
       this.getUserList(to.meta.title)
   }
 },
@@ -249,10 +250,10 @@ export default {
   methods: {
     getUserList(currentRoute) {
     let data = JSON.stringify({
-    condition: currentRoute === "Activos" ? "active" : currentRoute === "Inactivos" ? "inactive" : currentRoute === "Bloqueados" ? "blocked" : currentRoute === "ConCompras" ? "with buys" : currentRoute === "Conventas" ? "with sells" : currentRoute === "Eliminados" ? "deleted" : currentRoute === "Admin" ? "admins" : ''
+    condition: currentRoute === "Activos" ? "active" : currentRoute === "Inactivos" ? "inactive" : currentRoute === "Bloqueados" ? "blocked" : currentRoute === "ConCompras" || currentRoute === "Con Compras" ? "with buys" : currentRoute === "Conventas" || currentRoute === "Con Ventas"  ? "with sells" : currentRoute === "Eliminados" ? "deleted" : currentRoute === "Admin" ? "admins" : ''
     })
-
-    this.$store.dispatch("getUsersList", data).then((response) => {
+  console.log("currentRoutecurrentRoute", currentRoute)
+    this.$store.dispatch("getUsersList", data ).then((response) => {
         if(response.content){
             this.usersList = response.content;
         }

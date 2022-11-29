@@ -231,10 +231,11 @@
 </template>
 <script setup>
 import { ref } from 'vue'
+import { useStore } from 'vuex'
 import UserDataModal from '@/components/adApproval/UserDataModal.vue'
 import ConfirmModal from '@/components/adApproval/ConfirmModal.vue'
-
-const users = ref([
+const store = useStore();
+let users = ref([
   {
     name: 'Alice Blue',
     email: 'aliceblue@example.com',
@@ -278,6 +279,14 @@ const users = ref([
     picture: '/img/profile.jpg',
   },
 ])
+
+const data= JSON.stringify({status:"in review"})
+ store.dispatch("getAdvertisesList", data ).then((response) => {
+        if(response.content){
+            users.value = response.content;
+        }
+    })
+
 
 const userDataVisible = ref(false)
 const confirmModalVisible = ref(false)

@@ -118,7 +118,9 @@
           <span class="fs-14 d-block"
             >Bloquear los botones de compra y venta a este usuario:
           </span>
-          <button class="common chw mt-2" @click="handleBlockUser" >blocked</button>
+          <button class="common chw mt-2" @click="handleBlockUser" v-if="!userDetail.is_user_blocked_p2p" >blocked</button>
+          <button class="common chw mt-2" @click="handleUnBlockUser" v-if="userDetail.is_user_blocked_p2p" >unblocked</button>
+
         </div>
         <div class="mb-3">
           <span class="fs-14 d-block">Reenviar correo: </span>
@@ -148,6 +150,10 @@ import Swal from "sweetalert2";
 export default {
   name:"Add Balance Modal",
   props: ['userDetail'],
+  created(){
+  
+  console.log("hh---", this.userDetail)
+  },
   methods:{
   handleMarkAdmin(e) {
       e.preventDefault();
@@ -172,11 +178,35 @@ export default {
         });
     }
     },
+    handleUnBlockUser(e) {
+      e.preventDefault();
+      let payload= JSON.stringify({
+            "user_id":this.userDetail.id,
+        })
+      this.$store.dispatch("unBlockUser", payload).then((response) => {
+          if (response && response.status == true) {
+            Swal.fire({
+              title: "Success!",
+              text: response.content,
+              icon: "success",
+            });
+          } else {
+            Swal.fire({
+              title: "Error!",
+              text: "Failed to update",
+              icon: "error",
+            });
+          }
+        });
+    },
      handleBlockUser(e) {
       e.preventDefault();
       let payload= JSON.stringify({
             "user_id":this.userDetail.id,
         })
+
+
+
       this.$store.dispatch("blockUser", payload).then((response) => {
           if (response && response.status == true) {
             Swal.fire({
