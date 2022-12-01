@@ -40,18 +40,18 @@
                     <tr>
                       <th></th>
                       <th></th>
-                      <th class="c-table__col-label">Nombre de usuario</th>
-                      <th class="c-table__col-label">Nombre del negocio</th>
-                      <th class="c-table__col-label">Fecha</th>
+                      <th class="c-table__col-label">Propietario</th>
+                      <th class="c-table__col-label">Publicar enlace</th>
+                      <th class="c-table__col-label">Estatus</th>
                     </tr>
                   </thead>
                   <tbody class="c-table__body">
-                    <tr
-                      v-for="(user, i) in users"
+                    {{adsList }}
+                    <tr v-for="(ad, i) in adsList"
                       :key="i"
                       @click="openUserData"
                     >
-                      <td class="c-table__cell">
+                      <!-- <td class="c-table__cell">
                         <div class="form-check">
                           <input
                             class="form-check-input custom-checkbox"
@@ -67,10 +67,10 @@
                           height="40px"
                           src="/img/profile.jpg"
                         />
-                      </td>
-                      <td class="c-table__cell">Alice Blue</td>
-                      <td class="c-table__cell">aliceblue@example.com</td>
-                      <td class="c-table__cell">763012721</td>
+                      </td> -->
+                      <td class="c-table__cell"> {{ ad.owner }} </td>
+                      <td class="c-table__cell"> {{ ad.post_link }} </td>
+                      <td class="c-table__cell"> {{ ad.status }} </td>
                     </tr>
                   </tbody>
                 </table>
@@ -115,10 +115,13 @@
                     </tr>
                   </thead>
                   <tbody class="c-table__body">
-                    <tr
-                      v-for="(user, i) in users"
+                    <!-- <tr
+                      v-for="(user, i) in adsList"
                       :key="i"
                       @click="openUserData"
+                    > -->
+                    <tr
+                
                     >
                       <td class="c-table__cell">
                         <div class="form-check">
@@ -184,10 +187,13 @@
                     </tr>
                   </thead>
                   <tbody class="c-table__body">
-                    <tr
+                    <!-- <tr
                       v-for="(user, i) in users"
                       :key="i"
                       @click="openUserData"
+                    > -->
+                    <tr
+                  
                     >
                       <td class="c-table__cell">
                         <div class="form-check">
@@ -235,59 +241,60 @@ import { useStore } from 'vuex'
 import UserDataModal from '@/components/adApproval/UserDataModal.vue'
 import ConfirmModal from '@/components/adApproval/ConfirmModal.vue'
 const store = useStore();
-let users = ref([
-  {
-    name: 'Alice Blue',
-    email: 'aliceblue@example.com',
-    amount: '763012721',
-    picture: '/img/profile.jpg',
-  },
-  {
-    name: 'Alice Blue',
-    email: 'aliceblue@example.com',
-    amount: '763012721',
-    picture: '/img/profile.jpg',
-  },
-  {
-    name: 'Alice Blue',
-    email: 'aliceblue@example.com',
-    amount: '763012721',
-    picture: '/img/profile.jpg',
-  },
-  {
-    name: 'Alice Blue',
-    email: 'aliceblue@example.com',
-    amount: '763012721',
-    picture: '/img/profile.jpg',
-  },
-  {
-    name: 'Alice Blue',
-    email: 'aliceblue@example.com',
-    amount: '763012721',
-    picture: '/img/profile.jpg',
-  },
-  {
-    name: 'Alice Blue',
-    email: 'aliceblue@example.com',
-    amount: '763012721',
-    picture: '/img/profile.jpg',
-  },
-  {
-    name: 'Alice Blue',
-    email: 'aliceblue@example.com',
-    amount: '763012721',
-    picture: '/img/profile.jpg',
-  },
-])
 
-const data= JSON.stringify({status:"in review"})
- store.dispatch("getAdvertisesList", data ).then((response) => {
+let adsList= ref(0)
+// let users = ref([
+//   {
+//     name: 'Alice Blue',
+//     email: 'aliceblue@example.com',
+//     amount: '763012721',
+//     picture: '/img/profile.jpg',
+//   },
+//   {
+//     name: 'Alice Blue',
+//     email: 'aliceblue@example.com',
+//     amount: '763012721',
+//     picture: '/img/profile.jpg',
+//   },
+//   {
+//     name: 'Alice Blue',
+//     email: 'aliceblue@example.com',
+//     amount: '763012721',
+//     picture: '/img/profile.jpg',
+//   },
+//   {
+//     name: 'Alice Blue',
+//     email: 'aliceblue@example.com',
+//     amount: '763012721',
+//     picture: '/img/profile.jpg',
+//   },
+//   {
+//     name: 'Alice Blue',
+//     email: 'aliceblue@example.com',
+//     amount: '763012721',
+//     picture: '/img/profile.jpg',
+//   },
+//   {
+//     name: 'Alice Blue',
+//     email: 'aliceblue@example.com',
+//     amount: '763012721',
+//     picture: '/img/profile.jpg',
+//   },
+//   {
+//     name: 'Alice Blue',
+//     email: 'aliceblue@example.com',
+//     amount: '763012721',
+//     picture: '/img/profile.jpg',
+//   },
+// ])
+    const data= JSON.stringify({status:"in review"})
+      store.dispatch("getAdvertisesList", data ).then((response) => {
         if(response.content){
-            users.value = response.content;
+          console.log(response.content)
+           adsList = response.content;
+           console.log("adsList", adsList)
         }
     })
-
-
 const userDataVisible = ref(false)
 const confirmModalVisible = ref(false)
 
@@ -308,6 +315,34 @@ function closeConfirmModal(closeAll) {
 
   if (closeAll) closeUserData()
 }
+</script>
+<script>
+import { mapGetters } from "vuex";
+const store = useStore();
+
+// export default {
+//     data: function() {
+//     return {
+//     adsList: ref([])
+//     };
+//   },
+//   // watch: {
+//   //   getAdsList()
+// //   // },
+// //     beforeMount(){
+// //     this.getAdsList()
+// //  },
+// //   methods: {
+// //     getAdsList() {
+// //     const data= JSON.stringify({status:"in review"})
+// //       store.dispatch("getAdvertisesList", data ).then((response) => {
+// //         if(response.content){
+// //           this.adsList = response.content;
+// //         }
+// //     })
+// //   },
+// // },
+// }
 </script>
 <style lang="scss">
 .head {

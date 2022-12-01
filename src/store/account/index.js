@@ -149,7 +149,7 @@ export default {
             }
           });
       }, 
-    async  blockUser({ commit }, data) {
+    async blockUser({ commit }, data) {
         return await axios
           .post(`${BASE_API_URL}${BLOCK_USER}`, data,
           {

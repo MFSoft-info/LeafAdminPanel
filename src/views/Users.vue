@@ -239,7 +239,7 @@ export default {
   watch: {
   $route: function(to, from) {
   console.log("to--", to)
-      this.getUserList(to.meta.title)
+    this.getUserList(to.meta.title)
   }
 },
  created(){

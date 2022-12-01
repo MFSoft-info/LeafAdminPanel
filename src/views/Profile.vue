@@ -58,25 +58,6 @@
           />
         </div>
         <div class="mb-3 col-md-6">
-          <label class="form-label">Payment Method</label>
-          <input
-            placeholder="gvv56vyd65dx5xs52x"
-            type="text"
-            class="form-control"
-            aria-describedby="emailHelp"
-          />
-        </div>
-        <div class="mb-3 col-md-6">
-          <label class="form-label">Currency</label>
-          <input
-            v-model="profileInfo.currency"
-            placeholder="usd"
-            type="text"
-            class="form-control"
-            aria-describedby="emailHelp"
-          />
-        </div>
-        <div class="mb-3 col-md-6">
           <label class="form-label">Password 1</label>
           <input
             v-model="profileInfo.password1"
@@ -121,7 +102,39 @@
           </div>
         </div>
       </b-row>
-
+ 
+      <b-row>
+        <label class="form-label">Payment Method</label>
+        <hr>
+        <div class="mb-3 col-md-6" v-for="(data, index) in payment_methods"
+          :key="index" >
+          <label class="form-label">Bank Name</label>
+          <input
+            v-model="data.bank"
+            placeholder="Bank"
+            type="text"
+            class="form-control mb-3"
+            aria-describedby="emailHelp"
+          />
+          <input
+            v-model="data.account"
+            placeholder="Account"
+            type="text"
+            class="form-control"
+            aria-describedby="emailHelp"
+          />
+        </div>
+        <div class="mb-3 col-md-6">
+          <label class="form-label">Currency</label>
+          <input
+            v-model="profileInfo.currency"
+            placeholder="usd"
+            type="text"
+            class="form-control"
+            aria-describedby="emailHelp"
+          />
+        </div>
+      </b-row>
       <b-row>
         <b-col md="12" class="d-flex justify-content-center">
           <button type="submit" @click="submit"  class="common w-0X">Submit</button>
@@ -155,6 +168,7 @@ export default {
   },
   computed: {
     ...mapGetters([
+      "getUserId",
       "getUserInfo",
     ]),
   },
@@ -169,6 +183,7 @@ export default {
             this.$store.dispatch("getUserProfile", payload).then((response) => {
             if(response.status){
             this.profileInfo = response.content
+            this.payment_methods = response.content.payment_methods;
             }
         })
     },
