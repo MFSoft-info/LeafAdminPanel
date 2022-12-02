@@ -107,7 +107,7 @@
         <label class="form-label">Payment Method</label>
         <hr>
         <div class="mb-3 col-md-6" v-for="(data, index) in payment_methods"
-          :key="index" >
+          :key="index">
           <label class="form-label">Bank Name</label>
           <input
             v-model="data.bank"
