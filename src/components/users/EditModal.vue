@@ -10,6 +10,7 @@
         <div class="mb-3">
           <label class="form-label text-left fs-14">Nombre completo</label>
           <input
+            v-model="userDetail.full_nombre"
             type="text"
             class="form-control"
             placeholder="Alfredo zevallos"
@@ -17,11 +18,12 @@
         </div>
         <div class="mb-3">
           <label class="form-label text-left fs-14">Nombre de usuario</label>
-          <input type="text" class="form-control" placeholder="Equipeolite" />
+          <input v-model="userDetail.nombre_usuario" type="text" class="form-control" placeholder="Equipeolite" />
         </div>
         <div class="mb-3">
           <label class="form-label text-left fs-14">Correo</label>
           <input
+            v-model="userDetail.email" 
             type="email"
             class="form-control"
             placeholder="alfredo@gmail.com"
@@ -30,15 +32,17 @@
         <div class="mb-3">
           <label class="form-label text-left fs-14">Busd direccion</label>
           <input
+            v-model="userDetail.usd_direction" 
             type="text"
             class="form-control"
             placeholder="1xv737df663vesc5zx55"
           />
-        </div>
-        <div class="mb-3">
+        </div> 
+        <div class="mb-3" v-for="(data, index) in userDetail.payment_methods" :key="index">
           <label class="form-label text-left fs-14">Métodos de pago</label>
-          <input type="text" class="form-control" placeholder="Usdt address" />
+          <input v-model="data.bank" type="text" class="form-control" placeholder="Usdt address" />
           <input
+            v-model="data.account"
             type="text"
             class="form-control mt-2"
             placeholder="Laeal address"
@@ -46,11 +50,12 @@
         </div>
         <div class="mb-3">
           <label class="form-label text-left fs-14">País</label>
-          <input type="text" class="form-control" placeholder="Peru" />
+          <input v-model="userDetail.codigo_pais" type="text" class="form-control" placeholder="Peru" />
         </div>
         <div class="mb-3">
           <label class="form-label text-left fs-14">Teléfono</label>
           <input
+            v-model="userDetail.telefono"
             class="form-control"
             type="tel"
             pattern="[+]{1}[0-9]{11,14}"
@@ -61,7 +66,7 @@
           <label class="form-label text-left fs-14"
             >Descripción de perfil</label
           >
-          <textarea class="form-control" id="floatingTextarea"></textarea>
+          <textarea v-model="userDetail.habilidades" class="form-control" id="floatingTextarea"></textarea>
         </div>
         <div class="mb-3 d-inline-flex align-items-center">
           <span class="fs-14">Hacer admin a este usuario:</span>
@@ -141,25 +146,43 @@ import Backdrop from '@/components/Backdrop.vue'
 const emit = defineEmits(['close'])
 
 // Use it when api data is available
-function save() {
+// function save() {
   // emit('close')
-}
+// }
 </script>
 <script>
 import Swal from "sweetalert2";
 export default {
   name:"Add Balance Modal",
   props: ['userDetail'],
+  data: function() {
+    return {
+      userDetail: {
+      full_nombre: "",
+      nombre_usuario:"",
+      email:"",
+      telefono:"",
+      codigo_pais:"",
+      habilidades:"",
+      usd_direction:"",
+      payment_methods:[]
+    }
+    }
+
+  },
   created(){
   
   console.log("hh---", this.userDetail)
   },
+  updated(){
+  console.log("hh---", this.userDetail)
+  },
   methods:{
-  handleMarkAdmin(e) {
+    handleMarkAdmin(e) {
       e.preventDefault();
       if(e.target.checked){
       let payload= JSON.stringify({
-                  "user_id":this.userDetail.id,
+                  "user_id": localStorage.getItem("userId"),
         })
       this.$store.dispatch("makeAdmin", payload).then((response) => {
           if (response && response.status == true) {
@@ -171,7 +194,7 @@ export default {
           } else {
             Swal.fire({
               title: "Error!",
-              text: "Failed to update",
+              text: response.content,
               icon: "error",
             });
           }
@@ -222,7 +245,39 @@ export default {
             });
           }
         });
-    }
+    },
+    save(e) {
+      e.preventDefault();
+        let payload= JSON.stringify({
+           "user_id": localStorage.getItem("userId"),
+            "data": {
+                    full_nombre: this.userDetail.full_nombre,
+                    nombre_usuario: this.userDetail.nombre_usuario,
+                    email:this.userDetail.email,
+                    telefono:this.userDetail.telefono,
+                    codigo_pais:this.userDetail.codigo_pais,
+                    habilidades:this.userDetail.habilidades,
+                    usd_direction:this.userDetail.usd_direction,
+                    payment_methods:this.userDetail.payment_methods
+            }      
+        })
+        console.log(payload)
+         this.$store.dispatch("updateUserProfile", payload).then((response) => {
+          if (response.status == true) {
+            Swal.fire({
+              title: "Success!",
+              text: response.content,
+              icon: "success",
+            });
+          } else {
+            Swal.fire({
+              title: "Error!",
+              text: response.content,
+              icon: "error",
+            });
+          }
+        })
+    },
   },
  
 }

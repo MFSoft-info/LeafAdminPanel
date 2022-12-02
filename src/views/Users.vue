@@ -202,7 +202,8 @@ function closeRemoveBalance() {
 
 // Edit user modal
 function openEditModal(value) {
-  editUserDetail = value
+  console.log(value)
+  editUserDetail.value = value
   editModalOpen.value = true
 }
 
