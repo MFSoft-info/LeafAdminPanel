@@ -9,7 +9,7 @@
     </b-row>
     <b-card no-body>
       <b-tabs card>
-        <b-tab no-body title="Faltan Procesar">
+        <b-tab no-body title="Faltan Procesar" @click="getAdsList('in review')">
           <b-row class="mt-5">
             <b-col md="10" class="d-inline-flex align-items-center">
               <div class="form-check search-cb">
@@ -39,19 +39,17 @@
                   <thead class="c-table__header">
                     <tr>
                       <th></th>
-                      <th></th>
                       <th class="c-table__col-label">Propietario</th>
                       <th class="c-table__col-label">Publicar enlace</th>
                       <th class="c-table__col-label">Estatus</th>
                     </tr>
                   </thead>
                   <tbody class="c-table__body">
-                    {{adsList }}
                     <tr v-for="(ad, i) in adsList"
                       :key="i"
                       @click="openUserData"
                     >
-                      <!-- <td class="c-table__cell">
+                    <td class="c-table__cell">
                         <div class="form-check">
                           <input
                             class="form-check-input custom-checkbox"
@@ -60,14 +58,6 @@
                           />
                         </div>
                       </td>
-                      <td class="c-table__cell">
-                        <img
-                          class="c-img-table"
-                          width="40px"
-                          height="40px"
-                          src="/img/profile.jpg"
-                        />
-                      </td> -->
                       <td class="c-table__cell"> {{ ad.owner }} </td>
                       <td class="c-table__cell"> {{ ad.post_link }} </td>
                       <td class="c-table__cell"> {{ ad.status }} </td>
@@ -78,7 +68,7 @@
             </b-col>
           </b-row>
         </b-tab>
-        <b-tab no-body title="Procesados">
+        <b-tab no-body title="Procesados" @click="getAdsList('approved')">
           <b-row class="mt-5">
             <b-col md="10" class="d-inline-flex align-items-center">
               <div class="form-check search-cb">
@@ -108,22 +98,17 @@
                   <thead class="c-table__header">
                     <tr>
                       <th></th>
-                      <th></th>
                       <th class="c-table__col-label">Nombre de usuario</th>
                       <th class="c-table__col-label">Nombre del negocio</th>
                       <th class="c-table__col-label">Fecha</th>
                     </tr>
                   </thead>
-                  <tbody class="c-table__body">
-                    <!-- <tr
-                      v-for="(user, i) in adsList"
+                   <tbody class="c-table__body">
+                    <tr v-for="(ad, i) in adsList"
                       :key="i"
                       @click="openUserData"
-                    > -->
-                    <tr
-                
                     >
-                      <td class="c-table__cell">
+                    <td class="c-table__cell">
                         <div class="form-check">
                           <input
                             class="form-check-input custom-checkbox"
@@ -132,17 +117,9 @@
                           />
                         </div>
                       </td>
-                      <td class="c-table__cell">
-                        <img
-                          class="c-img-table"
-                          width="40px"
-                          height="40px"
-                          src="/img/profile.jpg"
-                        />
-                      </td>
-                      <td class="c-table__cell">Alice Blue</td>
-                      <td class="c-table__cell">aliceblue@example.com</td>
-                      <td class="c-table__cell">763012721</td>
+                      <td class="c-table__cell"> {{ ad.owner }} </td>
+                      <td class="c-table__cell"> {{ ad.post_link }} </td>
+                      <td class="c-table__cell"> {{ ad.status }} </td>
                     </tr>
                   </tbody>
                 </table>
@@ -150,7 +127,7 @@
             </b-col>
           </b-row>
         </b-tab>
-        <b-tab no-body title="Negados">
+        <b-tab no-body title="Negados" @click="getAdsList('denied')">
           <b-row class="mt-5">
             <b-col md="10" class="d-inline-flex align-items-center">
               <div class="form-check search-cb">
@@ -180,22 +157,17 @@
                   <thead class="c-table__header">
                     <tr>
                       <th></th>
-                      <th></th>
                       <th class="c-table__col-label">Nombre de usuario</th>
                       <th class="c-table__col-label">Nombre del negocio</th>
                       <th class="c-table__col-label">Fecha</th>
                     </tr>
                   </thead>
-                  <tbody class="c-table__body">
-                    <!-- <tr
-                      v-for="(user, i) in users"
+                   <tbody class="c-table__body">
+                    <tr v-for="(ad, i) in adsList"
                       :key="i"
                       @click="openUserData"
-                    > -->
-                    <tr
-                  
                     >
-                      <td class="c-table__cell">
+                    <td class="c-table__cell">
                         <div class="form-check">
                           <input
                             class="form-check-input custom-checkbox"
@@ -204,17 +176,9 @@
                           />
                         </div>
                       </td>
-                      <td class="c-table__cell">
-                        <img
-                          class="c-img-table"
-                          width="40px"
-                          height="40px"
-                          src="/img/profile.jpg"
-                        />
-                      </td>
-                      <td class="c-table__cell">Alice Blue</td>
-                      <td class="c-table__cell">aliceblue@example.com</td>
-                      <td class="c-table__cell">763012721</td>
+                      <td class="c-table__cell"> {{ ad.owner }} </td>
+                      <td class="c-table__cell"> {{ ad.post_link }} </td>
+                      <td class="c-table__cell"> {{ ad.status }} </td>
                     </tr>
                   </tbody>
                 </table>
@@ -287,14 +251,18 @@ let adsList= ref(0)
 //     picture: '/img/profile.jpg',
 //   },
 // ])
-    const data= JSON.stringify({status:"in review"})
+function getAdsList(status) {
+
+    const data= JSON.stringify({status: status})
       store.dispatch("getAdvertisesList", data ).then((response) => {
         if(response.content){
           console.log(response.content)
-           adsList = response.content;
+           adsList.value = response.content;
            console.log("adsList", adsList)
         }
     })
+}
+getAdsList("in review");
 const userDataVisible = ref(false)
 const confirmModalVisible = ref(false)
 

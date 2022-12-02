@@ -7,7 +7,7 @@
         </div>
       </div>
       <h4 class="heading-users m-0">QUITAR SALDO</h4>
-      <div class="mb-3">
+     <!-- <div class="mb-3">
         <label class="form-label text-left fs-14">Seleccionar usuario(s)</label>
         <select class="form-select" aria-label="Default select example" ref="user">
           <option selected>Todos</option>
@@ -17,7 +17,7 @@
             :key="index"
           >{{item.full_nombre}}</option>
         </select>
-      </div>
+      </div> -->
       <div class="mb-3">
         <label class="form-label text-left fs-14">Monto</label>
         <input type="number" class="form-control" ref="amount" />
@@ -43,21 +43,21 @@ const emit = defineEmits(['close'])
 <script>
 import Swal from "sweetalert2";
 export default {
-  name:"Add Balance Modal",
+  name:"Remove Balance Modal",
   props: ['data'],
   methods:{
   submit(e) {
       e.preventDefault();
-      if (!this.$refs.amount.value || !this.$refs.user.value) {
+      if (!this.$refs.amount.value ) {
             Swal.fire({
               title: "Error!",
-              text: "Please add user and amount.",
+              text: "Please enter amount.",
               icon: "error",
             });
             return 0;
           }
       let payload= JSON.stringify({
-                  "userid":this.$refs.user.value,
+                  "userid":this.data,
                   "amount":this.$refs.amount.value,
         })
       this.$store.dispatch("removeBalance", payload).then((response) => {

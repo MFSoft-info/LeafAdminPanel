@@ -115,6 +115,7 @@
             type="text"
             class="form-control mb-3"
             aria-describedby="emailHelp"
+            @input="e => handleBank(e,index)"
           />
           <input
             v-model="data.account"
@@ -122,6 +123,7 @@
             type="text"
             class="form-control"
             aria-describedby="emailHelp"
+            @input="e => handleAccount(e,index)"
           />
         </div>
         <div class="mb-3 col-md-6">
@@ -213,6 +215,13 @@ export default {
             });
           }
         })
+    },
+    handleBank(e,index){
+      console.log("thiss-->>", this.$refs.bank.value, e.target.value, index)
+      this.payment_methods[index]['bank'] = e.target.value;
+    },
+     handleAccount(e,index){
+      this.payment_methods[index]['account'] = e.target.value;
     },
   },
 }

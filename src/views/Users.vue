@@ -23,7 +23,9 @@
           <input
             class="form-check-input custom-checkbox"
             type="checkbox"
-            value=""
+            ref="all"
+            :value="everyone"
+            @change="selectUser($event)"
           />
         </div>
 
@@ -62,8 +64,10 @@
                   <div class="form-check">
                     <input
                       class="form-check-input custom-checkbox"
+                      
                       type="checkbox"
-                      value=""
+                      :value="value.id"
+                      @change="selectUser($event)"
                     />
                   </div>
                 </td>
@@ -121,9 +125,9 @@
       @delete="deleteUser"
     />
     <!--    ANADIR SALDO MODAL-->
-    <AddBalance v-show="addBalanceOpen" @close="closeAddBalance" :data="usersList"  />
+    <AddBalance v-show="addBalanceOpen" @close="closeAddBalance" :data="userId"  />
     <!--    QUITAR SALDO MODAL-->
-    <RemoveBalance v-show="removeBalanceOpen" @close="closeRemoveBalance" :data="usersList" />
+    <RemoveBalance v-show="removeBalanceOpen" @close="closeRemoveBalance" :data="userId" />
   </div>
 </template>
 <script setup>
@@ -233,7 +237,9 @@ export default {
   name: 'Users',
     data: function() {
     return {
-    usersList: ref([])
+    usersList: ref([]),
+    userId: ''
+    
     };
   },
   watch: {
@@ -248,6 +254,14 @@ export default {
  },
 
   methods: {
+  selectUser(event){
+  console.log("-->>", this.$refs.all.checked)
+  if( this.$refs.all.checked){
+  this.userId = "everyone";
+  }else{
+  this.userId = event.target.value;
+}
+  },
     getUserList(currentRoute) {
     let data = JSON.stringify({
     condition: currentRoute === "Activos" ? "active" : currentRoute === "Inactivos" ? "inactive" : currentRoute === "Bloqueados" ? "blocked" : currentRoute === "ConCompras" || currentRoute === "Con Compras" ? "with buys" : currentRoute === "Conventas" || currentRoute === "Con Ventas"  ? "with sells" : currentRoute === "Eliminados" ? "deleted" : currentRoute === "Admin" ? "admins" : ''
