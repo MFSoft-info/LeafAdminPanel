@@ -153,11 +153,10 @@ const emit = defineEmits(['close'])
 <script>
 import Swal from "sweetalert2";
 export default {
-  name:"Add Balance Modal",
+  name:"Edit Modal",
   props: ['userDetail'],
   data: function() {
     return {
-      userDetail: {
       full_nombre: "",
       nombre_usuario:"",
       email:"",
@@ -167,15 +166,7 @@ export default {
       usd_direction:"",
       payment_methods:[]
     }
-    }
 
-  },
-  created(){
-  
-  console.log("hh---", this.userDetail)
-  },
-  updated(){
-  console.log("hh---", this.userDetail)
   },
   methods:{
     handleMarkAdmin(e) {
@@ -227,9 +218,6 @@ export default {
       let payload= JSON.stringify({
             "user_id":this.userDetail.id,
         })
-
-
-
       this.$store.dispatch("blockUser", payload).then((response) => {
           if (response && response.status == true) {
             Swal.fire({
@@ -252,7 +240,6 @@ export default {
            "user_id": localStorage.getItem("userId"),
             "data": {
                     full_nombre: this.userDetail.full_nombre,
-                    nombre_usuario: this.userDetail.nombre_usuario,
                     email:this.userDetail.email,
                     telefono:this.userDetail.telefono,
                     codigo_pais:this.userDetail.codigo_pais,
@@ -261,7 +248,6 @@ export default {
                     payment_methods:this.userDetail.payment_methods
             }      
         })
-        console.log(payload)
          this.$store.dispatch("updateUserProfile", payload).then((response) => {
           if (response.status == true) {
             Swal.fire({
