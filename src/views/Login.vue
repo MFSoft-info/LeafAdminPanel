@@ -61,7 +61,6 @@ export default {
     },
     checkUser() {
       //set the custom user validations
-      console.log(this.User)
       if (this.User === '') {
         this.isUser = true
       } else {
