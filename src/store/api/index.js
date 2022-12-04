@@ -1,7 +1,7 @@
 import JwtService from "../jwt";
 
 import axios from 'axios'
-import { BASE_API_URL, LOGIN_API, USER_INFO, USERS_LIST, UPDATE_USER_INFO, ADD_BALANCE,BLOCK_USER, DECREASE_BALANCE, MAKE_ADMIN, HANDLE_SWITCHES, UN_BLOCK_USER, GET_WITHDRAWLS, GET_ADVERTISES_LIST, GET_ADVERTISES_INFO, ADVERTISE_DENY, ADVERTISE_APPROVE  } from '../../../constants'
+import { BASE_API_URL, LOGIN_API, USER_INFO, USERS_LIST, UPDATE_USER_INFO, ADD_BALANCE,BLOCK_USER, DECREASE_BALANCE, MAKE_ADMIN, HANDLE_SWITCHES, UN_BLOCK_USER, GET_WITHDRAWLS, GET_ADVERTISES_LIST, GET_ADVERTISES_INFO, ADVERTISE_DENY, ADVERTISE_APPROVE, UPDATE_ADS_CONFIG  } from '../../../constants'
 export default {
   state: {
     user: [],
@@ -244,6 +244,24 @@ export default {
             }
           });
       },
+    async updateAdsConfig({ commit }, data) {
+        return await axios
+        .put(`${BASE_API_URL}${UPDATE_ADS_CONFIG}`, data,
+        {
+          headers:{
+          'Content-Type': 'application/json',
+          'Authorization': `Bearer ${JwtService.getToken()}`
+      }})
+        .then((response) => {
+          commit("setAdsConfig", response.data);
+          return response.data;
+        })
+        .catch((error) => {
+          if (error.response) {
+            return error.response.data
+          }
+        });
+    },
     async getAdvertiseInfo({ commit }, data) {
         return await axios
           .post(`${BASE_API_URL}${GET_ADVERTISES_INFO}`, data,
@@ -332,9 +350,11 @@ export default {
       state.withdrawlsList = payload;
     },
     setAdvertisesList(state, payload) {
-      state.withdrawlsList = payload;
+      state.advertisesList = payload;
     },
-    
+    setAdsConfig(state, payload) {
+      state.adsConfig = payload;
+    },
     setroutes(state, payload) {
       state.route = payload;
     },

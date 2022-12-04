@@ -99,9 +99,9 @@
                   <thead class="c-table__header">
                     <tr>
                       <th></th>
-                      <th class="c-table__col-label">Nombre de usuario</th>
-                      <th class="c-table__col-label">Nombre del negocio</th>
-                      <th class="c-table__col-label">Fecha</th>
+                      <th class="c-table__col-label">Propietario</th>
+                      <th class="c-table__col-label">Publicar enlace</th>
+                      <th class="c-table__col-label">Estatus</th>
                     </tr>
                   </thead>
                    <tbody class="c-table__body">
@@ -159,9 +159,9 @@
                   <thead class="c-table__header">
                     <tr>
                       <th></th>
-                      <th class="c-table__col-label">Nombre de usuario</th>
-                      <th class="c-table__col-label">Nombre del negocio</th>
-                      <th class="c-table__col-label">Fecha</th>
+                      <th class="c-table__col-label">Propietario</th>
+                      <th class="c-table__col-label">Publicar enlace</th>
+                      <th class="c-table__col-label">Estatus</th>
                     </tr>
                   </thead>
                    <tbody class="c-table__body">
