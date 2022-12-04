@@ -288,16 +288,16 @@ let users = ref([
     amount: '763012721',
     picture: '/img/profile.jpg',
   },
-]);
-const store = useStore();
+])
+const store = useStore()
 const userDataVisible = ref(false)
-const modalDeleteVisible = ref(false);
-const data= JSON.stringify({status:"successful"})
- store.dispatch("getWithdrawlsList", data ).then((response) => {
-        if(response.content){
-            users.value = response.content;
-        }
-    })
+const modalDeleteVisible = ref(false)
+const data = JSON.stringify({ status: 'successful' })
+store.dispatch('getWithdrawlsList', data).then((response) => {
+  if (response.content) {
+    users.value = response.content
+  }
+})
 
 function openUserData() {
   userDataVisible.value = true

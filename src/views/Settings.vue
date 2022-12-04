@@ -16,7 +16,7 @@
           <!-- Do the same for the rest of tab's content -->
           <Negocios />
         </b-tab>
-        <b-tab no-body title="ANUNCIOS" @click="updateAdsConfig()">
+        <b-tab no-body title="ANUNCIOS">
           <b-row class="mt-5 justify-content-center">
             <b-col md="12" lg="4" class="d-flex">
               <div class="mt-2 mb-2">
@@ -141,28 +141,28 @@
 import Negocios from '@/components/settings/negocios/'
 import P2p from '@/components/settings/p2p/'
 import { useStore } from 'vuex'
-const store = useStore();
+const store = useStore()
 function submit() {
-    const data= JSON.stringify({
-                    // code: code,
-                    // hashtag:hashtag,
-                    // time_between_ads:time_between_ads,
-                    // facebook_url:facebook_url,
-                    // tiktok_url:tiktok_url,
-                    code: "",
-                    hashtag:"",
-                    time_between_ads:"",
-                    facebook_url:"",
-                    tiktok_url:"",
-      })
-      console.log("data", data)
-      store.dispatch("updateAdsConfig", data ).then((response) => {
-        if(response.content){
-          console.log(response.content)
-           adsConfig.value = response.content;
-           console.log("adsConfig", adsConfig)
-        }
-    })
+  const data = JSON.stringify({
+    // code: code,
+    // hashtag:hashtag,
+    // time_between_ads:time_between_ads,
+    // facebook_url:facebook_url,
+    // tiktok_url:tiktok_url,
+    code: '',
+    hashtag: '',
+    time_between_ads: '',
+    facebook_url: '',
+    tiktok_url: '',
+  })
+  console.log('data', data)
+  store.dispatch('updateAdsConfig', data).then((response) => {
+    if (response.content) {
+      console.log(response.content)
+      adsConfig.value = response.content
+      console.log('adsConfig', adsConfig)
+    }
+  })
 }
 // submit();
 </script>

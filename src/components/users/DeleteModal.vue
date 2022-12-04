@@ -19,3 +19,4 @@ import Backdrop from '@/components/Backdrop.vue'
 
 const emit = defineEmits(['close', 'delete'])
 </script>
+

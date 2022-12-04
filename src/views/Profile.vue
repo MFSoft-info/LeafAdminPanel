@@ -10,11 +10,11 @@
         <div class="mb-3 col-md-6">
           <label class="form-label">Full name </label>
           <input
-          placeholder="e.g Alfrdo zaid nini"
-          v-model="profileInfo.full_nombre"
-          type="text"
-          class="form-control"
-          aria-describedby="emailHelp"
+            placeholder="e.g Alfrdo zaid nini"
+            v-model="profileInfo.full_nombre"
+            type="text"
+            class="form-control"
+            aria-describedby="emailHelp"
           />
         </div>
         <div class="mb-3 col-md-6">
@@ -81,7 +81,11 @@
         </div>
         <div class="mb-3 col-md-6">
           <label class="form-label">Describe Your Ability</label>
-          <textarea class="form-control" v-model="profileInfo.habilidades" id="floatingTextarea"></textarea>
+          <textarea
+            class="form-control"
+            v-model="profileInfo.habilidades"
+            id="floatingTextarea"
+          ></textarea>
         </div>
         <div class="mb-3 col-md-6 ok d-inline-flex justify-content-between">
           <label class="form-label">Notification</label>
@@ -102,12 +106,15 @@
           </div>
         </div>
       </b-row>
- 
+
       <b-row>
         <label class="form-label">Payment Method</label>
-        <hr>
-        <div class="mb-3 col-md-6" v-for="(data, index) in payment_methods"
-          :key="index">
+        <hr />
+        <div
+          class="mb-3 col-md-6"
+          v-for="(data, index) in payment_methods"
+          :key="index"
+        >
           <label class="form-label">Bank Name</label>
           <input
             v-model="data.bank"
@@ -115,7 +122,7 @@
             type="text"
             class="form-control mb-3"
             aria-describedby="emailHelp"
-            @input="e => handleBank(e,index)"
+            @input="(e) => handleBank(e, index)"
           />
           <input
             v-model="data.account"
@@ -123,7 +130,7 @@
             type="text"
             class="form-control"
             aria-describedby="emailHelp"
-            @input="e => handleAccount(e,index)"
+            @input="(e) => handleAccount(e, index)"
           />
         </div>
         <div class="mb-3 col-md-6">
@@ -139,88 +146,87 @@
       </b-row>
       <b-row>
         <b-col md="12" class="d-flex justify-content-center">
-          <button type="submit" @click="submit"  class="common w-0X">Submit</button>
+          <button type="submit" @click="submit" class="common w-0X">
+            Submit
+          </button>
         </b-col>
       </b-row>
     </div>
   </div>
 </template>
 <script>
-import { mapGetters } from "vuex";
+import { mapGetters } from 'vuex'
 
 export default {
   name: 'Profile',
-    data: function() {
+  data: function () {
     return {
       profileInfo: {
-      full_nombre: "",
-      nombre_usuario:"",
-      email:"",
-      telefono:"",
-      codigo_pais:"",
-      currency:"",
-      country_name:"",
-      password1:"",
-      password2:"",
-      habilidades:"",
-      usd_direction:"",
-      payment_methods:[]
-      }
-    };
+        full_nombre: '',
+        nombre_usuario: '',
+        email: '',
+        telefono: '',
+        codigo_pais: '',
+        currency: '',
+        country_name: '',
+        password1: '',
+        password2: '',
+        habilidades: '',
+        usd_direction: '',
+        payment_methods: [],
+      },
+    }
   },
   computed: {
-    ...mapGetters([
-      "getUserId",
-      "getUserInfo",
-    ]),
+    ...mapGetters(['getUserId', 'getUserInfo']),
   },
-  beforeMount(){
+  beforeMount() {
     this.getProfile()
- },
+  },
   methods: {
     getProfile() {
-    let payload = JSON.stringify({
-                 "user_id": this.getUserId || localStorage.getItem("userId")
-                 })
-            this.$store.dispatch("getUserProfile", payload).then((response) => {
-            if(response.status){
-            this.profileInfo = response.content
-            this.payment_methods = response.content.payment_methods;
-            }
-        })
+      let payload = JSON.stringify({
+        user_id: this.getUserId || localStorage.getItem('userId'),
+      })
+      this.$store.dispatch('getUserProfile', payload).then((response) => {
+        if (response.status) {
+          this.profileInfo = response.content
+          this.payment_methods = response.content.payment_methods
+        }
+      })
     },
     submit(e) {
-      e.preventDefault();
-        let payload= JSON.stringify({
-           "user_id": localStorage.getItem("userId"),
-            "data": {
-                    full_nombre: this.profileInfo.full_nombre,
-                    email:this.profileInfo.email,
-                    telefono:this.profileInfo.telefono,
-                    codigo_pais:this.profileInfo.codigo_pais,
-                    habilidades:this.profileInfo.habilidades,
-                    usd_direction:this.profileInfo.usd_direction,
-                    payment_methods:this.profileInfo.payment_methods
-            }
-        })
-         this.$store.dispatch("updateUserProfile", payload).then((response) => {
-          if (response.status == true) {
-            this.$router.push({ name: "Home" });
-            this.profileInfo = response
-          } else {
-            Swal.fire({
-              title: "Error!",
-              text: response.content,
-              icon: "error",
-            });
-          }
-        })
+      e.preventDefault()
+      let payload = JSON.stringify({
+        user_id: localStorage.getItem('userId'),
+        data: {
+          full_nombre: this.profileInfo.full_nombre,
+          email: this.profileInfo.email,
+          telefono: this.profileInfo.telefono,
+          codigo_pais: this.profileInfo.codigo_pais,
+          habilidades: this.profileInfo.habilidades,
+          usd_direction: this.profileInfo.usd_direction,
+          payment_methods: this.profileInfo.payment_methods,
+        },
+      })
+      this.$store.dispatch('updateUserProfile', payload).then((response) => {
+        if (response.status == true) {
+          this.$router.push({ name: 'Home' })
+          this.profileInfo = response
+        } else {
+          Swal.fire({
+            title: 'Error!',
+            text: response.content,
+            icon: 'error',
+          })
+        }
+      })
     },
-    handleBank(e,index){
-      this.payment_methods[index]['bank'] = e.target.value;
+    handleBank(e, index) {
+      this.payment_methods[index]['bank'] = e.target.value
     },
-     handleAccount(e,index){
-      this.payment_methods[index]['account'] = e.target.value;
+    handleAccount(e, index) {
+      this.payment_methods[index]['account'] = e.target.value
     },
   },
 }

@@ -45,11 +45,12 @@
                     </tr>
                   </thead>
                   <tbody class="c-table__body">
-                    <tr v-for="(ad, i) in adsList"
+                    <tr
+                      v-for="(ad, i) in adsList"
                       :key="i"
                       @click="openUserData"
                     >
-                    <td class="c-table__cell">
+                      <td class="c-table__cell">
                         <div class="form-check">
                           <input
                             class="form-check-input custom-checkbox"
@@ -59,9 +60,9 @@
                           />
                         </div>
                       </td>
-                      <td class="c-table__cell"> {{ ad.owner }} </td>
-                      <td class="c-table__cell"> {{ ad.post_link }} </td>
-                      <td class="c-table__cell"> {{ ad.status }} </td>
+                      <td class="c-table__cell">{{ ad.owner }}</td>
+                      <td class="c-table__cell">{{ ad.post_link }}</td>
+                      <td class="c-table__cell">{{ ad.status }}</td>
                     </tr>
                   </tbody>
                 </table>
@@ -76,7 +77,6 @@
                 <input
                   class="form-check-input custom-checkbox"
                   type="checkbox"
-               
                 />
               </div>
               <!-- Actual search box -->
@@ -104,24 +104,25 @@
                       <th class="c-table__col-label">Estatus</th>
                     </tr>
                   </thead>
-                   <tbody class="c-table__body">
-                    <tr v-for="(ad, i) in adsList"
+                  <tbody class="c-table__body">
+                    <tr
+                      v-for="(ad, i) in adsList"
                       :key="i"
                       @click="openUserData"
                     >
-                    <td class="c-table__cell">
+                      <td class="c-table__cell">
                         <div class="form-check">
                           <input
                             class="form-check-input custom-checkbox"
                             type="checkbox"
-                             :value="ad.advertise_id"
-                              @change="handleOnCheck($event)"
+                            :value="ad.advertise_id"
+                            @change="handleOnCheck($event)"
                           />
                         </div>
                       </td>
-                      <td class="c-table__cell"> {{ ad.owner }} </td>
-                      <td class="c-table__cell"> {{ ad.post_link }} </td>
-                      <td class="c-table__cell"> {{ ad.status }} </td>
+                      <td class="c-table__cell">{{ ad.owner }}</td>
+                      <td class="c-table__cell">{{ ad.post_link }}</td>
+                      <td class="c-table__cell">{{ ad.status }}</td>
                     </tr>
                   </tbody>
                 </table>
@@ -136,7 +137,6 @@
                 <input
                   class="form-check-input custom-checkbox"
                   type="checkbox"
-                  
                 />
               </div>
               <!-- Actual search box -->
@@ -164,24 +164,25 @@
                       <th class="c-table__col-label">Estatus</th>
                     </tr>
                   </thead>
-                   <tbody class="c-table__body">
-                    <tr v-for="(ad, i) in adsList"
+                  <tbody class="c-table__body">
+                    <tr
+                      v-for="(ad, i) in adsList"
                       :key="i"
                       @click="openUserData"
                     >
-                    <td class="c-table__cell">
+                      <td class="c-table__cell">
                         <div class="form-check">
                           <input
                             class="form-check-input custom-checkbox"
                             type="checkbox"
-                             :value="ad.advertise_id"
-                              @change="handleOnCheck($event)"
+                            :value="ad.advertise_id"
+                            @change="handleOnCheck($event)"
                           />
                         </div>
                       </td>
-                      <td class="c-table__cell"> {{ ad.owner }} </td>
-                      <td class="c-table__cell"> {{ ad.post_link }} </td>
-                      <td class="c-table__cell"> {{ ad.status }} </td>
+                      <td class="c-table__cell">{{ ad.owner }}</td>
+                      <td class="c-table__cell">{{ ad.post_link }}</td>
+                      <td class="c-table__cell">{{ ad.status }}</td>
                     </tr>
                   </tbody>
                 </table>
@@ -193,36 +194,40 @@
     </b-card>
 
     <!-- modal 18-->
-   <UserDataModal
+    <UserDataModal
       v-show="userDataVisible"
       @close="closeUserData"
       @show-confirm="openConfirmModal"
       :content="adsData"
       :advertiseId="adsId"
     />
-    
+
     <!--    confirm modal-->
-    <ConfirmModal v-show="confirmModalVisible" @close="closeConfirmModal" :advertiseId="adsId"  />
+    <ConfirmModal
+      v-show="confirmModalVisible"
+      @close="closeConfirmModal"
+      :advertiseId="adsId"
+    />
   </div>
 </template>
 <script setup>
-import { ref, watch } from 'vue';
+import { ref, watch } from 'vue'
 import { useStore } from 'vuex'
 import UserDataModal from '@/components/adApproval/UserDataModal.vue'
 import ConfirmModal from '@/components/adApproval/ConfirmModal.vue'
-const store = useStore();
-let adsList= ref(0);
-let adsDetails = ref(null);
+const store = useStore()
+let adsList = ref(0)
+let adsDetails = ref(null)
 
 function getAdsList(status) {
-    const data= JSON.stringify({status: status})
-      store.dispatch("getAdvertisesList", data ).then((response) => {
-        if(response.content){
-           adsList.value = response.content;
-        }
-    })
+  const data = JSON.stringify({ status: status })
+  store.dispatch('getAdvertisesList', data).then((response) => {
+    if (response.content) {
+      adsList.value = response.content
+    }
+  })
 }
-getAdsList("in review");
+getAdsList('in review')
 const userDataVisible = ref(false)
 const confirmModalVisible = ref(false)
 
@@ -246,28 +251,28 @@ function closeConfirmModal(closeAll) {
 </script>
 
 <script>
-import Swal from "sweetalert2";
+import Swal from 'sweetalert2'
 export default {
-  name:"Ad",
-  data: function() {
+  name: 'Ad',
+  data: function () {
     return {
-  adsId: "",
-  adsData: {},
+      adsId: '',
+      adsData: {},
     }
+  },
+  methods: {
+    handleOnCheck(event) {
+      this.adsId = event.target.value
+      if (this.adsId) {
+        const data = JSON.stringify({ advertise_id: this.adsId })
+        this.$store.dispatch('getAdvertiseInfo', data).then((response) => {
+          if (response.content) {
+            this.adsData = response.content
+          }
+        })
+      }
     },
-  methods:{
-   handleOnCheck(event) {
-    this.adsId = event.target.value;
-    if(this.adsId){
-    const data= JSON.stringify({advertise_id: this.adsId});
-      this.$store.dispatch("getAdvertiseInfo", data ).then((response) => {
-        if(response.content){
-        this.adsData=response.content;
-        }
-    });
-    }
-},
- },
+  },
 }
 </script>
 <style lang="scss">

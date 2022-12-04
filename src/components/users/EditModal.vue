@@ -18,12 +18,17 @@
         </div>
         <div class="mb-3">
           <label class="form-label text-left fs-14">Nombre de usuario</label>
-          <input v-model="userDetail.nombre_usuario" type="text" class="form-control" placeholder="Equipeolite" />
+          <input
+            v-model="userDetail.nombre_usuario"
+            type="text"
+            class="form-control"
+            placeholder="Equipeolite"
+          />
         </div>
         <div class="mb-3">
           <label class="form-label text-left fs-14">Correo</label>
           <input
-            v-model="userDetail.email" 
+            v-model="userDetail.email"
             type="email"
             class="form-control"
             placeholder="alfredo@gmail.com"
@@ -32,15 +37,24 @@
         <div class="mb-3">
           <label class="form-label text-left fs-14">Busd direccion</label>
           <input
-            v-model="userDetail.usd_direction" 
+            v-model="userDetail.usd_direction"
             type="text"
             class="form-control"
             placeholder="1xv737df663vesc5zx55"
           />
-        </div> 
-        <div class="mb-3" v-for="(data, index) in userDetail.payment_methods" :key="index">
+        </div>
+        <div
+          class="mb-3"
+          v-for="(data, index) in userDetail.payment_methods"
+          :key="index"
+        >
           <label class="form-label text-left fs-14">Métodos de pago</label>
-          <input v-model="data.bank" type="text" class="form-control" placeholder="Usdt address" />
+          <input
+            v-model="data.bank"
+            type="text"
+            class="form-control"
+            placeholder="Usdt address"
+          />
           <input
             v-model="data.account"
             type="text"
@@ -50,7 +64,12 @@
         </div>
         <div class="mb-3">
           <label class="form-label text-left fs-14">País</label>
-          <input v-model="userDetail.codigo_pais" type="text" class="form-control" placeholder="Peru" />
+          <input
+            v-model="userDetail.codigo_pais"
+            type="text"
+            class="form-control"
+            placeholder="Peru"
+          />
         </div>
         <div class="mb-3">
           <label class="form-label text-left fs-14">Teléfono</label>
@@ -66,7 +85,11 @@
           <label class="form-label text-left fs-14"
             >Descripción de perfil</label
           >
-          <textarea v-model="userDetail.habilidades" class="form-control" id="floatingTextarea"></textarea>
+          <textarea
+            v-model="userDetail.habilidades"
+            class="form-control"
+            id="floatingTextarea"
+          ></textarea>
         </div>
         <div class="mb-3 d-inline-flex align-items-center">
           <span class="fs-14">Hacer admin a este usuario:</span>
@@ -123,9 +146,20 @@
           <span class="fs-14 d-block"
             >Bloquear los botones de compra y venta a este usuario:
           </span>
-          <button class="common chw mt-2" @click="handleBlockUser" v-if="!userDetail.is_user_blocked_p2p" >blocked</button>
-          <button class="common chw mt-2" @click="handleUnBlockUser" v-if="userDetail.is_user_blocked_p2p" >unblocked</button>
-
+          <button
+            class="common chw mt-2"
+            @click="handleBlockUser"
+            v-if="!userDetail.is_user_blocked_p2p"
+          >
+            blocked
+          </button>
+          <button
+            class="common chw mt-2"
+            @click="handleUnBlockUser"
+            v-if="userDetail.is_user_blocked_p2p"
+          >
+            unblocked
+          </button>
         </div>
         <div class="mb-3">
           <span class="fs-14 d-block">Reenviar correo: </span>
@@ -147,125 +181,123 @@ const emit = defineEmits(['close'])
 
 // Use it when api data is available
 // function save() {
-  // emit('close')
+// emit('close')
 // }
 </script>
 <script>
-import Swal from "sweetalert2";
+import Swal from 'sweetalert2'
 export default {
-  name:"Edit Modal",
+  name: 'Edit Modal',
   props: ['userDetail'],
-  data: function() {
+  data: function () {
     return {
-      full_nombre: "",
-      nombre_usuario:"",
-      email:"",
-      telefono:"",
-      codigo_pais:"",
-      habilidades:"",
-      usd_direction:"",
-      payment_methods:[]
+      full_nombre: '',
+      nombre_usuario: '',
+      email: '',
+      telefono: '',
+      codigo_pais: '',
+      habilidades: '',
+      usd_direction: '',
+      payment_methods: [],
     }
-
   },
-  methods:{
+  methods: {
     handleMarkAdmin(e) {
-      e.preventDefault();
-      if(e.target.checked){
-      let payload= JSON.stringify({
-                  "user_id": localStorage.getItem("userId"),
+      e.preventDefault()
+      if (e.target.checked) {
+        let payload = JSON.stringify({
+          user_id: localStorage.getItem('userId'),
         })
-      this.$store.dispatch("makeAdmin", payload).then((response) => {
+        this.$store.dispatch('makeAdmin', payload).then((response) => {
           if (response && response.status == true) {
             Swal.fire({
-              title: "Success!",
+              title: 'Success!',
               text: response.content,
-              icon: "success",
-            });
+              icon: 'success',
+            })
           } else {
             Swal.fire({
-              title: "Error!",
+              title: 'Error!',
               text: response.content,
-              icon: "error",
-            });
+              icon: 'error',
+            })
           }
-        });
-    }
+        })
+      }
     },
     handleUnBlockUser(e) {
-      e.preventDefault();
-      let payload= JSON.stringify({
-            "user_id":this.userDetail.id,
-        })
-      this.$store.dispatch("unBlockUser", payload).then((response) => {
-          if (response && response.status == true) {
-            Swal.fire({
-              title: "Success!",
-              text: response.content,
-              icon: "success",
-            });
-          } else {
-            Swal.fire({
-              title: "Error!",
-              text: "Failed to update",
-              icon: "error",
-            });
-          }
-        });
+      e.preventDefault()
+      let payload = JSON.stringify({
+        user_id: this.userDetail.id,
+      })
+      this.$store.dispatch('unBlockUser', payload).then((response) => {
+        if (response && response.status == true) {
+          Swal.fire({
+            title: 'Success!',
+            text: response.content,
+            icon: 'success',
+          })
+        } else {
+          Swal.fire({
+            title: 'Error!',
+            text: 'Failed to update',
+            icon: 'error',
+          })
+        }
+      })
     },
-     handleBlockUser(e) {
-      e.preventDefault();
-      let payload= JSON.stringify({
-            "user_id":this.userDetail.id,
-        })
-      this.$store.dispatch("blockUser", payload).then((response) => {
-          if (response && response.status == true) {
-            Swal.fire({
-              title: "Success!",
-              text: response.content,
-              icon: "success",
-            });
-          } else {
-            Swal.fire({
-              title: "Error!",
-              text: "Failed to update",
-              icon: "error",
-            });
-          }
-        });
+    handleBlockUser(e) {
+      e.preventDefault()
+      let payload = JSON.stringify({
+        user_id: this.userDetail.id,
+      })
+      this.$store.dispatch('blockUser', payload).then((response) => {
+        if (response && response.status == true) {
+          Swal.fire({
+            title: 'Success!',
+            text: response.content,
+            icon: 'success',
+          })
+        } else {
+          Swal.fire({
+            title: 'Error!',
+            text: 'Failed to update',
+            icon: 'error',
+          })
+        }
+      })
     },
     save(e) {
-      e.preventDefault();
-        let payload= JSON.stringify({
-           "user_id": localStorage.getItem("userId"),
-            "data": {
-                    full_nombre: this.userDetail.full_nombre,
-                    email:this.userDetail.email,
-                    telefono:this.userDetail.telefono,
-                    codigo_pais:this.userDetail.codigo_pais,
-                    habilidades:this.userDetail.habilidades,
-                    usd_direction:this.userDetail.usd_direction,
-                    payment_methods:this.userDetail.payment_methods
-            }      
-        })
-         this.$store.dispatch("updateUserProfile", payload).then((response) => {
-          if (response.status == true) {
-            Swal.fire({
-              title: "Success!",
-              text: response.content,
-              icon: "success",
-            });
-          } else {
-            Swal.fire({
-              title: "Error!",
-              text: response.content,
-              icon: "error",
-            });
-          }
-        })
+      e.preventDefault()
+      let payload = JSON.stringify({
+        user_id: localStorage.getItem('userId'),
+        data: {
+          full_nombre: this.userDetail.full_nombre,
+          email: this.userDetail.email,
+          telefono: this.userDetail.telefono,
+          codigo_pais: this.userDetail.codigo_pais,
+          habilidades: this.userDetail.habilidades,
+          usd_direction: this.userDetail.usd_direction,
+          payment_methods: this.userDetail.payment_methods,
+        },
+      })
+      this.$store.dispatch('updateUserProfile', payload).then((response) => {
+        if (response.status == true) {
+          Swal.fire({
+            title: 'Success!',
+            text: response.content,
+            icon: 'success',
+          })
+        } else {
+          Swal.fire({
+            title: 'Error!',
+            text: response.content,
+            icon: 'error',
+          })
+        }
+      })
     },
   },
- 
 }
 </script>
 <style scoped>

@@ -32,8 +32,8 @@
   </div>
 </template>
 <script>
-import Swal from "sweetalert2";
-import { mapGetters } from "vuex";
+import Swal from 'sweetalert2'
+import { mapGetters } from 'vuex'
 
 export default {
   name: 'Login',
@@ -46,9 +46,7 @@ export default {
     }
   },
   computed: {
-    ...mapGetters([
-      "getUserId",
-    ]),
+    ...mapGetters(['getUserId']),
   },
   methods: {
     //check the password length is max 8
@@ -74,29 +72,28 @@ export default {
       //   return;
       // }else
       //
-      e.preventDefault();
+      e.preventDefault()
       if (this.password === '' || this.password.length < 8) {
         this.isPassword = true
         return
       } else {
-        let payload= JSON.stringify({
+        let payload = JSON.stringify({
           username: this.$refs.User.value,
           password: this.password,
-
         })
-         this.$store.dispatch("signInUser", payload).then((response) => {
+        this.$store.dispatch('signInUser', payload).then((response) => {
           if (response.status == true) {
-            this.$router.push({ name: "Home" });
+            this.$router.push({ name: 'Home' })
             let payload = JSON.stringify({
-              "user_id": this.getUserId
+              user_id: this.getUserId,
             })
-            this.$store.dispatch("getUserProfile", payload);
+            this.$store.dispatch('getUserProfile', payload)
           } else {
             Swal.fire({
-              title: "Error!",
+              title: 'Error!',
               text: response.content,
-              icon: "error",
-            });
+              icon: 'error',
+            })
           }
         })
       }
