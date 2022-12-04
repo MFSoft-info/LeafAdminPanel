@@ -217,7 +217,6 @@ export default {
         })
     },
     handleBank(e,index){
-      console.log("thiss-->>", this.$refs.bank.value, e.target.value, index)
       this.payment_methods[index]['bank'] = e.target.value;
     },
      handleAccount(e,index){

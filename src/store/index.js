@@ -1,10 +1,9 @@
 import { createStore } from 'vuex';
 // import  createPersistedState from 'vuex-persistedstate'
-import accounts from "./account";
+import data from "./api";
 export default createStore({
   modules: {
-    accounts
+    data
   },
   // plugins: [createPersistedState("testState")],
-
 });

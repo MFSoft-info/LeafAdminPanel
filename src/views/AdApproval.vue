@@ -54,7 +54,8 @@
                           <input
                             class="form-check-input custom-checkbox"
                             type="checkbox"
-                            value=""
+                            :value="ad.advertise_id"
+                            @change="handleOnCheck($event)"
                           />
                         </div>
                       </td>
@@ -75,7 +76,7 @@
                 <input
                   class="form-check-input custom-checkbox"
                   type="checkbox"
-                  value=""
+               
                 />
               </div>
               <!-- Actual search box -->
@@ -113,7 +114,8 @@
                           <input
                             class="form-check-input custom-checkbox"
                             type="checkbox"
-                            value=""
+                             :value="ad.advertise_id"
+                              @change="handleOnCheck($event)"
                           />
                         </div>
                       </td>
@@ -134,7 +136,7 @@
                 <input
                   class="form-check-input custom-checkbox"
                   type="checkbox"
-                  value=""
+                  
                 />
               </div>
               <!-- Actual search box -->
@@ -172,7 +174,8 @@
                           <input
                             class="form-check-input custom-checkbox"
                             type="checkbox"
-                            value=""
+                             :value="ad.advertise_id"
+                              @change="handleOnCheck($event)"
                           />
                         </div>
                       </td>
@@ -189,76 +192,33 @@
       </b-tabs>
     </b-card>
 
-    <!--    modal 18-->
-    <UserDataModal
+    <!-- modal 18-->
+   <UserDataModal
       v-show="userDataVisible"
       @close="closeUserData"
       @show-confirm="openConfirmModal"
+      :content="adsData"
+      :advertiseId="adsId"
     />
+    
     <!--    confirm modal-->
-    <ConfirmModal v-show="confirmModalVisible" @close="closeConfirmModal" />
+    <ConfirmModal v-show="confirmModalVisible" @close="closeConfirmModal" :advertiseId="adsId"  />
   </div>
 </template>
 <script setup>
-import { ref } from 'vue'
+import { ref, watch } from 'vue';
 import { useStore } from 'vuex'
 import UserDataModal from '@/components/adApproval/UserDataModal.vue'
 import ConfirmModal from '@/components/adApproval/ConfirmModal.vue'
 const store = useStore();
+let adsList= ref(0);
+let adsDetails = ref(null);
 
-let adsList= ref(0)
-// let users = ref([
-//   {
-//     name: 'Alice Blue',
-//     email: 'aliceblue@example.com',
-//     amount: '763012721',
-//     picture: '/img/profile.jpg',
-//   },
-//   {
-//     name: 'Alice Blue',
-//     email: 'aliceblue@example.com',
-//     amount: '763012721',
-//     picture: '/img/profile.jpg',
-//   },
-//   {
-//     name: 'Alice Blue',
-//     email: 'aliceblue@example.com',
-//     amount: '763012721',
-//     picture: '/img/profile.jpg',
-//   },
-//   {
-//     name: 'Alice Blue',
-//     email: 'aliceblue@example.com',
-//     amount: '763012721',
-//     picture: '/img/profile.jpg',
-//   },
-//   {
-//     name: 'Alice Blue',
-//     email: 'aliceblue@example.com',
-//     amount: '763012721',
-//     picture: '/img/profile.jpg',
-//   },
-//   {
-//     name: 'Alice Blue',
-//     email: 'aliceblue@example.com',
-//     amount: '763012721',
-//     picture: '/img/profile.jpg',
-//   },
-//   {
-//     name: 'Alice Blue',
-//     email: 'aliceblue@example.com',
-//     amount: '763012721',
-//     picture: '/img/profile.jpg',
-//   },
-// ])
 function getAdsList(status) {
-
     const data= JSON.stringify({status: status})
       store.dispatch("getAdvertisesList", data ).then((response) => {
         if(response.content){
-          console.log(response.content)
            adsList.value = response.content;
-           console.log("adsList", adsList)
         }
     })
 }
@@ -284,33 +244,31 @@ function closeConfirmModal(closeAll) {
   if (closeAll) closeUserData()
 }
 </script>
-<script>
-import { mapGetters } from "vuex";
-const store = useStore();
 
-// export default {
-//     data: function() {
-//     return {
-//     adsList: ref([])
-//     };
-//   },
-//   // watch: {
-//   //   getAdsList()
-// //   // },
-// //     beforeMount(){
-// //     this.getAdsList()
-// //  },
-// //   methods: {
-// //     getAdsList() {
-// //     const data= JSON.stringify({status:"in review"})
-// //       store.dispatch("getAdvertisesList", data ).then((response) => {
-// //         if(response.content){
-// //           this.adsList = response.content;
-// //         }
-// //     })
-// //   },
-// // },
-// }
+<script>
+import Swal from "sweetalert2";
+export default {
+  name:"Ad",
+  data: function() {
+    return {
+  adsId: "",
+  adsData: {},
+    }
+    },
+  methods:{
+   handleOnCheck(event) {
+    this.adsId = event.target.value;
+    if(this.adsId){
+    const data= JSON.stringify({advertise_id: this.adsId});
+      this.$store.dispatch("getAdvertiseInfo", data ).then((response) => {
+        if(response.content){
+        this.adsData=response.content;
+        }
+    });
+    }
+},
+ },
+}
 </script>
 <style lang="scss">
 .head {
