@@ -11,6 +11,6 @@ export const UN_BLOCK_USER = 'admin/unblock/user'
 export const HANDLE_SWITCHES = 'admin/handle_switches'
 export const GET_WITHDRAWLS = 'admin/withdrawals/list'
 export const GET_ADVERTISES_LIST = 'admin/advertises/list'
-
+export const UPDATE_ADS_CONFIG = 'admin/update/ads_config'
 
 // export const LOGIN_API = 'admin/login'
