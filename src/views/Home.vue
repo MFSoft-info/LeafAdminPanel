@@ -62,7 +62,7 @@
 <script setup>
 import { ref } from 'vue'
 import { useStore } from 'vuex'
-import Swal from "sweetalert2";
+import Swal from 'sweetalert2'
 import StatsWrapper from '@/components/home/StatsWrapper.vue'
 import Stats from '@/components/home/Stats.vue'
 import ConfirmModal from '@/components/home/ConfirmModal.vue'
@@ -149,7 +149,7 @@ const businessSales = ref([
     amount: '4000',
   },
 ])
-const store = useStore();
+const store = useStore()
 
 function showConfirmModal(input) {
   confirmModalOpen.value = true
@@ -161,40 +161,40 @@ function closeConfirmModal() {
 }
 
 function enableSwith() {
- let payload = JSON.stringify({
-             "query": confirmModalInput.value === 'sale' ? 'sell' : confirmModalInput.value,
-        })
-     
-   store.dispatch("handleSwitches", payload).then((response) => {
-          if (response && response.status == true) {
-            Swal.fire({
-              title: "Success!",
-              text: response.content,
-              icon: "success",
-            });
-            switch (confirmModalInput.value) {
-              case 'buy':
-                activeBuy.value = !activeBuy.value
-                break
-              case 'sale':
-                activeSale.value = !activeSale.value
-                break
-              case 'register':
-                activeRegister.value = !activeRegister.value
-                break
-              default:
-                console.log('please provide an input')
-                break
-            }
-          } else {
-            Swal.fire({
-              title: "Error!",
-              text: "Failed to update",
-              icon: "error",
-            });
-          }
-        });
+  let payload = JSON.stringify({
+    query:
+      confirmModalInput.value === 'sale' ? 'sell' : confirmModalInput.value,
+  })
 
+  store.dispatch('handleSwitches', payload).then((response) => {
+    if (response && response.status == true) {
+      Swal.fire({
+        title: 'Success!',
+        text: response.content,
+        icon: 'success',
+      })
+      switch (confirmModalInput.value) {
+        case 'buy':
+          activeBuy.value = !activeBuy.value
+          break
+        case 'sale':
+          activeSale.value = !activeSale.value
+          break
+        case 'register':
+          activeRegister.value = !activeRegister.value
+          break
+        default:
+          console.log('please provide an input')
+          break
+      }
+    } else {
+      Swal.fire({
+        title: 'Error!',
+        text: 'Failed to update',
+        icon: 'error',
+      })
+    }
+  })
 
   closeConfirmModal()
 }

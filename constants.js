@@ -1,4 +1,4 @@
-export  const BASE_API_URL = 'http://137.184.90.156:4200/'
+export const BASE_API_URL = 'http://137.184.90.156:4200/'
 export const LOGIN_API = 'admin/login'
 export const USER_INFO = 'admin/get_user/info'
 export const USERS_LIST = 'admin/users/list'
@@ -15,5 +15,7 @@ export const UPDATE_ADS_CONFIG = 'admin/update/ads_config'
 export const GET_ADVERTISES_INFO = 'admin/advertise/info'
 export const ADVERTISE_DENY = 'admin/advertises/deny'
 export const ADVERTISE_APPROVE = 'admin/advertises/approve'
+export const GET_TEAM = 'admin/get_team'
+export const GET_TEAM_BY_USERNAME = 'admin/get_team/by_username'
 
 // export const LOGIN_API = 'admin/login'

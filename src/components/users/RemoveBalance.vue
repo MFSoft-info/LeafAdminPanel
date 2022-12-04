@@ -7,7 +7,7 @@
         </div>
       </div>
       <h4 class="heading-users m-0">QUITAR SALDO</h4>
-     <!-- <div class="mb-3">
+      <!-- <div class="mb-3">
         <label class="form-label text-left fs-14">Seleccionar usuario(s)</label>
         <select class="form-select" aria-label="Default select example" ref="user">
           <option selected>Todos</option>
@@ -41,41 +41,41 @@ import Backdrop from '@/components/Backdrop.vue'
 const emit = defineEmits(['close'])
 </script>
 <script>
-import Swal from "sweetalert2";
+import Swal from 'sweetalert2'
 export default {
-  name:"Remove Balance Modal",
+  name: 'Remove Balance Modal',
   props: ['data'],
-  methods:{
-  submit(e) {
-      e.preventDefault();
-      if (!this.$refs.amount.value ) {
-            Swal.fire({
-              title: "Error!",
-              text: "Please enter amount.",
-              icon: "error",
-            });
-            return 0;
-          }
-      let payload= JSON.stringify({
-                  "userid":this.data,
-                  "amount":this.$refs.amount.value,
+  methods: {
+    submit(e) {
+      e.preventDefault()
+      if (!this.$refs.amount.value) {
+        Swal.fire({
+          title: 'Error!',
+          text: 'Please enter amount.',
+          icon: 'error',
         })
-      this.$store.dispatch("removeBalance", payload).then((response) => {
-          if (response && response.status == true) {
-            Swal.fire({
-              title: "Success!",
-              text: response.content,
-              icon: "success",
-            });
-          } else {
-            Swal.fire({
-              title: "Error!",
-              text: "Failed to add",
-              icon: "error",
-            });
-          }
-        })
+        return 0
+      }
+      let payload = JSON.stringify({
+        userid: this.data,
+        amount: this.$refs.amount.value,
+      })
+      this.$store.dispatch('removeBalance', payload).then((response) => {
+        if (response && response.status == true) {
+          Swal.fire({
+            title: 'Success!',
+            text: response.content,
+            icon: 'success',
+          })
+        } else {
+          Swal.fire({
+            title: 'Error!',
+            text: 'Failed to add',
+            icon: 'error',
+          })
+        }
+      })
     },
-  }
+  },
 }
 </script>
