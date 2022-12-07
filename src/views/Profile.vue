@@ -110,12 +110,32 @@
       <b-row>
         <label class="form-label">Payment Method</label>
         <hr />
+        <div class="mb-3 col-md-6">
+          <label class="form-label">Usd</label>
+          <input
+            v-model="profileInfo.usd_direction"
+            placeholder="usd"
+            type="text"
+            class="form-control"
+            aria-describedby="emailHelp"
+          />
+        </div>
+        <div class="mb-3 col-md-6">
+          <label class="form-label">Leal</label>
+          <input
+            v-model="profileInfo.leal_direction"
+            placeholder="usd"
+            type="text"
+            class="form-control"
+            aria-describedby="emailHelp"
+          />
+        </div>
         <div
           class="mb-3 col-md-6"
           v-for="(data, index) in payment_methods"
           :key="index"
         >
-          <label class="form-label">Bank Name</label>
+          <label class="form-label">Name Bank</label>
           <input
             v-model="data.bank"
             placeholder="Bank"

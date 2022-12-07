@@ -14,6 +14,9 @@ import {
   HANDLE_SWITCHES,
   UN_BLOCK_USER,
   GET_WITHDRAWLS,
+  GET_WITHDRAWLS_INFO,
+  WITHDRAWL_APPROVE,
+  WITHDRAWL_DENY,
   GET_ADVERTISES_LIST,
   GET_ADVERTISES_INFO,
   ADVERTISE_DENY,
@@ -21,6 +24,8 @@ import {
   UPDATE_ADS_CONFIG,
   GET_TEAM,
   GET_TEAM_BY_USERNAME,
+  GET_ADVERTISE_BY_REQUESTER,
+  GET_WITHDRAWL_BY_REQUESTER
 } from '../../../constants'
 export default {
   state: {
@@ -43,8 +48,14 @@ export default {
     getAdvertiseInfo(state) {
       return state.advertiseInfo
     },
+    getWithdrawlInfo(state) {
+      return state.withdrawlInfo
+    },
     getAdsRoute(state) {
       return state.adsRoute
+    },
+    getWithdrawlsRoute(state) {
+      return state.withdrawlsRoute
     },
     isUserAuthenticated(state) {
       return state.isAuthenticated
@@ -228,7 +239,7 @@ export default {
         })
     },
 
-    async getWithdrawlsList({ commit }, data) {
+    async getWithdrawlList({ commit }, data) {
       return await axios
         .post(`${BASE_API_URL}${GET_WITHDRAWLS}`, data, {
           headers: {
@@ -238,6 +249,76 @@ export default {
         })
         .then((response) => {
           commit('setWithdrawlsList', response.data)
+          return response.data
+        })
+        .catch((error) => {
+          if (error.response) {
+            return error.response.data
+          }
+        })
+    },
+    async getWithdrawlInfo({ commit }, data) {
+      return await axios
+        .post(`${BASE_API_URL}${GET_WITHDRAWLS_INFO}`, data, {
+          headers: {
+            'Content-Type': 'application/json',
+            Authorization: `Bearer ${JwtService.getToken()}`,
+          },
+        })
+        .then((response) => {
+          commit('setWithdrawlInfo', response.data)
+
+          return response.data
+        })
+        .catch((error) => {
+          if (error.response) {
+            return error.response.data
+          }
+        })
+    },
+    async getWithdrawlByRequester({ commit }, data) {
+      return await axios
+        .post(`${BASE_API_URL}${GET_WITHDRAWL_BY_REQUESTER}`, data, {
+          headers: {
+            'Content-Type': 'application/json',
+            Authorization: `Bearer ${JwtService.getToken()}`,
+          },
+        })
+        .then((response) => {
+          return response.data
+        })
+        .catch((error) => {
+          if (error.response) {
+            return error.response.data
+          }
+        })
+    },
+    async approveWithdrawl({ commit }, data) {
+      return await axios
+        .post(`${BASE_API_URL}${WITHDRAWL_APPROVE}`, data, {
+          headers: {
+            'Content-Type': 'application/json',
+            Authorization: `Bearer ${JwtService.getToken()}`,
+          },
+        })
+        .then((response) => {
+          return response.data
+        })
+        .catch((error) => {
+          if (error.response) {
+            return error.response.data
+          }
+        })
+    },
+    async denyWithdrawl({ commit }, data) {
+      return await axios
+        .post(`${BASE_API_URL}${WITHDRAWL_DENY}`, data, {
+          headers: {
+            'Content-Type': 'application/json',
+            Authorization: `Bearer ${JwtService.getToken()}`,
+          },
+        })
+        .then((response) => {
           return response.data
         })
         .catch((error) => {
@@ -301,6 +382,24 @@ export default {
           }
         })
     },
+    async getAdvertiseByRequester({ commit }, data) {
+      return await axios
+        .post(`${BASE_API_URL}${GET_ADVERTISE_BY_REQUESTER}`, data, {
+          headers: {
+            'Content-Type': 'application/json',
+            Authorization: `Bearer ${JwtService.getToken()}`,
+          },
+        })
+        .then((response) => {
+          return response.data
+        })
+        .catch((error) => {
+          if (error.response) {
+            return error.response.data
+          }
+        })
+    },
+
     async approveAdvertise({ commit }, data) {
       return await axios
         .post(`${BASE_API_URL}${ADVERTISE_APPROVE}`, data, {
@@ -373,6 +472,9 @@ export default {
     async setAdsModalRoute({ commit }, data) {
       await commit('setAdsRoute', data)
     },
+    async setWithdrawlsModalRoute({ commit }, data) {
+      await commit('setWithdrawlsRoute', data)
+    },
     async logOut({ commit }) {
       await commit('resetStateOnLogOut')
     },
@@ -396,7 +498,9 @@ export default {
     setAdevertiseInfo(state, payload) {
       state.advertiseInfo = payload
     },
-
+    setWithdrawlInfo(state, payload) {
+      state.withdrawlInfo = payload
+    },
     setUsersList(state, payload) {
       state.usersList = payload
     },
@@ -414,6 +518,9 @@ export default {
     },
     setAdsRoute(state, payload) {
       state.adsRoute = payload
+    },
+    setWithdrawlsRoute(state, payload) {
+      state.withdrawlsRoute = payload
     },
     resetStateOnLogOut(state) {
       JwtService.destroyToken()

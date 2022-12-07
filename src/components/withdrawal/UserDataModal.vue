@@ -15,7 +15,7 @@
           <span class="head">Nombre: </span>
         </b-col>
         <b-col md="7">
-          <span>marilu melendrez</span>
+          <span> {{ content.full_nombre }} </span>
         </b-col>
       </b-row>
       <b-row class="mb-2">
@@ -23,7 +23,7 @@
           <span class="head">Nombre de usuario: </span>
         </b-col>
         <b-col md="7">
-          <span>maricucha:</span>
+          <span>{{ content.nombre_usuario }}</span>
         </b-col>
       </b-row>
       <b-row class="mb-2">
@@ -31,7 +31,7 @@
           <span class="head">Fecha:</span>
         </b-col>
         <b-col md="7">
-          <span>12/09/2021</span>
+          <span> {{ new Date(content.requested_at).toLocaleString() }} </span>
         </b-col>
       </b-row>
       <b-row class="mb-2">
@@ -39,7 +39,7 @@
           <span class="head">Monto:</span>
         </b-col>
         <b-col md="7">
-          <span>240 leal</span>
+          <span>{{ content.amount }} </span>
         </b-col>
       </b-row>
       <b-row class="mb-2">
@@ -47,14 +47,14 @@
           <span class="head">Direccion LEAL:</span>
         </b-col>
         <b-col md="7">
-          <span> 1ST5CD6DF36FS66FA52DSDD52</span>
+          <span>{{ content.leal_direction }} </span>
         </b-col>
       </b-row>
       <div class="mt-5 mb-4 text-center">
-        <button @click="$emit('modal-delete')" class="common sm-btn-c">
+        <button @click="handleApproveClick" class="common sm-btn-c">
           PROCESAR
         </button>
-        <button @click="$emit('modal-delete')" class="ms-3 common sm-btn-c">
+        <button @click="handleDenyClick" class="ms-3 common sm-btn-c">
           NEGAR
         </button>
       </div>
@@ -64,4 +64,39 @@
 
 <script setup>
 import Backdrop from '@/components/Backdrop.vue'
+import { ref, computed } from 'vue'
+import { useStore } from 'vuex'
+const store = useStore()
 </script>
+<script>
+import { mapGetters } from 'vuex'
+export default {
+  name: 'Withdrawal Modal',
+  props: ['content'],
+  data: function () {
+    return {
+      content: {
+        full_nombre: '',
+        nombre_usuario: '',
+        requested_at: '',
+        amount: '',
+        leal_direction: '',
+      },
+    }
+  },
+  computed: {
+    ...mapGetters(['getWithdrawlInfo']),
+  },
+  methods: {
+    handleApproveClick(e) {
+      this.$store.dispatch('setWithdrawlsModalRoute', 'approve')
+      this.$emit('modal-delete')
+    },
+    handleDenyClick(e) {
+      this.$store.dispatch('setWithdrawlsModalRoute', 'deny')
+      this.$emit('modal-delete')
+    },
+  },
+}
+</script>
+

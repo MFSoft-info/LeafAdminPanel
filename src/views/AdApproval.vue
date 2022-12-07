@@ -25,9 +25,11 @@
               >
                 <span class="fa fa-search form-control-feedback1234"></span>
                 <input
+                  v-model="searchAdvertise"
                   type="text"
                   class="form-control"
                   placeholder="Search Contact"
+                  @keypress="getAdvertiseByRequester('in review')"
                 />
               </div>
             </b-col>
@@ -39,8 +41,9 @@
                   <thead class="c-table__header">
                     <tr>
                       <th></th>
+                      <th></th>
                       <th class="c-table__col-label">Propietario</th>
-                      <th class="c-table__col-label">Publicar enlace</th>
+                      <th class="c-table__col-label w-25">Publicar enlace</th>
                       <th class="c-table__col-label">Estatus</th>
                     </tr>
                   </thead>
@@ -60,9 +63,11 @@
                           />
                         </div>
                       </td>
+                      <td></td>
                       <td class="c-table__cell">{{ ad.owner }}</td>
-                      <td class="c-table__cell">{{ ad.post_link }}</td>
+                      <td class="c-table__cell w-25">{{ ad.post_link }}</td>
                       <td class="c-table__cell">{{ ad.status }}</td>
+                      <td></td>
                     </tr>
                   </tbody>
                 </table>
@@ -85,9 +90,11 @@
               >
                 <span class="fa fa-search form-control-feedback1234"></span>
                 <input
+                  v-model="searchAdvertise"
                   type="text"
                   class="form-control"
                   placeholder="Search Contact"
+                  @keypress="getAdvertiseByRequester('approved')"
                 />
               </div>
             </b-col>
@@ -98,6 +105,7 @@
                 <table class="c-table">
                   <thead class="c-table__header">
                     <tr>
+                      <th></th>
                       <th></th>
                       <th class="c-table__col-label">Propietario</th>
                       <th class="c-table__col-label">Publicar enlace</th>
@@ -120,9 +128,11 @@
                           />
                         </div>
                       </td>
+                      <td></td>
                       <td class="c-table__cell">{{ ad.owner }}</td>
                       <td class="c-table__cell">{{ ad.post_link }}</td>
                       <td class="c-table__cell">{{ ad.status }}</td>
+                      <td></td>
                     </tr>
                   </tbody>
                 </table>
@@ -145,9 +155,11 @@
               >
                 <span class="fa fa-search form-control-feedback1234"></span>
                 <input
+                  v-model="searchAdvertise"
                   type="text"
                   class="form-control"
                   placeholder="Search Contact"
+                  @keypress="getAdvertiseByRequester('denied')"
                 />
               </div>
             </b-col>
@@ -158,6 +170,7 @@
                 <table class="c-table">
                   <thead class="c-table__header">
                     <tr>
+                      <th></th>
                       <th></th>
                       <th class="c-table__col-label">Propietario</th>
                       <th class="c-table__col-label">Publicar enlace</th>
@@ -180,9 +193,11 @@
                           />
                         </div>
                       </td>
+                      <td></td>
                       <td class="c-table__cell">{{ ad.owner }}</td>
                       <td class="c-table__cell">{{ ad.post_link }}</td>
                       <td class="c-table__cell">{{ ad.status }}</td>
+                      <td></td>
                     </tr>
                   </tbody>
                 </table>
@@ -218,6 +233,7 @@ import ConfirmModal from '@/components/adApproval/ConfirmModal.vue'
 const store = useStore()
 let adsList = ref(0)
 let adsDetails = ref(null)
+let searchAdvertise = ref(null)
 
 function getAdsList(status) {
   const data = JSON.stringify({ status: status })
@@ -228,9 +244,22 @@ function getAdsList(status) {
   })
 }
 getAdsList('in review')
+
 const userDataVisible = ref(false)
 const confirmModalVisible = ref(false)
 
+function getAdvertiseByRequester(type) {
+  let payload = JSON.stringify({
+    username: searchAdvertise.value,
+  })
+  store.dispatch('getAdvertiseByRequester', payload).then((response) => {
+    if (response.status) {
+      this.adsList =
+        response.content.length > 0 &&
+        response.content.filter((e) => e.status === type)
+    }
+  })
+}
 function openUserData() {
   userDataVisible.value = true
 }

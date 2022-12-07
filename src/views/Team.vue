@@ -19,16 +19,20 @@
         md="3"
         class="d-inline align-items-center justify-content-center res-mt"
       >
-        <span>DIRECTOS : </span><strong>25</strong>
+        <span>DIRECTOS : </span><strong> {{ direct_users }}</strong>
       </b-col>
       <b-col md="3" class="res-mt">
-        <span>INDIRECTOS : </span><strong>120</strong>
+        <span>INDIRECTOS : </span><strong>{{ indirect_users }}</strong>
       </b-col>
     </b-row>
 
     <div class="row-team">
       <div class="top-levels">
-        <div class="level" v-for="(data, index) in childs_count" :key="index">
+        <div
+          class="level"
+          v-for="(data, index) in childs_count.slice(0, 10)"
+          :key="index"
+        >
           <p>n {{ doMath(index) }}</p>
           <p class="level-value">{{ data }}</p>
         </div>
@@ -81,17 +85,41 @@
       <div class="middle-div">
         <div>
           <div @click="isName = !isName">
-            <i class="fas fa-user-plus"></i>
-            <span class="team-span"> {{ teamList.user.nombre_usuario }} </span>
-            <i class="fas fa-greater-than ms-2"></i>
+            <div v-if="teamList.children.length">
+              <i class="fas fa-user-plus"></i>
+              <span class="team-span">
+                {{ teamList.user.nombre_usuario }}
+              </span>
+              <i class="fas fa-greater-than ms-2"></i>
+            </div>
+            <div v-else style="cursor: no-drop">
+              <i class="fas fa-user"></i>
+              <span class="team-span">
+                {{ teamList.user.nombre_usuario }}
+              </span>
+              <i class="ms-2"></i>
+            </div>
           </div>
           <div v-if="isName" class="nested-team-span">
             <div v-for="(data, index) in teamList.children" :key="index">
               <div @click="isChildName = !isChildName" class="team-span">
-                <i class="fas fa-user-plus"></i>
-                <span class="team-span-n">
-                  {{ data.user.nombre_usuario }}
-                </span>
+                <div v-if="data.children.length">
+                  <i class="fas fa-user-plus"></i>
+                  <span class="team-span">
+                    {{ data.user.nombre_usuario }}
+                  </span>
+                  <i class="fas fa-greater-than ms-2"></i>
+                </div>
+                <div v-else style="cursor: not-allowed !important">
+                  <i class="fas fa-user"></i>
+                  <span
+                    class="team-span"
+                    style="cursor: not-allowed !important"
+                  >
+                    {{ data.user.nombre_usuario }}
+                  </span>
+                  <i class="ms-2"></i>
+                </div>
               </div>
               <div v-if="isChildName" class="nested-team-span">
                 <div v-for="(childData, index) in data.children" :key="index">
@@ -99,10 +127,19 @@
                     @click="isChildNameee = !isChildNameee"
                     class="team-span"
                   >
-                    <i class="fas fa-user-plus"></i>
+                    <i
+                      v-if="childData.children.length"
+                      class="fas fa-user-plus"
+                    ></i>
+                    <i v-else class="fas fa-user"></i>
                     <span class="team-span-n">
                       {{ childData.user.nombre_usuario }}
                     </span>
+                    <i
+                      v-if="childData.children.length"
+                      class="fas fa-greater-than ms-2"
+                    ></i>
+                    <i v-else class="ms-2"></i>
                   </div>
                   <div v-if="isChildNameee" class="nested-team-span">
                     <div
@@ -110,10 +147,19 @@
                       :key="index"
                     >
                       <div @click="isChild = !isChild" class="team-span">
-                        <i class="fas fa-user-plus"></i>
+                        <i
+                          v-if="childDataaa.children.length"
+                          class="fas fa-user-plus"
+                        ></i>
+                        <i v-else class="fas fa-user"></i>
                         <span class="team-span-n">
                           {{ childDataaa.user.nombre_usuario }}
                         </span>
+                        <i
+                          v-if="childDataaa.children.length"
+                          class="fas fa-greater-than ms-2"
+                        ></i>
+                        <i v-else class="ms-2"></i>
                       </div>
                       <div v-if="isChild" class="nested-team-span">
                         <div
@@ -123,10 +169,19 @@
                           :key="index"
                         >
                           <div @click="isChildd = !isChildd" class="team-span">
-                            <i class="fas fa-user-plus"></i>
+                            <i
+                              v-if="childDataaaaaa.children.length"
+                              class="fas fa-user-plus"
+                            ></i>
+                            <i v-else class="fas fa-user"></i>
                             <span class="team-span-n">
                               {{ childDataaaaaa.user.nombre_usuario }}
                             </span>
+                            <i
+                              v-if="childDataaaaaa.children.length"
+                              class="fas fa-greater-than ms-2"
+                            ></i>
+                            <i v-else class="ms-2"></i>
                           </div>
                           <div v-if="isChildd" class="nested-team-span">
                             <div
@@ -139,10 +194,19 @@
                                 @click="isChildddd = !isChildddd"
                                 class="team-span"
                               >
-                                <i class="fas fa-user-plus"></i>
+                                <i
+                                  v-if="childDatas.children.length"
+                                  class="fas fa-user-plus"
+                                ></i>
+                                <i v-else class="fas fa-user"></i>
                                 <span class="team-span-n">
                                   {{ childDatas.user.nombre_usuario }}
                                 </span>
+                                <i
+                                  v-if="childDatas.children.length"
+                                  class="fas fa-greater-than ms-2"
+                                ></i>
+                                <i v-else class="ms-2"></i>
                               </div>
                               <div v-if="isChildddd" class="nested-team-span">
                                 <div
@@ -155,10 +219,19 @@
                                     @click="isChilddddsssss = !isChilddddsssss"
                                     class="team-span"
                                   >
-                                    <i class="fas fa-user-plus"></i>
+                                    <i
+                                      v-if="childDatasss.children.length"
+                                      class="fas fa-user-plus"
+                                    ></i>
+                                    <i v-else class="fas fa-user"></i>
                                     <span class="team-span-n">
                                       {{ childDatasss.user.nombre_usuario }}
                                     </span>
+                                    <i
+                                      v-if="childDatasss.children.length"
+                                      class="fas fa-greater-than ms-2"
+                                    ></i>
+                                    <i v-else class="ms-2"></i>
                                   </div>
                                   <div
                                     v-if="isChilddddsssss"
@@ -170,13 +243,24 @@
                                       ) in childDatasss.children"
                                       :key="index"
                                     >
-                                      <i class="fas fa-user-plus"></i>
+                                      <i
+                                        v-if="
+                                          isChilddddsssddddss.children.length
+                                        "
+                                        class="fas fa-user-plus"
+                                      ></i>
+                                      <i v-else class="fas fa-user"></i>
                                       <span class="team-span-n">
                                         {{
                                           isChilddddsssddddss.user
                                             .nombre_usuario
                                         }}
                                       </span>
+                                      <i
+                                        v-if="childDatasss.children.length"
+                                        class="fas fa-greater-than ms-2"
+                                      ></i>
+                                      <i v-else class="ms-2"></i>
                                     </div>
                                   </div>
                                 </div>
@@ -209,6 +293,8 @@ export default {
       isChildddd: false,
       isChilddddsssss: false,
       searchTeam: '',
+      direct_users: '',
+      indirect_users: '',
       childs_count: [],
       teamList: {
         children: [],
@@ -224,6 +310,8 @@ export default {
         if (response.status) {
           this.teamList = response.content
           this.childs_count = response.childs_count
+          this.direct_users = response.direct_users
+          this.indirect_users = response.indirect_users
         }
       })
     },
@@ -239,7 +327,8 @@ export default {
       })
     },
     doMath: function (index) {
-      return index + 1
+      let a = index + 1
+      return a
     },
   },
 }
@@ -308,6 +397,12 @@ export default {
   div .fa-user-plus {
     font-size: 20px !important;
   }
+  div .fa-user {
+    font-size: 20px !important;
+  }
+  div .fa-greater-than {
+    font-size: 15px !important;
+  }
 }
 .middle-div {
   width: 40% !important;
@@ -348,4 +443,3 @@ export default {
   }
 }
 </style>
-

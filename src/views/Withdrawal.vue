@@ -7,7 +7,11 @@
     </b-row>
     <b-card no-body>
       <b-tabs card>
-        <b-tab no-body title="Faltan Procesar">
+        <b-tab
+          no-body
+          title="Faltan Procesar"
+          @click="getWithdrawalList('processing')"
+        >
           <b-row class="mt-5">
             <b-col md="10" class="d-inline-flex align-items-center">
               <div class="form-check search-cb">
@@ -23,9 +27,11 @@
               >
                 <span class="fa fa-search form-control-feedback1234"></span>
                 <input
+                  v-model="searchWithdrawl"
                   type="text"
                   class="form-control"
                   placeholder="Search Contact"
+                  @keypress="getWithdrawlByRequester('processing')"
                 />
               </div>
             </b-col>
@@ -38,16 +44,14 @@
                     <tr>
                       <th></th>
                       <th></th>
-                      <th class="c-table__col-label">Nombre</th>
-                      <th class="c-table__col-label">Nombre de usuario</th>
-                      <th class="c-table__col-label">Monto</th>
-                      <th class="c-table__col-label">Fecha</th>
-                      <th class="c-table__col-label">Direccion de token</th>
+                      <th class="c-table__col-label">Propietario</th>
+                      <th class="c-table__col-label">cantidade</th>
+                      <th class="c-table__col-label">Estatus</th>
                     </tr>
                   </thead>
                   <tbody class="c-table__body">
                     <tr
-                      v-for="(user, i) in users"
+                      v-for="(withdrawal, i) in withdrawalList"
                       :key="i"
                       @click="openUserData"
                     >
@@ -56,21 +60,15 @@
                           <input
                             class="form-check-input custom-checkbox"
                             type="checkbox"
-                            value=""
+                            :value="withdrawal.withdrawal_id"
+                            @change="handleOnCheck($event)"
                           />
                         </div>
                       </td>
-                      <td class="c-table__cell">
-                        <img
-                          class="c-img-table"
-                          width="40px"
-                          height="40px"
-                          src="/img/profile.jpg"
-                        />
-                      </td>
-                      <td class="c-table__cell">Alice Blue</td>
-                      <td class="c-table__cell">aliceblue@example.com</td>
-                      <td class="c-table__cell">763012721</td>
+                      <td></td>
+                      <td class="c-table__cell">{{ withdrawal.owner }}</td>
+                      <td class="c-table__cell">{{ withdrawal.amount }}</td>
+                      <td class="c-table__cell">{{ withdrawal.status }}</td>
                       <td class="c-table__cell"></td>
                       <td></td>
                     </tr>
@@ -80,7 +78,11 @@
             </b-col>
           </b-row>
         </b-tab>
-        <b-tab no-body title="Procesados">
+        <b-tab
+          no-body
+          title="Procesados"
+          @click="getWithdrawalList('successful')"
+        >
           <b-row class="mt-5">
             <b-col md="10" class="d-inline-flex align-items-center">
               <div class="form-check search-cb">
@@ -96,9 +98,11 @@
               >
                 <span class="fa fa-search form-control-feedback1234"></span>
                 <input
+                  v-model="searchWithdrawl"
                   type="text"
                   class="form-control"
                   placeholder="Search Contact"
+                  @keypress="getWithdrawlByRequester('successful')"
                 />
               </div>
             </b-col>
@@ -111,16 +115,14 @@
                     <tr>
                       <th></th>
                       <th></th>
-                      <th class="c-table__col-label">Nombre</th>
-                      <th class="c-table__col-label">Nombre de usuario</th>
-                      <th class="c-table__col-label">Monto</th>
-                      <th class="c-table__col-label">Fecha</th>
-                      <th class="c-table__col-label">Direccion de token</th>
+                      <th class="c-table__col-label">Propietario</th>
+                      <th class="c-table__col-label">cantidade</th>
+                      <th class="c-table__col-label">Estatus</th>
                     </tr>
                   </thead>
                   <tbody class="c-table__body">
                     <tr
-                      v-for="(user, i) in users"
+                      v-for="(withdrawal, i) in withdrawalList"
                       :key="i"
                       @click="openUserData"
                     >
@@ -129,21 +131,15 @@
                           <input
                             class="form-check-input custom-checkbox"
                             type="checkbox"
-                            value=""
+                            :value="withdrawal.withdrawal_id"
+                            @change="handleOnCheck($event)"
                           />
                         </div>
                       </td>
-                      <td class="c-table__cell">
-                        <img
-                          class="c-img-table"
-                          width="40px"
-                          height="40px"
-                          src="/img/profile.jpg"
-                        />
-                      </td>
-                      <td class="c-table__cell">Alice Blue</td>
-                      <td class="c-table__cell">aliceblue@example.com</td>
-                      <td class="c-table__cell">763012721</td>
+                      <td></td>
+                      <td class="c-table__cell">{{ withdrawal.owner }}</td>
+                      <td class="c-table__cell">{{ withdrawal.amount }}</td>
+                      <td class="c-table__cell">{{ withdrawal.status }}</td>
                       <td class="c-table__cell"></td>
                       <td></td>
                     </tr>
@@ -153,7 +149,7 @@
             </b-col>
           </b-row>
         </b-tab>
-        <b-tab no-body title="Negados">
+        <b-tab no-body title="Negados" @click="getWithdrawalList('denied')">
           <b-row class="mt-5">
             <b-col md="10" class="d-inline-flex align-items-center">
               <div class="form-check search-cb">
@@ -169,9 +165,11 @@
               >
                 <span class="fa fa-search form-control-feedback1234"></span>
                 <input
+                  v-model="searchWithdrawl"
                   type="text"
                   class="form-control"
                   placeholder="Search Contact"
+                  @keypress="getWithdrawlByRequester('denied')"
                 />
               </div>
             </b-col>
@@ -184,16 +182,14 @@
                     <tr>
                       <th></th>
                       <th></th>
-                      <th class="c-table__col-label">Nombre</th>
-                      <th class="c-table__col-label">Nombre de usuario</th>
-                      <th class="c-table__col-label">Monto</th>
-                      <th class="c-table__col-label">Fecha</th>
-                      <th class="c-table__col-label">Direccion de token</th>
+                      <th class="c-table__col-label">Propietario</th>
+                      <th class="c-table__col-label">cantidade</th>
+                      <th class="c-table__col-label">Estatus</th>
                     </tr>
                   </thead>
                   <tbody class="c-table__body">
                     <tr
-                      v-for="(user, i) in users"
+                      v-for="(withdrawal, i) in withdrawalList"
                       :key="i"
                       @click="openUserData"
                     >
@@ -202,21 +198,15 @@
                           <input
                             class="form-check-input custom-checkbox"
                             type="checkbox"
-                            value=""
+                            :value="withdrawal.withdrawal_id"
+                            @change="handleOnCheck($event)"
                           />
                         </div>
                       </td>
-                      <td class="c-table__cell">
-                        <img
-                          class="c-img-table"
-                          width="40px"
-                          height="40px"
-                          src="/img/profile.jpg"
-                        />
-                      </td>
-                      <td class="c-table__cell">Alice Blue</td>
-                      <td class="c-table__cell">aliceblue@example.com</td>
-                      <td class="c-table__cell">763012721</td>
+                      <td></td>
+                      <td class="c-table__cell">{{ withdrawal.owner }}</td>
+                      <td class="c-table__cell">{{ withdrawal.amount }}</td>
+                      <td class="c-table__cell">{{ withdrawal.status }}</td>
                       <td class="c-table__cell"></td>
                       <td></td>
                     </tr>
@@ -234,9 +224,15 @@
       v-show="userDataVisible"
       @close="closeUserData"
       @modal-delete="openModalDelete"
+      :content="withdrawalData"
+      :withdrawalssId="withdrawalId"
     />
     <!--    delete modal-->
-    <ModalDelete v-show="modalDeleteVisible" @close="closeModalDelete" />
+    <ModalDelete
+      v-show="modalDeleteVisible"
+      @close="closeModalDelete"
+      :withdrawalssId="withdrawalId"
+    />
   </div>
 </template>
 <script setup>
@@ -292,12 +288,32 @@ let users = ref([
 const store = useStore()
 const userDataVisible = ref(false)
 const modalDeleteVisible = ref(false)
-const data = JSON.stringify({ status: 'successful' })
-store.dispatch('getWithdrawlsList', data).then((response) => {
-  if (response.content) {
-    users.value = response.content
-  }
-})
+let withdrawalList = ref(0)
+let searchWithdrawl = ref(null)
+
+function getWithdrawalList(status) {
+  const data = JSON.stringify({ status: status })
+  store.dispatch('getWithdrawlList', data).then((response) => {
+    if (response.content) {
+      withdrawalList.value = response.content
+    }
+  })
+}
+
+getWithdrawalList('processing')
+
+function getWithdrawlByRequester(type) {
+  let payload = JSON.stringify({
+    username: searchWithdrawl.value,
+  })
+  store.dispatch('getWithdrawlByRequester', payload).then((response) => {
+    if (response.status) {
+      this.withdrawalList =
+        response.content.length > 0 &&
+        response.content.filter((e) => e.status === type)
+    }
+  })
+}
 
 function openUserData() {
   userDataVisible.value = true
@@ -315,6 +331,32 @@ function closeModalDelete(closeAll) {
   modalDeleteVisible.value = false
 
   if (closeAll) closeUserData()
+}
+</script>
+
+<script>
+import Swal from 'sweetalert2'
+export default {
+  name: 'Withdrawal',
+  data: function () {
+    return {
+      withdrawalId: '',
+      withdrawalData: {},
+    }
+  },
+  methods: {
+    handleOnCheck(event) {
+      this.withdrawalId = event.target.value
+      if (this.withdrawalId) {
+        const data = JSON.stringify({ withdrawal_id: this.withdrawalId })
+        this.$store.dispatch('getWithdrawlInfo', data).then((response) => {
+          if (response.content) {
+            this.withdrawalData = response.content
+          }
+        })
+      }
+    },
+  },
 }
 </script>
 <style lang="scss">
