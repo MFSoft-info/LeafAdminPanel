@@ -8,10 +8,19 @@
     <b-card no-body>
       <b-tabs card>
         <b-tab no-body title="P2p">
-          <P2p />
+          <P2p :data="p2pSetting" />
         </b-tab>
 
-        <b-tab no-body title="CHAT"></b-tab>
+        <b-tab no-body title="CHAT">
+          <div class="d-flex justify-content-end mb-4 mx-4">
+            <button
+              class="btn btn-primary"
+              style="margin-right: 30px; margin-top: 40px"
+            >
+              Guardar cambios
+            </button>
+          </div>
+        </b-tab>
         <b-tab no-body title="NEGOCIOS">
           <!-- Do the same for the rest of tab's content -->
           <Negocios />
@@ -25,7 +34,7 @@
                 >
                 <input
                   type="text"
-                  v-model="time_between_ads"
+                  v-model="adsConfig.time_between_ads"
                   class="btn btn-outline-primary me-2 mt-2"
                 />
               </div>
@@ -36,7 +45,7 @@
                   >URL del tutorial</span
                 >
                 <input
-                  v-model="tutorial_url"
+                  v-model="adsConfig.tutorial_url"
                   type="text"
                   class="btn btn-outline-primary me-2 mt-2"
                 />
@@ -45,14 +54,15 @@
           </b-row>
           <b-row class="mt-2 justify-content-center">
             <b-col lg="4" md="12" class="d-flex">
-              <div class="mt-2 mb-2">
+              <div class="mt-2 mb-2 w-100" style="width: 100% !important">
                 <span class="cong-span-heading d-block text-left-c"
                   >URL de página de Facebook</span
                 >
                 <input
                   type="text"
-                  v-model="facebook_url"
-                  class="btn btn-outline-primary me-2 mt-2"
+                  v-model="adsConfig.facebook_url"
+                  class="btn btn-outline-primary me-2 mt-2 w-100"
+                  style="width: 100% !important; max-width: 100% !important"
                 />
               </div>
             </b-col>
@@ -60,15 +70,15 @@
           </b-row>
           <b-row class="mt-2 justify-content-center">
             <b-col lg="4" md="12" class="d-flex">
-              <div class="mt-2 mb-2">
+              <div class="mt-2 mb-2 w-100" style="width: 100% !important">
                 <span class="cong-span-heading d-block text-left-c"
                   >URL de cuenta de Tiktok</span
                 >
                 <input
                   type="text"
-                  v-model="tiktok_url"
-                  class="btn btn-outline-primary me-2 mt-2"
-                  style="width: 500px"
+                  v-model="adsConfig.tiktok_url"
+                  class="btn btn-outline-primary me-2 mt-2 w-100"
+                  style="width: 100% !important; max-width: 100% !important"
                 />
               </div>
             </b-col>
@@ -82,7 +92,7 @@
                 >
                 <input
                   type="text"
-                  v-model="code"
+                  v-model="adsConfig.code"
                   class="btn btn-outline-primary col-md-1 me-2 mt-2"
                 />
               </div>
@@ -92,12 +102,22 @@
                 >
                 <input
                   type="text"
-                  v-model="hashtag"
+                  v-model="adsConfig.hashtag"
                   class="btn btn-outline-primary col-md-1 me-2 mt-2"
                 />
               </div>
             </b-col>
             <b-col md="12" lg="4" class=" "> </b-col>
+
+            <div class="d-flex justify-content-end mb-4 mx-4">
+              <button
+                class="btn btn-primary"
+                @click="submitAdConfig"
+                style="margin-right: 30px; margin-top: 40px"
+              >
+                Guardar cambios
+              </button>
+            </div>
           </b-row>
         </b-tab>
         <b-tab class="h-90" no-body title="SPLIT">
@@ -108,8 +128,8 @@
                   >Precio de leals.</span
                 >
                 <input
+                  v-model="splitSetting.value_compared_usdt"
                   type="text"
-                  value="0.25"
                   class="btn btn-outline-primary me-2 mt-2"
                 />
               </div>
@@ -120,51 +140,154 @@
                   >Balance split</span
                 >
                 <input
+                  v-model="splitSetting.initial_split"
                   type="text"
-                  value="11,000,000,000"
                   class="btn btn-outline-primary me-2 mt-2"
                 />
               </div>
             </b-col>
+
+            <div class="d-flex justify-content-end mb-4 mx-4">
+              <button
+                class="btn btn-primary"
+                @click="submitSplit"
+                style="margin-right: 30px; margin-top: 40px"
+              >
+                Guardar cambios
+              </button>
+            </div>
           </b-row>
         </b-tab>
       </b-tabs>
       <!-- This button is just for demostration -->
       <!-- Make the changes that requires the API integration and update this code -->
-      <div class="d-flex justify-content-end mb-4 mx-4">
+      <!-- <div class="d-flex justify-content-end mb-4 mx-4">
         <button class="btn btn-primary" @click="submit">Guardar cambios</button>
-      </div>
+      </div> -->
     </b-card>
   </div>
 </template>
 <script setup>
 import Negocios from '@/components/settings/negocios/'
 import P2p from '@/components/settings/p2p/'
+import { ref } from 'vue'
 import { useStore } from 'vuex'
 const store = useStore()
-function submit() {
-  const data = JSON.stringify({
-    // code: code,
-    // hashtag:hashtag,
-    // time_between_ads:time_between_ads,
-    // facebook_url:facebook_url,
-    // tiktok_url:tiktok_url,
-    code: '',
-    hashtag: '',
-    time_between_ads: '',
-    facebook_url: '',
-    tiktok_url: '',
-  })
-  console.log('data', data)
-  store.dispatch('updateAdsConfig', data).then((response) => {
-    if (response.content) {
-      console.log(response.content)
-      adsConfig.value = response.content
-      console.log('adsConfig', adsConfig)
+// let adsConfig = ref(0)
+
+// function submitAdConfig() {
+//     const data = JSON.stringify({
+//       code: this.adsConfig.code,
+//       hashtag: this.adsConfig.hashtag,
+//       time_between_ads: this.adsConfig.time_between_ads,
+//       facebook_url: this.adsConfig.facebook_url,
+//       tiktok_url: this.adsConfig.tiktok_url,
+//       // code: '',
+//       // hashtag: '',
+//       // time_between_ads: '',
+//       // facebook_url: '',
+//       // tiktok_url: '',
+//     })
+//     console.log('data', data)
+//     store.dispatch('updateAdsConfig', data).then((response) => {
+//       if (response.content) {
+//         console.log(response.content)
+//         adsConfig.value = response.content
+//         console.log('adsConfig', adsConfig)
+//       }
+//     })
+//   }
+</script>
+
+<script>
+import Swal from 'sweetalert2'
+export default {
+  name: 'Withdrawal',
+  data: function () {
+    return {
+      p2pSetting: {
+        usdt_address_penalty: '',
+        rules_commissions: [],
+        packages: [],
+        rules_ads: [],
+        wthdrawal_sell_minimun_amount: '',
+      },
+      adsConfig: {
+        code: '',
+        hashtag: '',
+        time_between_ads: '',
+        facebook_url: '',
+        tiktok_url: '',
+        tutorial_url: '',
+      },
+      splitSetting: {
+        initial_split: '',
+        value_compared_usdt: '',
+      },
     }
-  })
+  },
+  beforeMount() {
+    this.getAdsSettings()
+    this.getP2PSettings()
+    this.getSplitSettings()
+  },
+  methods: {
+    getP2PSettings() {
+      this.$store.dispatch('getP2PSettings').then((response) => {
+        if (response.status) {
+          this.p2pSetting = response.content
+        }
+      })
+    },
+    getAdsSettings() {
+      this.$store.dispatch('getAdsSettings').then((response) => {
+        if (response.status) {
+          this.adsConfig = response.content
+        }
+      })
+    },
+    getSplitSettings() {
+      this.$store.dispatch('getSplitSettings').then((response) => {
+        if (response.status) {
+          this.splitSetting = response.content
+        }
+      })
+    },
+    submitAdConfig() {
+      const data = JSON.stringify({
+        code: this.adsConfig.code,
+        hashtag: this.adsConfig.hashtag,
+        time_between_ads: this.adsConfig.time_between_ads,
+        facebook_url: this.adsConfig.facebook_url,
+        tiktok_url: this.adsConfig.tiktok_url,
+        tutorial_url: this.adsConfig.tutorial_url,
+      })
+      this.$store.dispatch('updateAdsConfig', data).then((response) => {
+        if (response.content) {
+          this.adsConfig.value = response.content
+        }
+      })
+    },
+    submitSplit() {
+      const data = JSON.stringify({
+        new_value: this.splitSetting.initial_split,
+      })
+      this.$store.dispatch('updateSplitSettings', data).then((response) => {
+        if (response.content) {
+          this.splitSetting.value = response.content
+        }
+      })
+      const dataa = JSON.stringify({
+        new_value: this.splitSetting.value_compared_usdt,
+      })
+      this.$store.dispatch('updateLealValue', dataa).then((response) => {
+        if (response.content) {
+          this.splitSetting.value = response.content
+        }
+      })
+    },
+  },
 }
-// submit();
 </script>
 <style lang="scss">
 .btn-outline-primary {

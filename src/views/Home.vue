@@ -72,6 +72,7 @@ const confirmModalInput = ref(null)
 const activeBuy = ref(false)
 const activeSale = ref(false)
 const activeRegister = ref(false)
+let homePage = ref(0)
 
 // Keys and content may change depending on API data
 const p2pShopping = ref([
@@ -198,6 +199,58 @@ function enableSwith() {
 
   closeConfirmModal()
 }
+
+function getHomePage() {
+  store.dispatch('getHomePage').then((response) => {
+    if (response.status) {
+      // p2pShopping.value = response.content
+      let p2pBuy = response.content
+      activeRegister.value = p2pBuy.is_registering_active
+      activeBuy.value = p2pBuy.is_buying_active
+      activeSale.value = p2pBuy.is_selling_active
+
+      p2pShopping.value = [
+        {
+          name: 'Usuarios',
+          amount: p2pBuy.p2p_buys_users,
+        },
+        {
+          name: 'Cantidad',
+          amount: p2pBuy.p2p_buys,
+        },
+        {
+          name: 'USDT',
+          amount: p2pBuy.p2p_buys_amount_usdt,
+        },
+        {
+          name: 'LEAL',
+          amount: p2pBuy.p2p_buys_amount_leals,
+        },
+      ]
+
+      p2pSelling.value = [
+        {
+          name: 'Usuarios',
+          amount: p2pBuy.p2p_sells_users,
+        },
+        {
+          name: 'Cantidad',
+          amount: p2pBuy.p2p_sells,
+        },
+        {
+          name: 'USDT',
+          amount: p2pBuy.p2p_sells_amount_usdt,
+        },
+        {
+          name: 'LEAL',
+          amount: p2pBuy.p2p_sells_amount_leals,
+        },
+      ]
+    }
+  })
+}
+
+getHomePage()
 </script>
 <style lang="scss">
 @import '../assets/scss/variables';

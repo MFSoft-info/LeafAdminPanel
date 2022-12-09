@@ -7,6 +7,7 @@ import {
   USER_INFO,
   USERS_LIST,
   UPDATE_USER_INFO,
+  GET_USER_BY_USERNAME,
   ADD_BALANCE,
   BLOCK_USER,
   DECREASE_BALANCE,
@@ -21,11 +22,22 @@ import {
   GET_ADVERTISES_INFO,
   ADVERTISE_DENY,
   ADVERTISE_APPROVE,
-  UPDATE_ADS_CONFIG,
   GET_TEAM,
   GET_TEAM_BY_USERNAME,
   GET_ADVERTISE_BY_REQUESTER,
-  GET_WITHDRAWL_BY_REQUESTER
+  GET_WITHDRAWL_BY_REQUESTER,
+  GET_ADS_SETTINGS,
+  UPDATE_ADS_CONFIG,
+  GET_P2P_SETTINGS,
+  GET_SPLIT_SETTINGS,
+  UPDATE_SPLIT_SETTINGS,
+  UPDATE_LEAL_VALUE,
+  UPDATE_SELL_WITHDRAWAL_MIN_AMOUNT,
+  UPDATE_SENDING_TIME_HASH,
+  UPDATE_EARNINGS_STOP,
+  GET_HOME_PAGE,
+  UPDATE_COMMISSION_RULE,
+  UPDATE_RULES_ADS,
 } from '../../../constants'
 export default {
   state: {
@@ -345,24 +357,6 @@ export default {
           }
         })
     },
-    async updateAdsConfig({ commit }, data) {
-      return await axios
-        .put(`${BASE_API_URL}${UPDATE_ADS_CONFIG}`, data, {
-          headers: {
-            'Content-Type': 'application/json',
-            Authorization: `Bearer ${JwtService.getToken()}`,
-          },
-        })
-        .then((response) => {
-          commit('setAdsConfig', response.data)
-          return response.data
-        })
-        .catch((error) => {
-          if (error.response) {
-            return error.response.data
-          }
-        })
-    },
     async getAdvertiseInfo({ commit }, data) {
       return await axios
         .post(`${BASE_API_URL}${GET_ADVERTISES_INFO}`, data, {
@@ -373,7 +367,6 @@ export default {
         })
         .then((response) => {
           commit('setAdevertiseInfo', response.data)
-
           return response.data
         })
         .catch((error) => {
@@ -399,7 +392,6 @@ export default {
           }
         })
     },
-
     async approveAdvertise({ commit }, data) {
       return await axios
         .post(`${BASE_API_URL}${ADVERTISE_APPROVE}`, data, {
@@ -468,12 +460,233 @@ export default {
           }
         })
     },
-
     async setAdsModalRoute({ commit }, data) {
       await commit('setAdsRoute', data)
     },
     async setWithdrawlsModalRoute({ commit }, data) {
       await commit('setWithdrawlsRoute', data)
+    },
+    async getP2PSettings({ commit }, data) {
+      return await axios
+        .get(`${BASE_API_URL}${GET_P2P_SETTINGS}`, {
+          headers: {
+            'Content-Type': 'application/json',
+            Authorization: `Bearer ${JwtService.getToken()}`,
+          },
+        })
+        .then((response) => {
+          return response.data
+        })
+        .catch((error) => {
+          if (error.response) {
+            return error.response.data
+          }
+        })
+    },
+    async getAdsSettings({ commit }, data) {
+      return await axios
+        .get(`${BASE_API_URL}${GET_ADS_SETTINGS}`, {
+          headers: {
+            'Content-Type': 'application/json',
+            Authorization: `Bearer ${JwtService.getToken()}`,
+          },
+        })
+        .then((response) => {
+          return response.data
+        })
+        .catch((error) => {
+          if (error.response) {
+            return error.response.data
+          }
+        })
+    },
+    async updateAdsConfig({ commit }, data) {
+      return await axios
+        .put(`${BASE_API_URL}${UPDATE_ADS_CONFIG}`, data, {
+          headers: {
+            'Content-Type': 'application/json',
+            Authorization: `Bearer ${JwtService.getToken()}`,
+          },
+        })
+        .then((response) => {
+          commit('setAdsConfig', response.data)
+          return response.data
+        })
+        .catch((error) => {
+          if (error.response) {
+            return error.response.data
+          }
+        })
+    },
+    async getSplitSettings({ commit }, data) {
+      return await axios
+        .get(`${BASE_API_URL}${GET_SPLIT_SETTINGS}`, {
+          headers: {
+            'Content-Type': 'application/json',
+            Authorization: `Bearer ${JwtService.getToken()}`,
+          },
+        })
+        .then((response) => {
+          return response.data
+        })
+        .catch((error) => {
+          if (error.response) {
+            return error.response.data
+          }
+        })
+    },
+    async updateSplitSettings({ commit }, data) {
+      return await axios
+        .put(`${BASE_API_URL}${UPDATE_SPLIT_SETTINGS}`, data, {
+          headers: {
+            'Content-Type': 'application/json',
+            Authorization: `Bearer ${JwtService.getToken()}`,
+          },
+        })
+        .then((response) => {
+          return response.data
+        })
+        .catch((error) => {
+          if (error.response) {
+            return error.response.data
+          }
+        })
+    },
+    async updateLealValue({ commit }, data) {
+      return await axios
+        .put(`${BASE_API_URL}${UPDATE_LEAL_VALUE}`, data, {
+          headers: {
+            'Content-Type': 'application/json',
+            Authorization: `Bearer ${JwtService.getToken()}`,
+          },
+        })
+        .then((response) => {
+          return response.data
+        })
+        .catch((error) => {
+          if (error.response) {
+            return error.response.data
+          }
+        })
+    },
+    async updateSellWithdrawalMinAmount({ commit }, data) {
+      return await axios
+        .put(`${BASE_API_URL}${UPDATE_SELL_WITHDRAWAL_MIN_AMOUNT}`, data, {
+          headers: {
+            'Content-Type': 'application/json',
+            Authorization: `Bearer ${JwtService.getToken()}`,
+          },
+        })
+        .then((response) => {
+          return response.data
+        })
+        .catch((error) => {
+          if (error.response) {
+            return error.response.data
+          }
+        })
+    },
+    async updateSendingTimeHash({ commit }, data) {
+      return await axios
+        .put(`${BASE_API_URL}${UPDATE_SENDING_TIME_HASH}`, data, {
+          headers: {
+            'Content-Type': 'application/json',
+            Authorization: `Bearer ${JwtService.getToken()}`,
+          },
+        })
+        .then((response) => {
+          return response.data
+        })
+        .catch((error) => {
+          if (error.response) {
+            return error.response.data
+          }
+        })
+    },
+    async updateEarningsStop({ commit }, data) {
+      return await axios
+        .put(`${BASE_API_URL}${UPDATE_EARNINGS_STOP}`, data, {
+          headers: {
+            'Content-Type': 'application/json',
+            Authorization: `Bearer ${JwtService.getToken()}`,
+          },
+        })
+        .then((response) => {
+          return response.data
+        })
+        .catch((error) => {
+          if (error.response) {
+            return error.response.data
+          }
+        })
+    },
+    async getHomePage({ commit }, data) {
+      return await axios
+        .get(`${BASE_API_URL}${GET_HOME_PAGE}`, {
+          headers: {
+            'Content-Type': 'application/json',
+            Authorization: `Bearer ${JwtService.getToken()}`,
+          },
+        })
+        .then((response) => {
+          return response.data
+        })
+        .catch((error) => {
+          if (error.response) {
+            return error.response.data
+          }
+        })
+    },
+    async updateCommissionRule({ commit }, data) {
+      return await axios
+        .post(`${BASE_API_URL}${UPDATE_COMMISSION_RULE}`, data, {
+          headers: {
+            'Content-Type': 'application/json',
+            Authorization: `Bearer ${JwtService.getToken()}`,
+          },
+        })
+        .then((response) => {
+          return response.data
+        })
+        .catch((error) => {
+          if (error.response) {
+            return error.response.data
+          }
+        })
+    },
+    async updateRulesAds({ commit }, data) {
+      return await axios
+        .post(`${BASE_API_URL}${UPDATE_RULES_ADS}`, data, {
+          headers: {
+            'Content-Type': 'application/json',
+            Authorization: `Bearer ${JwtService.getToken()}`,
+          },
+        })
+        .then((response) => {
+          return response.data
+        })
+        .catch((error) => {
+          if (error.response) {
+            return error.response.data
+          }
+        })
+    },
+    async getUserByUsername({ commit }, data) {
+      return await axios
+        .post(`${BASE_API_URL}${GET_USER_BY_USERNAME}`, data, {
+          headers: {
+            'Content-Type': 'application/json',
+            Authorization: `Bearer ${JwtService.getToken()}`,
+          },
+        })
+        .then((response) => {
+          return response.data
+        })
+        .catch((error) => {
+          if (error.response) {
+            return error.response.data
+          }
+        })
     },
     async logOut({ commit }) {
       await commit('resetStateOnLogOut')

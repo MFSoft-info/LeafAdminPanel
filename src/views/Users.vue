@@ -33,9 +33,11 @@
         <div class="form-group has-search d-flex align-items-center">
           <i class="fa fa-search form-control-feedback position-relative"></i>
           <input
+            v-model="searchUser"
             type="text"
             class="form-control"
             placeholder="Search Contact"
+            @keypress="getUserByUsername()"
           />
         </div>
       </b-col>
@@ -64,7 +66,6 @@
                   <div class="form-check">
                     <input
                       class="form-check-input custom-checkbox"
-                      
                       type="checkbox"
                       :value="value.id"
                       @change="selectUser($event)"
@@ -237,9 +238,9 @@ export default {
   name: 'Users',
     data: function() {
     return {
-    usersList: ref([]),
-    userId: ''
-    
+      usersList: ref([]),
+      userId: '',
+      searchUser: '',
     };
   },
   watch: {
@@ -260,13 +261,23 @@ export default {
   this.userId = event.target.value;
 }
   },
-    getUserList(currentRoute) {
+  getUserList(currentRoute) {
     let data = JSON.stringify({
     condition: currentRoute === "Activos" ? "active" : currentRoute === "Inactivos" ? "inactive" : currentRoute === "Bloqueados" ? "blocked" : currentRoute === "ConCompras" || currentRoute === "Con Compras" ? "with buys" : currentRoute === "Conventas" || currentRoute === "Con Ventas"  ? "with sells" : currentRoute === "Eliminados" ? "deleted" : currentRoute === "Admin" ? "admins" : ''
     })
     this.$store.dispatch("getUsersList", data ).then((response) => {
         if(response.content){
             this.usersList = response.content;
+        }
+    })
+    },
+  getUserByUsername() {
+    let data = JSON.stringify({
+      username: this.searchUser,
+    })
+    this.$store.dispatch("getUserByUsername", data ).then((response) => {
+        if(response.content){
+            this.usersList.value = response.content;
         }
     })
     },

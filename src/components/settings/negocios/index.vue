@@ -58,13 +58,22 @@
 
     <Commissions />
 
-    <BusinessTypes :businessTypes="businessTypes"/>
+    <BusinessTypes :businessTypes="businessTypes" />
 
-    <BusinessCategories :businessTypes="businessTypes"/>
+    <BusinessCategories :businessTypes="businessTypes" />
 
     <BusinessRanking />
 
     <MaximunAllowed />
+
+    <div class="d-flex justify-content-end mb-4 mx-4">
+      <button
+        class="btn btn-primary"
+        style="margin-right: 30px; margin-top: 40px"
+      >
+        Guardar cambios
+      </button>
+    </div>
   </div>
 </template>
 
@@ -75,29 +84,28 @@ import BusinessCategories from './BusinessCategories.vue'
 import MaximunAllowed from './MaximunAllowed.vue'
 import Commissions from './Commissions.vue'
 
-
 import { ref } from 'vue'
 
 const businessTypes = ref([
   {
     name: 'Local',
-    categories: ['Peluquería', 'Barbería']
+    categories: ['Peluquería', 'Barbería'],
   },
   {
     name: 'Profesional',
-    categories: ['', '']
+    categories: ['', ''],
   },
   {
     name: 'Freelancers',
-    categories: ['', '']
+    categories: ['', ''],
   },
   {
     name: 'Mobility',
-    categories: ['', '']
+    categories: ['', ''],
   },
-    {
+  {
     name: 'Buy/sell',
-    categories: ['', '']
+    categories: ['', ''],
   },
 ])
 </script>
@@ -114,3 +122,4 @@ const businessTypes = ref([
   outline: none;
 }
 </style>
+

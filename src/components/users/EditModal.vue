@@ -37,26 +37,57 @@
         <div class="mb-3">
           <label class="form-label text-left fs-14">Busd direccion</label>
           <input
+            v-if="userDetail.usd_direction"
             v-model="userDetail.usd_direction"
             type="text"
             class="form-control"
             placeholder="1xv737df663vesc5zx55"
           />
+          <input
+            v-else
+            value="Busd direccion"
+            type="text"
+            class="form-control"
+            placeholder="1xv737df663vesc5zx55"
+          />
+        </div>
+        <!-- v-if="userDetail.usd_direction ? 'v-model'== userDetail.usd_direction : 'value'== 'sdsf' "  -->
+        <div v-if="userDetail.payment_methods">
+          <div
+            class="mb-3"
+            v-for="(data, index) in userDetail.payment_methods"
+            :key="index"
+          >
+            <label class="form-label text-left fs-14">Métodos de pago</label>
+            <input
+              v-model="data.bank"
+              type="text"
+              class="form-control"
+              placeholder="Usdt address"
+            />
+            <input
+              v-model="data.account"
+              type="text"
+              class="form-control mt-2"
+              placeholder="Laeal address"
+            />
+          </div>
         </div>
         <div
+          v-else
           class="mb-3"
           v-for="(data, index) in userDetail.payment_methods"
           :key="index"
         >
           <label class="form-label text-left fs-14">Métodos de pago</label>
           <input
-            v-model="data.bank"
+            value="bank"
             type="text"
             class="form-control"
             placeholder="Usdt address"
           />
           <input
-            v-model="data.account"
+            value="account"
             type="text"
             class="form-control mt-2"
             placeholder="Laeal address"
