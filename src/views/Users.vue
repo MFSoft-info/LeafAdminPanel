@@ -277,7 +277,9 @@ export default {
     })
     this.$store.dispatch("getUserByUsername", data ).then((response) => {
         if(response.content){
-            this.usersList.value = response.content;
+            let data = response.content;
+            this.usersList = [data]
+            console.log("DATA", this.usersList)
         }
     })
     },
