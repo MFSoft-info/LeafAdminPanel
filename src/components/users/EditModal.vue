@@ -69,7 +69,7 @@
               v-model="data.account"
               type="text"
               class="form-control mt-2"
-              placeholder="Laeal address"
+              placeholder="Leal address"
             />
           </div>
         </div>

@@ -42,7 +42,7 @@
         </div>
       </b-col>
       <b-col cols="12" sm="6" md="2" class="total-res">
-        <span>TOTAL: </span><strong>{{usersList.length}}</strong>
+        <span>TOTAL: </span><strong>{{ usersList.length }}</strong>
       </b-col>
     </b-row>
     <b-row style="color: #ffffff" class="mt-4">
@@ -73,7 +73,11 @@
                   </div>
                 </td>
                 <td class="c-table__cell">
-                  <img class="c-img-table" v-if="value.avatar" :src="value.avatar" />
+                  <img
+                    class="c-img-table"
+                    v-if="value.avatar"
+                    :src="value.avatar"
+                  />
                   <img class="c-img-table" v-else src="/img/profile.jpg" />
                 </td>
                 <td class="c-table__cell">
@@ -98,7 +102,9 @@
                   >
                     {{ value.status_p2p }}</span
                   >
-                  <span v-else class="badge c-color"> {{ value.status_p2p }}</span>
+                  <span v-else class="badge c-color">
+                    {{ value.status_p2p }}</span
+                  >
                 </td>
                 <td class="c-table__cell">
                   <button @click="openEditModal(value)" class="common w-c me-2">
@@ -118,7 +124,11 @@
       </b-col>
     </b-row>
     <!-- edit modal -->
-    <EditModal v-show="editModalOpen" @close="closeEditModal" :userDetail="editUserDetail" />
+    <EditModal
+      v-show="editModalOpen"
+      @close="closeEditModal"
+      :userDetail="editUserDetail"
+    />
     <!-- delete modal -->
     <DeleteModal
       v-show="deleteModalOpen"
@@ -126,13 +136,21 @@
       @delete="deleteUser"
     />
     <!--    ANADIR SALDO MODAL-->
-    <AddBalance v-show="addBalanceOpen" @close="closeAddBalance" :data="userId"  />
+    <AddBalance
+      v-show="addBalanceOpen"
+      @close="closeAddBalance"
+      :data="userId"
+    />
     <!--    QUITAR SALDO MODAL-->
-    <RemoveBalance v-show="removeBalanceOpen" @close="closeRemoveBalance" :data="userId" />
+    <RemoveBalance
+      v-show="removeBalanceOpen"
+      @close="closeRemoveBalance"
+      :data="userId"
+    />
   </div>
 </template>
 <script setup>
-import { ref, watchEffect, watch } from 'vue';
+import { ref, watchEffect, watch } from 'vue'
 import { useRoute } from 'vue-router'
 
 import Backdrop from '@/components/Backdrop.vue'
@@ -228,60 +246,74 @@ function deleteUser() {
 }
 
 watchEffect(() => {
-  routeName.value = route.meta.title;
-});
+  routeName.value = route.meta.title
+})
 </script>
 <script>
-import { mapGetters } from "vuex";
+import { mapGetters } from 'vuex'
 
 export default {
   name: 'Users',
-    data: function() {
+  data: function () {
     return {
       usersList: ref([]),
-      userId: '',
+      userId: [],
       searchUser: '',
-    };
+    }
   },
   watch: {
-  $route: function(to, from) {
-    this.getUserList(to.meta.title)
-  }
-},
- created(){
-  const nav_route = useRoute().meta.title;
-  this.getUserList(nav_route)
- },
+    $route: function (to, from) {
+      this.getUserList(to.meta.title)
+    },
+  },
+  created() {
+    const nav_route = useRoute().meta.title
+    this.getUserList(nav_route)
+  },
 
   methods: {
-  selectUser(event){
-  if( this.$refs.all.checked){
-  this.userId = "everyone";
-  }else{
-  this.userId = event.target.value;
-}
-  },
-  getUserList(currentRoute) {
-    let data = JSON.stringify({
-    condition: currentRoute === "Activos" ? "active" : currentRoute === "Inactivos" ? "inactive" : currentRoute === "Bloqueados" ? "blocked" : currentRoute === "ConCompras" || currentRoute === "Con Compras" ? "with buys" : currentRoute === "Conventas" || currentRoute === "Con Ventas"  ? "with sells" : currentRoute === "Eliminados" ? "deleted" : currentRoute === "Admin" ? "admins" : ''
-    })
-    this.$store.dispatch("getUsersList", data ).then((response) => {
-        if(response.content){
-            this.usersList = response.content;
-        }
-    })
+    selectUser(event) {
+      if (this.$refs.all.checked) {
+        this.userId = 'everyone'
+      } else {
+        this.userId.push(event.target.value)
+      }
     },
-  getUserByUsername() {
-    let data = JSON.stringify({
-      username: this.searchUser,
-    })
-    this.$store.dispatch("getUserByUsername", data ).then((response) => {
-        if(response.content){
-            let data = response.content;
-            this.usersList = [data]
-            console.log("DATA", this.usersList)
+    getUserList(currentRoute) {
+      let data = JSON.stringify({
+        condition:
+          currentRoute === 'Activos'
+            ? 'active'
+            : currentRoute === 'Inactivos'
+            ? 'inactive'
+            : currentRoute === 'Bloqueados'
+            ? 'blocked'
+            : currentRoute === 'ConCompras' || currentRoute === 'Con Compras'
+            ? 'with buys'
+            : currentRoute === 'Conventas' || currentRoute === 'Con Ventas'
+            ? 'with sells'
+            : currentRoute === 'Eliminados'
+            ? 'deleted'
+            : currentRoute === 'Admin'
+            ? 'admins'
+            : '',
+      })
+      this.$store.dispatch('getUsersList', data).then((response) => {
+        if (response.content) {
+          this.usersList = response.content
         }
-    })
+      })
+    },
+    getUserByUsername() {
+      let data = JSON.stringify({
+        username: this.searchUser,
+      })
+      this.$store.dispatch('getUserByUsername', data).then((response) => {
+        if (response.content) {
+          let data = response.content
+          this.usersList = [data]
+        }
+      })
     },
   },
 }

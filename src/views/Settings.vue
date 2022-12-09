@@ -173,30 +173,6 @@ import P2p from '@/components/settings/p2p/'
 import { ref } from 'vue'
 import { useStore } from 'vuex'
 const store = useStore()
-// let adsConfig = ref(0)
-
-// function submitAdConfig() {
-//     const data = JSON.stringify({
-//       code: this.adsConfig.code,
-//       hashtag: this.adsConfig.hashtag,
-//       time_between_ads: this.adsConfig.time_between_ads,
-//       facebook_url: this.adsConfig.facebook_url,
-//       tiktok_url: this.adsConfig.tiktok_url,
-//       // code: '',
-//       // hashtag: '',
-//       // time_between_ads: '',
-//       // facebook_url: '',
-//       // tiktok_url: '',
-//     })
-//     console.log('data', data)
-//     store.dispatch('updateAdsConfig', data).then((response) => {
-//       if (response.content) {
-//         console.log(response.content)
-//         adsConfig.value = response.content
-//         console.log('adsConfig', adsConfig)
-//       }
-//     })
-//   }
 </script>
 
 <script>
@@ -263,8 +239,19 @@ export default {
         tutorial_url: this.adsConfig.tutorial_url,
       })
       this.$store.dispatch('updateAdsConfig', data).then((response) => {
-        if (response.content) {
+        if (response.status == true) {
           this.adsConfig.value = response.content
+          Swal.fire({
+            title: 'Success!',
+            text: response.content,
+            icon: 'success',
+          })
+        } else {
+          Swal.fire({
+            title: 'Error!',
+            text: response.content,
+            icon: 'error',
+          })
         }
       })
     },
@@ -273,16 +260,33 @@ export default {
         new_value: this.splitSetting.initial_split,
       })
       this.$store.dispatch('updateSplitSettings', data).then((response) => {
-        if (response.content) {
+        if (response.status == true) {
           this.splitSetting.value = response.content
+          Swal.fire({
+            title: 'Success!',
+            text: response.content,
+            icon: 'success',
+          })
+        } else {
+          Swal.fire({
+            title: 'Error!',
+            text: response.content,
+            icon: 'error',
+          })
         }
       })
       const dataa = JSON.stringify({
         new_value: this.splitSetting.value_compared_usdt,
       })
       this.$store.dispatch('updateLealValue', dataa).then((response) => {
-        if (response.content) {
+        if (response.status == true) {
           this.splitSetting.value = response.content
+        } else {
+          Swal.fire({
+            title: 'Error!',
+            text: response.content,
+            icon: 'error',
+          })
         }
       })
     },

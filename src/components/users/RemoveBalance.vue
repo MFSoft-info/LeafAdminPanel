@@ -57,7 +57,7 @@ export default {
         return 0
       }
       let payload = JSON.stringify({
-        userid: this.data,
+        user_ids: this.data,
         amount: this.$refs.amount.value,
       })
       this.$store.dispatch('removeBalance', payload).then((response) => {

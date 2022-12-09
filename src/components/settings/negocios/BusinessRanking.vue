@@ -15,9 +15,12 @@
         <input :value="ranking.amount" class="box" />
       </div>
 
-      <div @dblclick="closeAddField" class="new-field" v-if="addFieldVisible"
-          :class="{shake: newFieldEmpty}"
-       >
+      <div
+        @dblclick="closeAddField"
+        class="new-field"
+        v-if="addFieldVisible"
+        :class="{ shake: newFieldEmpty }"
+      >
         <input
           ref="newFieldInput"
           class="form-control"
@@ -26,7 +29,7 @@
           @keyup.enter="saveField"
         />
         <input disabled type="text" class="box" />
-          <p v-if="newFieldEmpty && addFieldVisible">Inserta un valor</p>
+        <p v-if="newFieldEmpty && addFieldVisible">Inserta un valor</p>
       </div>
 
       <button v-if="!addFieldVisible" @click="showAddField" class="button box">
@@ -81,13 +84,11 @@ async function showAddField() {
   newFieldInput.value.focus()
 }
 
-watch(newField, () => newFieldEmpty.value = false)
+watch(newField, () => (newFieldEmpty.value = false))
 
 function saveField() {
-  if (!newField.value) return newFieldEmpty.value = true
-
+  if (!newField.value) return (newFieldEmpty.value = true)
   rankingCategories.value.push({ title: newField.value, amount: '' })
-
   closeAddField()
 }
 
@@ -147,3 +148,4 @@ function closeAddField() {
   }
 }
 </style>
+

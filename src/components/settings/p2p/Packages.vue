@@ -104,6 +104,7 @@ import { ref } from 'vue'
 // }
 </script>
 <script>
+import Swal from 'sweetalert2'
 import { mapGetters } from 'vuex'
 export default {
   name: 'Packages',
@@ -124,24 +125,63 @@ export default {
       this.$store
         .dispatch('updateSellWithdrawalMinAmount', data)
         .then((response) => {
-          if (response.content) {
-            // this.data.value = response.content
+          // if (response.content) {
+          //   // this.data.value = response.content
+          // }
+          if (response.status == true) {
+            Swal.fire({
+              title: 'Success!',
+              text: 'Successfully updated',
+              icon: 'success',
+            })
+          } else {
+            Swal.fire({
+              title: 'Error!',
+              text: response.content,
+              icon: 'error',
+            })
           }
         })
       const dataa = JSON.stringify({
         new_time: this.dataa.sending_time_hash_seconds,
       })
       this.$store.dispatch('updateSendingTimeHash', dataa).then((response) => {
-        if (response.content) {
-          // this.data.value = response.content
+        // if (response.content) {
+        //   // this.data.value = response.content
+        // }
+        if (response.status == true) {
+          Swal.fire({
+            title: 'Success!',
+            text: 'Successfully updated',
+            icon: 'success',
+          })
+        } else {
+          Swal.fire({
+            title: 'Error!',
+            text: response.content,
+            icon: 'error',
+          })
         }
       })
       const payload = JSON.stringify({
         new_stop: this.dataa.not_available_earnings_stop,
       })
       this.$store.dispatch('updateEarningsStop', payload).then((response) => {
-        if (response.content) {
-          // this.data.value = response.content
+        // if (response.content) {
+        //   // this.data.value = response.content
+        // }
+        if (response.status == true) {
+          Swal.fire({
+            title: 'Success!',
+            text: 'Successfully updated',
+            icon: 'success',
+          })
+        } else {
+          Swal.fire({
+            title: 'Error!',
+            text: response.content,
+            icon: 'error',
+          })
         }
       })
       const ruleList = JSON.stringify({
@@ -150,19 +190,46 @@ export default {
       this.$store
         .dispatch('updateCommissionRule', ruleList)
         .then((response) => {
-          if (response.content) {
-            // this.data.value = response.content
+          // if (response.content) {
+          //   // this.data.value = response.content
+          // }
+          if (response.status == true) {
+            Swal.fire({
+              title: 'Success!',
+              text: 'Successfully updated',
+              icon: 'success',
+            })
+          } else {
+            Swal.fire({
+              title: 'Error!',
+              text: response.content,
+              icon: 'error',
+            })
           }
         })
       const rulesAds = JSON.stringify({
         new_list: this.dataa.rules_ads,
       })
       this.$store.dispatch('updateRulesAds', rulesAds).then((response) => {
-        if (response.content) {
-          // this.data.value = response.content
+        // if (response.content) {
+        //   // this.data.value = response.content
+        // }
+        if (response.status == true) {
+          Swal.fire({
+            title: 'Success!',
+            text: 'Successfully updated',
+            icon: 'success',
+          })
+        } else {
+          Swal.fire({
+            title: 'Error!',
+            text: response.content,
+            icon: 'error',
+          })
         }
       })
     },
   },
 }
 </script>
+
