@@ -192,14 +192,14 @@
             @click="handleBlockUser"
             v-if="!userDetail.is_user_blocked_p2p"
           >
-            blocked
+            block
           </button>
           <button
             class="common chw mt-2"
             @click="handleUnBlockUser"
             v-if="userDetail.is_user_blocked_p2p"
           >
-            unblocked
+            unblock
           </button>
         </div>
         <div class="mb-3">
@@ -335,6 +335,7 @@ export default {
             text: response.content,
             icon: 'success',
           })
+          this.$emit('close');
         } else {
           Swal.fire({
             title: 'Error!',

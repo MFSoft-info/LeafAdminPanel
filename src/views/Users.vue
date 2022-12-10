@@ -152,13 +152,14 @@
 <script setup>
 import { ref, watchEffect, watch } from 'vue'
 import { useRoute } from 'vue-router'
+import { useStore } from 'vuex'
 
 import Backdrop from '@/components/Backdrop.vue'
 import AddBalance from '@/components/users/AddBalance.vue'
 import RemoveBalance from '@/components/users/RemoveBalance.vue'
 import EditModal from '@/components/users/EditModal.vue'
 import DeleteModal from '@/components/users/DeleteModal.vue'
-
+const store = useStore()
 const route = useRoute()
 
 const routeName = ref('')
@@ -222,6 +223,14 @@ function closeRemoveBalance() {
 // Edit user modal
 function openEditModal(value) {
   editUserDetail.value = value
+    let payload = JSON.stringify({
+        user_id: value.id,
+      })
+      store.dispatch('getUserProfile', payload).then((response) => {
+        if (response.status) {
+            editUserDetail.value = response.content;
+        }
+      })
   editModalOpen.value = true
 }
 
