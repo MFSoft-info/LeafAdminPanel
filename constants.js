@@ -1,4 +1,4 @@
-export const BASE_API_URL = 'http://137.184.90.156:4200/'
+export const BASE_API_URL = 'http://137.184.90.156:4200/' 
 export const LOGIN_API = 'admin/login'
 export const USER_INFO = 'admin/get_user/info'
 export const USERS_LIST = 'admin/users/list'
