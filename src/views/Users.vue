@@ -24,10 +24,10 @@
             class="form-check-input custom-checkbox"
             type="checkbox"
             ref="all"
-            :value="everyone"
             @change="selectUser($event)"
           />
         </div>
+        <!-- :value="everyone" -->
 
         <!-- Actual search box -->
         <div class="form-group has-search d-flex align-items-center">
@@ -274,7 +274,10 @@ export default {
   methods: {
     selectUser(event) {
       if (this.$refs.all.checked) {
-        this.userId = 'everyone'
+        for (let i = 0; i < this.usersList.length; i++) {
+          let idss = this.usersList[i].id
+          this.userId.push(idss)
+        }
       } else {
         this.userId.push(event.target.value)
       }
