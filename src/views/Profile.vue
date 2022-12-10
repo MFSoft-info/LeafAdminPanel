@@ -210,9 +210,15 @@ export default {
       })
       this.$store.dispatch('getUserProfile', payload).then((response) => {
         if (response.status) {
-          this.profileInfo = response.content
-          this.payment_methods = response.content.payment_methods
-        }
+          this.profileInfo = response.content;
+          var payment_method = response.content.payment_methods;
+          if(!payment_method){
+              payment_method = [];
+          }
+          for(let i=payment_method.length; i < 3; i++ )
+              payment_method.push({bank: '', account: ''});
+          }
+          this.payment_methods = payment_method;
       })
     },
     submit(e) {

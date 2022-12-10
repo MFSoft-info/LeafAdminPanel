@@ -41,14 +41,14 @@
             v-model="userDetail.usd_direction"
             type="text"
             class="form-control"
-            placeholder="1xv737df663vesc5zx55"
+            placeholder="Busd direccion"
           />
           <input
             v-else
-            value="Busd direccion"
             type="text"
+            ref = "usd_direction"
             class="form-control"
-            placeholder="1xv737df663vesc5zx55"
+            placeholder="Busd direccion"
           />
         </div>
         <!-- v-if="userDetail.usd_direction ? 'v-model'== userDetail.usd_direction : 'value'== 'sdsf' "  -->
@@ -63,13 +63,13 @@
               v-model="data.bank"
               type="text"
               class="form-control"
-              placeholder="Usdt address"
+              placeholder="Banco"
             />
             <input
               v-model="data.account"
               type="text"
               class="form-control mt-2"
-              placeholder="Leal address"
+              placeholder="Conta"
             />
           </div>
         </div>
@@ -117,9 +117,19 @@
             >Descripción de perfil</label
           >
           <textarea
+            v-if="userDetail.habilidades"
             v-model="userDetail.habilidades"
             class="form-control"
             id="floatingTextarea"
+            placeholder="Habilidades"
+          ></textarea>
+
+          <textarea
+            v-else
+            class="form-control"
+            id="floatingTextarea"
+            ref="floatingTextarea"
+            placeholder="Habilidades"
           ></textarea>
         </div>
         <div class="mb-3 d-inline-flex align-items-center">
@@ -217,6 +227,7 @@ const emit = defineEmits(['close'])
 </script>
 <script>
 import Swal from 'sweetalert2'
+import { ref } from 'vue';
 export default {
   name: 'Edit Modal',
   props: ['userDetail'],
@@ -230,6 +241,11 @@ export default {
       habilidades: '',
       usd_direction: '',
       payment_methods: [],
+    }
+  },
+  updated(){
+    if(!this.userDetail.payment_methods){
+      this.userDetail.payment_methods= [{bank: '', account: ''}]
     }
   },
   methods: {
@@ -301,14 +317,14 @@ export default {
     save(e) {
       e.preventDefault()
       let payload = JSON.stringify({
-        user_id: localStorage.getItem('userId'),
+        user_id: this.userDetail.id,
         data: {
           full_nombre: this.userDetail.full_nombre,
           email: this.userDetail.email,
           telefono: this.userDetail.telefono,
           codigo_pais: this.userDetail.codigo_pais,
-          habilidades: this.userDetail.habilidades,
-          usd_direction: this.userDetail.usd_direction,
+          habilidades: this.userDetail.habilidades || this.$refs.floatingTextarea.value,
+          usd_direction: this.userDetail.usd_direction || this.$refs.usd_direction.value,
           payment_methods: this.userDetail.payment_methods,
         },
       })
@@ -322,7 +338,7 @@ export default {
         } else {
           Swal.fire({
             title: 'Error!',
-            text: response.content,
+            text: response,
             icon: 'error',
           })
         }
