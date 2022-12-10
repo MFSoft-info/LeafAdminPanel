@@ -124,7 +124,7 @@
           <label class="form-label">Leal</label>
           <input
             v-model="profileInfo.leal_direction"
-            placeholder="usd"
+            placeholder="leal"
             type="text"
             class="form-control"
             aria-describedby="emailHelp"
@@ -157,7 +157,7 @@
           <label class="form-label">Currency</label>
           <input
             v-model="profileInfo.currency"
-            placeholder="usd"
+            placeholder="Currency"
             type="text"
             class="form-control"
             aria-describedby="emailHelp"
