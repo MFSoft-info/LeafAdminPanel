@@ -64,7 +64,7 @@
                         </div>
                       </td>
                       <td></td>
-                      <td class="c-table__cell">{{ ad.owner }}</td>
+                      <td class="c-table__cell">{{ ad.nombre_usuario }}</td>
                       <td class="c-table__cell w-25">{{ ad.post_link }}</td>
                       <td class="c-table__cell">{{ ad.status }}</td>
                       <td></td>
@@ -129,7 +129,7 @@
                         </div>
                       </td>
                       <td></td>
-                      <td class="c-table__cell">{{ ad.owner }}</td>
+                      <td class="c-table__cell">{{ ad.nombre_usuario }}</td>
                       <td class="c-table__cell">{{ ad.post_link }}</td>
                       <td class="c-table__cell">{{ ad.status }}</td>
                       <td></td>
@@ -194,7 +194,7 @@
                         </div>
                       </td>
                       <td></td>
-                      <td class="c-table__cell">{{ ad.owner }}</td>
+                      <td class="c-table__cell">{{ ad.nombre_usuario }}</td>
                       <td class="c-table__cell">{{ ad.post_link }}</td>
                       <td class="c-table__cell">{{ ad.status }}</td>
                       <td></td>

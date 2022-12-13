@@ -51,8 +51,23 @@
             placeholder="Busd direccion"
           />
         </div>
-        <!-- v-if="userDetail.usd_direction ? 'v-model'== userDetail.usd_direction : 'value'== 'sdsf' "  -->
-        <div v-if="userDetail.payment_methods">
+        <div class="mb-3">
+          <label class="form-label text-left fs-14">Leal direccion</label>
+          <input
+            v-if="userDetail.leal_direction"
+            v-model="userDetail.leal_direction"
+            type="text"
+            class="form-control"
+            placeholder="Leal direccion"
+          />
+          <input
+            v-else
+            type="text"
+            ref = "leal_direction"
+            class="form-control"
+            placeholder="Leal direccion"
+          />
+        </div>
           <div
             class="mb-3"
             v-for="(data, index) in userDetail.payment_methods"
@@ -64,35 +79,16 @@
               type="text"
               class="form-control"
               placeholder="Banco"
+              @input="(e) => handleBank(e, index)"
             />
             <input
               v-model="data.account"
               type="text"
               class="form-control mt-2"
               placeholder="Conta"
+              @input="(e) => handleAccount(e, index)"
             />
           </div>
-        </div>
-        <div
-          v-else
-          class="mb-3"
-          v-for="(data, index) in userDetail.payment_methods"
-          :key="index"
-        >
-          <label class="form-label text-left fs-14">Métodos de pago</label>
-          <input
-            value="bank"
-            type="text"
-            class="form-control"
-            placeholder="Usdt address"
-          />
-          <input
-            value="account"
-            type="text"
-            class="form-control mt-2"
-            placeholder="Laeal address"
-          />
-        </div>
         <div class="mb-3">
           <label class="form-label text-left fs-14">País</label>
           <input
@@ -147,15 +143,15 @@
           <b-row>
             <b-col md="3">
               <span class="fs-14">Paquete: </span
-              ><strong class="fs-14">50</strong>
+              ><strong class="fs-14">{{ userDetail.pack_1 }}</strong>
             </b-col>
             <b-col md="5">
               <span class="fs-14">Total compras p2p: </span
-              ><strong class="fs-14">15</strong>
+              ><strong class="fs-14">{{ userDetail.buys }}</strong>
             </b-col>
             <b-col md="4">
               <span class="fs-14">Total ventas p2p: </span
-              ><strong class="fs-14">20</strong>
+              ><strong class="fs-14">{{ userDetail.sells }}</strong>
             </b-col>
           </b-row>
         </div>
@@ -163,11 +159,13 @@
           <b-row>
             <b-col md="5">
               <span class="fs-14">Disponible wallet: </span
-              ><strong class="fs-14">230</strong>
+              ><strong class="fs-14" v-if="userDetail.balance">{{ userDetail.balance }}</strong>
+              <strong class="fs-14" v-else>0</strong>
             </b-col>
             <b-col md="5">
               <span class="fs-14">No disponible wallet: </span
-              ><strong class="fs-14">230</strong>
+              ><strong class="fs-14" v-if="userDetail.not_available">{{ userDetail.not_available }}</strong>
+              <strong class="fs-14" v-else>0</strong>
             </b-col>
           </b-row>
         </div>
@@ -175,11 +173,11 @@
           <b-row>
             <b-col md="5">
               <span class="fs-14">Total negocios: </span
-              ><strong class="fs-14">4</strong>
+              ><strong class="fs-14">{{ userDetail.businesses_total }}</strong>
             </b-col>
             <b-col md="5">
               <span class="fs-14">Balance wallet scrow: </span
-              ><strong class="fs-14">230</strong>
+              ><strong class="fs-14">{{ userDetail.scrow_balance }}</strong>
             </b-col>
           </b-row>
         </div>
@@ -240,6 +238,7 @@ export default {
       codigo_pais: '',
       habilidades: '',
       usd_direction: '',
+      leal_direction: '',
       payment_methods: [],
     }
   },
@@ -247,6 +246,15 @@ export default {
     if(!this.userDetail.payment_methods){
       this.userDetail.payment_methods= [{bank: '', account: ''}]
     }
+          
+    var payment_method = this.userDetail.payment_methods;
+          if(!payment_method){
+              payment_method = [];
+          }
+          for(let i=payment_method.length; i < 3; i++ ){
+              payment_method.push({bank: '', account: ''});
+          }
+          this.payment_methods = payment_method;
   },
   methods: {
     handleMarkAdmin(e) {
@@ -344,6 +352,12 @@ export default {
           })
         }
       })
+    },
+    handleBank(e, index) {
+      this.payment_methods[index]['bank'] = e.target.value
+    },
+    handleAccount(e, index) {
+      this.payment_methods[index]['account'] = e.target.value
     },
   },
 }

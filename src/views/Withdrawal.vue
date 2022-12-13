@@ -66,7 +66,7 @@
                         </div>
                       </td>
                       <td></td>
-                      <td class="c-table__cell">{{ withdrawal.owner }}</td>
+                      <td class="c-table__cell">{{ withdrawal.nombre_usuario }}</td>
                       <td class="c-table__cell">{{ withdrawal.amount }}</td>
                       <td class="c-table__cell">{{ withdrawal.status }}</td>
                       <td class="c-table__cell"></td>
@@ -137,7 +137,7 @@
                         </div>
                       </td>
                       <td></td>
-                      <td class="c-table__cell">{{ withdrawal.owner }}</td>
+                      <td class="c-table__cell">{{ withdrawal.nombre_usuario }}</td>
                       <td class="c-table__cell">{{ withdrawal.amount }}</td>
                       <td class="c-table__cell">{{ withdrawal.status }}</td>
                       <td class="c-table__cell"></td>
@@ -204,7 +204,7 @@
                         </div>
                       </td>
                       <td></td>
-                      <td class="c-table__cell">{{ withdrawal.owner }}</td>
+                      <td class="c-table__cell">{{ withdrawal.nombre_usuario }}</td>
                       <td class="c-table__cell">{{ withdrawal.amount }}</td>
                       <td class="c-table__cell">{{ withdrawal.status }}</td>
                       <td class="c-table__cell"></td>

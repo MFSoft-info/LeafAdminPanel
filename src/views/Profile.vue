@@ -176,6 +176,7 @@
 </template>
 <script>
 import { mapGetters } from 'vuex'
+import Swal from 'sweetalert2'
 
 export default {
   name: 'Profile',
@@ -219,6 +220,7 @@ export default {
               payment_method.push({bank: '', account: ''});
           }
           this.payment_methods = payment_method;
+          console.log(this.payment_methods)
       })
     },
     submit(e) {
@@ -232,17 +234,22 @@ export default {
           codigo_pais: this.profileInfo.codigo_pais,
           habilidades: this.profileInfo.habilidades,
           usd_direction: this.profileInfo.usd_direction,
-          payment_methods: this.profileInfo.payment_methods,
+          payment_methods: this.payment_methods,
         },
       })
       this.$store.dispatch('updateUserProfile', payload).then((response) => {
-        if (response.status == true) {
+        if (response && response.status == true) {
+          Swal.fire({
+            title: 'Success!',
+            text: response.content,
+            icon: 'success',
+          })
           this.$router.push({ name: 'Home' })
           this.profileInfo = response
         } else {
           Swal.fire({
             title: 'Error!',
-            text: response.content,
+            text: response,
             icon: 'error',
           })
         }
