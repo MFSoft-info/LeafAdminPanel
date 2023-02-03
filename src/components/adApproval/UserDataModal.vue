@@ -11,7 +11,7 @@
           <span class="head">Nombre : </span>
         </b-col>
         <b-col md="7">
-          <span> {{ content.full_nombre }} </span> 
+          <span> {{ content.full_nombre }} </span>
         </b-col>
       </b-row>
       <b-row class="mb-2">
@@ -19,7 +19,7 @@
           <span class="head">Nombre de usuario : </span>
         </b-col>
         <b-col md="7">
-          <span>{{ content.nombre_usuario }}</span> 
+          <span>{{ content.nombre_usuario }}</span>
         </b-col>
       </b-row>
       <b-row class="mb-2">
@@ -27,7 +27,7 @@
           <span class="head"> Fecha : </span>
         </b-col>
         <b-col md="7">
-          <span> {{ (new Date (content.created_at)).toLocaleString() }} </span> 
+          <span> {{ new Date(content.created_at).toLocaleString() }} </span>
         </b-col>
       </b-row>
       <b-row class="mb-2">
@@ -35,12 +35,12 @@
           <span class="head">URL Publicacion : </span>
         </b-col>
         <b-col md="7">
-          <span> {{ content.post_link }} </span> 
+          <span style="word-break: break-all"> {{ content.post_link }} </span>
         </b-col>
       </b-row>
 
       <div class="mt-5 mb-4 text-center">
-        <button @click="handleApproveClick" class="common sm-btn-c"> 
+        <button @click="handleApproveClick" class="common sm-btn-c">
           PROCESAR
         </button>
         <button @click="handleDenyClick" class="ms-3 common sm-btn-c">
@@ -52,41 +52,38 @@
 </template>
 
 <script setup>
-import { ref, computed  } from 'vue';
-import { useStore } from 'vuex';
+import { ref, computed } from 'vue'
+import { useStore } from 'vuex'
 import Backdrop from '@/components/Backdrop.vue'
-const store = useStore();
+const store = useStore()
 </script>
 <script>
-import { mapGetters } from "vuex";
+import { mapGetters } from 'vuex'
 export default {
-  name:"Advertise Modal",
+  name: 'Advertise Modal',
   props: ['content'],
-  data: function() {
+  data: function () {
     return {
-  content :{
-    full_nombre: "",
-    nombre_usuario: "",
-    created_at: "",
-    post_link: "",
-  }
-  }
-  },
-    computed: {
-    ...mapGetters([
-      "getAdvertiseInfo",
-    ]),
-  },
-  methods:{
-      handleApproveClick(e) {
-        this.$store.dispatch("setAdsModalRoute", 'approve');
-        this.$emit("show-confirm");
+      content: {
+        full_nombre: '',
+        nombre_usuario: '',
+        created_at: '',
+        post_link: '',
       },
-      handleDenyClick(e) {
-        this.$store.dispatch("setAdsModalRoute", 'deny');
-        this.$emit("show-confirm");
-      },
+    }
   },
- 
+  computed: {
+    ...mapGetters(['getAdvertiseInfo']),
+  },
+  methods: {
+    handleApproveClick(e) {
+      this.$store.dispatch('setAdsModalRoute', 'approve')
+      this.$emit('show-confirm')
+    },
+    handleDenyClick(e) {
+      this.$store.dispatch('setAdsModalRoute', 'deny')
+      this.$emit('show-confirm')
+    },
+  },
 }
 </script>

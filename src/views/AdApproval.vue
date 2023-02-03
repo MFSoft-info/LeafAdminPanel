@@ -23,7 +23,18 @@
               <div
                 class="form-group has-search d-inline-block position-relative"
               >
-                <span class="fa fa-search form-control-feedback1234"></span>
+              <span style="border:1px solid #b3b0b0;border-radius: 5px;
+                  padding-left: 3px;
+                  position: absolute;
+                  margin-top: 6px;
+                  margin-left: 10px;
+                  height: auto;
+                  margin-bottom: 10px;
+                  padding-right: 3px;"  @click="getAdvertiseByRequester('in review')"> 
+                  <span
+                  class="fa fa-search form-control-feedback1234" style="position:relative; top:0; left:0px !important"
+                ></span>
+              </span>
                 <input
                   v-model="searchAdvertise"
                   type="text"
@@ -51,7 +62,7 @@
                     <tr
                       v-for="(ad, i) in adsList"
                       :key="i"
-                      @click="openUserData"
+                      @click="openUserData(ad.advertise_id)"
                     >
                       <td class="c-table__cell">
                         <div class="form-check">
@@ -88,7 +99,18 @@
               <div
                 class="form-group has-search d-inline-block position-relative"
               >
-                <span class="fa fa-search form-control-feedback1234"></span>
+              <span style="border:1px solid #b3b0b0;border-radius: 5px;
+                  padding-left: 3px;
+                  position: absolute;
+                  margin-top: 6px;
+                  margin-left: 10px;
+                  height: auto;
+                  margin-bottom: 10px;
+                  padding-right: 3px;"  @click="getAdvertiseByRequester('approved')"> 
+                  <span
+                  class="fa fa-search form-control-feedback1234" style="position:relative; top:0; left:0px !important"
+                ></span>
+              </span>
                 <input
                   v-model="searchAdvertise"
                   type="text"
@@ -116,7 +138,7 @@
                     <tr
                       v-for="(ad, i) in adsList"
                       :key="i"
-                      @click="openUserData"
+                      @click="openUserData(ad.advertise_id)"
                     >
                       <td class="c-table__cell">
                         <div class="form-check">
@@ -153,7 +175,18 @@
               <div
                 class="form-group has-search d-inline-block position-relative"
               >
-                <span class="fa fa-search form-control-feedback1234"></span>
+              <span style="border:1px solid #b3b0b0;border-radius: 5px;
+                  padding-left: 3px;
+                  position: absolute;
+                  margin-top: 6px;
+                  margin-left: 10px;
+                  height: auto;
+                  margin-bottom: 10px;
+                  padding-right: 3px;"  @click="getAdvertiseByRequester('denied')"> 
+                  <span
+                  class="fa fa-search form-control-feedback1234" style="position:relative; top:0; left:0px !important"
+                ></span>
+              </span>
                 <input
                   v-model="searchAdvertise"
                   type="text"
@@ -181,7 +214,7 @@
                     <tr
                       v-for="(ad, i) in adsList"
                       :key="i"
-                      @click="openUserData"
+                      @click="openUserData(ad.advertise_id)"
                     >
                       <td class="c-table__cell">
                         <div class="form-check">
@@ -234,6 +267,7 @@ const store = useStore()
 let adsList = ref(0)
 let adsDetails = ref(null)
 let searchAdvertise = ref(null)
+let adsData = ref({})
 
 function getAdsList(status) {
   const data = JSON.stringify({ status: status })
@@ -260,8 +294,17 @@ function getAdvertiseByRequester(type) {
     }
   })
 }
-function openUserData() {
+function openUserData(adsId) {
   userDataVisible.value = true
+
+  if (adsId) {
+    const data = JSON.stringify({ advertise_id: adsId })
+    store.dispatch('getAdvertiseInfo', data).then((response) => {
+      if (response.content) {
+        adsData.value = response.content
+      }
+    })
+  }
 }
 
 function closeUserData() {
@@ -291,15 +334,15 @@ export default {
   },
   methods: {
     handleOnCheck(event) {
-      this.adsId = event.target.value
-      if (this.adsId) {
-        const data = JSON.stringify({ advertise_id: this.adsId })
-        this.$store.dispatch('getAdvertiseInfo', data).then((response) => {
-          if (response.content) {
-            this.adsData = response.content
-          }
-        })
-      }
+      // this.adsId = event.target.value
+      // if (this.adsId) {
+      //   const data = JSON.stringify({ advertise_id: this.adsId })
+      //   this.$store.dispatch('getAdvertiseInfo', data).then((response) => {
+      //     if (response.content) {
+      //       this.adsData = response.content
+      //     }
+      //   })
+      // }
     },
   },
 }

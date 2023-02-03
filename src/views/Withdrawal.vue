@@ -25,7 +25,18 @@
               <div
                 class="form-group has-search d-inline-block position-relative"
               >
-                <span class="fa fa-search form-control-feedback1234"></span>
+              <span style="border:1px solid #b3b0b0;border-radius: 5px;
+                  padding-left: 3px;
+                  position: absolute;
+                  margin-top: 6px;
+                  margin-left: 10px;
+                  height: auto;
+                  margin-bottom: 10px;
+                  padding-right: 3px;"  @click="getWithdrawlByRequester('processing')"> 
+                  <span
+                  class="fa fa-search form-control-feedback1234" style="position:relative; top:0; left:0px !important"
+                ></span>
+              </span>
                 <input
                   v-model="searchWithdrawl"
                   type="text"
@@ -53,7 +64,7 @@
                     <tr
                       v-for="(withdrawal, i) in withdrawalList"
                       :key="i"
-                      @click="openUserData"
+                      @click="openUserData(withdrawal.withdrawal_id)"
                     >
                       <td class="c-table__cell">
                         <div class="form-check">
@@ -66,7 +77,9 @@
                         </div>
                       </td>
                       <td></td>
-                      <td class="c-table__cell">{{ withdrawal.nombre_usuario }}</td>
+                      <td class="c-table__cell">
+                        {{ withdrawal.nombre_usuario }}
+                      </td>
                       <td class="c-table__cell">{{ withdrawal.amount }}</td>
                       <td class="c-table__cell">{{ withdrawal.status }}</td>
                       <td class="c-table__cell"></td>
@@ -96,7 +109,18 @@
               <div
                 class="form-group has-search d-inline-block position-relative"
               >
-                <span class="fa fa-search form-control-feedback1234"></span>
+              <span style="border:1px solid #b3b0b0;border-radius: 5px;
+                  padding-left: 3px;
+                  position: absolute;
+                  margin-top: 6px;
+                  margin-left: 10px;
+                  height: auto;
+                  margin-bottom: 10px;
+                  padding-right: 3px;"  @click="getWithdrawlByRequester('successful')"> 
+                  <span
+                  class="fa fa-search form-control-feedback1234" style="position:relative; top:0; left:0px !important"
+                ></span>
+              </span>
                 <input
                   v-model="searchWithdrawl"
                   type="text"
@@ -124,7 +148,7 @@
                     <tr
                       v-for="(withdrawal, i) in withdrawalList"
                       :key="i"
-                      @click="openUserData"
+                      @click="openUserData(withdrawal.withdrawal_id)"
                     >
                       <td class="c-table__cell">
                         <div class="form-check">
@@ -137,7 +161,9 @@
                         </div>
                       </td>
                       <td></td>
-                      <td class="c-table__cell">{{ withdrawal.nombre_usuario }}</td>
+                      <td class="c-table__cell">
+                        {{ withdrawal.nombre_usuario }}
+                      </td>
                       <td class="c-table__cell">{{ withdrawal.amount }}</td>
                       <td class="c-table__cell">{{ withdrawal.status }}</td>
                       <td class="c-table__cell"></td>
@@ -163,7 +189,18 @@
               <div
                 class="form-group has-search d-inline-block position-relative"
               >
-                <span class="fa fa-search form-control-feedback1234"></span>
+              <span style="border:1px solid #b3b0b0;border-radius: 5px;
+                  padding-left: 3px;
+                  position: absolute;
+                  margin-top: 6px;
+                  margin-left: 10px;
+                  height: auto;
+                  margin-bottom: 10px;
+                  padding-right: 3px;"  @click="getWithdrawlByRequester('denied')"> 
+                  <span
+                  class="fa fa-search form-control-feedback1234" style="position:relative; top:0; left:0px !important"
+                ></span>
+              </span>
                 <input
                   v-model="searchWithdrawl"
                   type="text"
@@ -191,7 +228,7 @@
                     <tr
                       v-for="(withdrawal, i) in withdrawalList"
                       :key="i"
-                      @click="openUserData"
+                      @click="openUserData(withdrawal.withdrawal_id)"
                     >
                       <td class="c-table__cell">
                         <div class="form-check">
@@ -204,7 +241,9 @@
                         </div>
                       </td>
                       <td></td>
-                      <td class="c-table__cell">{{ withdrawal.nombre_usuario }}</td>
+                      <td class="c-table__cell">
+                        {{ withdrawal.nombre_usuario }}
+                      </td>
                       <td class="c-table__cell">{{ withdrawal.amount }}</td>
                       <td class="c-table__cell">{{ withdrawal.status }}</td>
                       <td class="c-table__cell"></td>
@@ -290,6 +329,7 @@ const userDataVisible = ref(false)
 const modalDeleteVisible = ref(false)
 let withdrawalList = ref(0)
 let searchWithdrawl = ref(null)
+let withdrawalData = ref({})
 
 function getWithdrawalList(status) {
   const data = JSON.stringify({ status: status })
@@ -315,8 +355,16 @@ function getWithdrawlByRequester(type) {
   })
 }
 
-function openUserData() {
+function openUserData(withdrawalId) {
   userDataVisible.value = true
+  if (withdrawalId) {
+    const data = JSON.stringify({ withdrawal_id: withdrawalId })
+    store.dispatch('getWithdrawlInfo', data).then((response) => {
+      if (response.content) {
+        withdrawalData.value = response.content
+      }
+    })
+  }
 }
 
 function closeUserData() {
@@ -345,16 +393,16 @@ export default {
     }
   },
   methods: {
-    handleOnCheck(event) {
-      this.withdrawalId = event.target.value
-      if (this.withdrawalId) {
-        const data = JSON.stringify({ withdrawal_id: this.withdrawalId })
-        this.$store.dispatch('getWithdrawlInfo', data).then((response) => {
-          if (response.content) {
-            this.withdrawalData = response.content
-          }
-        })
-      }
+    handleOnCheck($event) {
+      // this.withdrawalId = event.target.value
+      // if (this.withdrawalId) {
+      //   const data = JSON.stringify({ withdrawal_id: this.withdrawalId })
+      //   this.$store.dispatch('getWithdrawlInfo', data).then((response) => {
+      //     if (response.content) {
+      //       this.withdrawalData = response.content
+      //     }
+      //   })
+      // }
     },
   },
 }

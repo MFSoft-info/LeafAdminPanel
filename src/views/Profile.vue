@@ -58,6 +58,16 @@
           />
         </div>
         <div class="mb-3 col-md-6">
+          <label class="form-label">Currency</label>
+          <input
+            v-model="profileInfo.currency"
+            placeholder="Currency"
+            type="text"
+            class="form-control"
+            aria-describedby="emailHelp"
+          />
+        </div>
+        <div class="mb-3 col-md-6">
           <label class="form-label">Password 1</label>
           <input
             v-model="profileInfo.password1"
@@ -79,7 +89,7 @@
             aria-describedby="emailHelp"
           />
         </div>
-        <div class="mb-3 col-md-6">
+        <div class="mb-3 col-md-12">
           <label class="form-label">Describe Your Ability</label>
           <textarea
             class="form-control"
@@ -153,16 +163,6 @@
             @input="(e) => handleAccount(e, index)"
           />
         </div>
-        <div class="mb-3 col-md-6">
-          <label class="form-label">Currency</label>
-          <input
-            v-model="profileInfo.currency"
-            placeholder="Currency"
-            type="text"
-            class="form-control"
-            aria-describedby="emailHelp"
-          />
-        </div>
       </b-row>
       <b-row>
         <b-col md="12" class="d-flex justify-content-center">
@@ -211,16 +211,16 @@ export default {
       })
       this.$store.dispatch('getUserProfile', payload).then((response) => {
         if (response.status) {
-          this.profileInfo = response.content;
-          var payment_method = response.content.payment_methods;
-          if(!payment_method){
-              payment_method = [];
+          this.profileInfo = response.content
+          var payment_method = response.content.payment_methods
+          if (!payment_method) {
+            payment_method = []
           }
-          for(let i=payment_method.length; i < 3; i++ )
-              payment_method.push({bank: '', account: ''});
-          }
-          this.payment_methods = payment_method;
-          console.log(this.payment_methods)
+          for (let i = payment_method.length; i < 3; i++)
+            payment_method.push({ bank: '', account: '' })
+        }
+        this.payment_methods = payment_method
+        console.log(this.payment_methods)
       })
     },
     submit(e) {
@@ -231,7 +231,7 @@ export default {
           full_nombre: this.profileInfo.full_nombre,
           email: this.profileInfo.email,
           telefono: this.profileInfo.telefono,
-          codigo_pais: this.profileInfo.codigo_pais,
+          codigo_pais: this.profileInfo.country_name,
           habilidades: this.profileInfo.habilidades,
           usd_direction: this.profileInfo.usd_direction,
           payment_methods: this.payment_methods,

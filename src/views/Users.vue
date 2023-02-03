@@ -6,19 +6,29 @@
           USUARIOS {{ routeName }}
         </h4>
       </b-col>
-      <b-col sm="4" md="3" class="d-flex align-items-center">
+      <b-col
+        sm="4"
+        md="3"
+        v-if="role == 'superadmin'"
+        class="d-flex align-items-center"
+      >
         <button @click="openAddBalance" class="common resp-btn">
           Añadir saldo
         </button>
       </b-col>
-      <b-col sm="4" md="3" class="d-flex align-items-center">
+      <b-col
+        sm="4"
+        md="3"
+        v-if="role == 'superadmin'"
+        class="d-flex align-items-center"
+      >
         <button @click="openRemoveBalance" class="common resp-btn">
           Quitar saldo
         </button>
       </b-col>
     </b-row>
     <b-row>
-      <b-col cols="12" sm="6" md="10" class="d-inline-flex align-items-center">
+      <b-col cols="12" sm="6" md="10" class="d-inline-flex align-items-center position-relative">
         <div class="form-check search-cb">
           <input
             class="form-check-input custom-checkbox"
@@ -30,8 +40,19 @@
         <!-- :value="everyone" -->
 
         <!-- Actual search box -->
-        <div class="form-group has-search d-flex align-items-center">
-          <i class="fa fa-search form-control-feedback position-relative"></i>
+        <div class="form-group has-search d-flex align-items-center position-relative">
+              <span style="border:1px solid #b3b0b0;border-radius: 5px;
+                  padding-left: 3px;
+                  position: absolute;
+                  margin-top: 8px;
+                  margin-left: 10px;
+                  height: auto;
+                  margin-bottom: 8px;
+                  padding-right: 3px;"  @click="getUserByUsername()"> 
+                  <span
+                  class="fa fa-search form-control-feedback1234" style="position:relative; top:0; left:0px !important"
+                ></span>
+              </span>
           <input
             v-model="searchUser"
             type="text"
@@ -42,7 +63,7 @@
         </div>
       </b-col>
       <b-col cols="12" sm="6" md="2" class="total-res">
-        <span>TOTAL: </span><strong>{{ usersList.length }}</strong>
+        <span>TOTAL: </span><strong>{{ total }}</strong>
       </b-col>
     </b-row>
     <b-row style="color: #ffffff" class="mt-4">
@@ -53,14 +74,14 @@
               <tr>
                 <th></th>
                 <th></th>
-                <th class="c-table__col-label">Nombre</th>
-                <th class="c-table__col-label">Correo</th>
+                <th class="c-table__col-label">Nombre Usuario</th>
+                <th class="c-table__col-label">Full Nombre</th>
                 <th class="c-table__col-label">Teléfono</th>
                 <th class="c-table__col-label">Estatus</th>
                 <th class="c-table__col-label">Accion</th>
               </tr>
             </thead>
-            <tbody class="c-table__body">
+            <tbody class="c-table__body" v-if="usersList">
               <tr v-for="(value, index) in usersList" :key="value">
                 <td class="c-table__cell">
                   <div class="form-check">
@@ -81,10 +102,10 @@
                   <img class="c-img-table" v-else src="/img/profile.jpg" />
                 </td>
                 <td class="c-table__cell">
-                  {{ value.full_nombre }}
+                  {{ value.nombre_usuario }}
                 </td>
                 <td class="c-table__cell">
-                  {{ value.email }}
+                  {{ value.full_nombre }}
                 </td>
                 <td class="c-table__cell">
                   {{ value.telefono }}
@@ -110,7 +131,13 @@
                   <button @click="openEditModal(value)" class="common w-c me-2">
                     <i class="fas fa-edit"></i>
                   </button>
-                  <button
+                  <button v-if="routeName == 'Eliminados'"
+                    @click="openResetModal(index)"
+                    class="common w-c w-c-c"
+                  >
+                    <i  class="fas fa-undo"></i>
+                  </button>
+                  <button v-if="routeName != 'Eliminados'"
                     @click="openDeleteModal(index)"
                     class="common w-c w-c-c"
                   >
@@ -134,6 +161,11 @@
       v-show="deleteModalOpen"
       @close="closeDeleteModal"
       @delete="deleteUser"
+    />
+    <ResetModal
+      v-show="resetModalOpen"
+      @close="closeResetModal"
+      @delete="resetUser"
     />
     <!--    ANADIR SALDO MODAL-->
     <AddBalance
@@ -159,14 +191,17 @@ import AddBalance from '@/components/users/AddBalance.vue'
 import RemoveBalance from '@/components/users/RemoveBalance.vue'
 import EditModal from '@/components/users/EditModal.vue'
 import DeleteModal from '@/components/users/DeleteModal.vue'
+import ResetModal from '@/components/users/ResetModal.vue'
 const store = useStore()
 const route = useRoute()
 
 const routeName = ref('')
 const addBalanceOpen = ref(false)
 const removeBalanceOpen = ref(false)
+const resetModalOpen = ref(false)
 const deleteModalOpen = ref(false)
 const editModalOpen = ref(false)
+const resetIndex = ref(null)
 const deleteIndex = ref(null)
 var tableData = ref([
   {
@@ -223,14 +258,14 @@ function closeRemoveBalance() {
 // Edit user modal
 function openEditModal(value) {
   editUserDetail.value = value
-    let payload = JSON.stringify({
-        user_id: value.id,
-      })
-      store.dispatch('getUserProfile', payload).then((response) => {
-        if (response.status) {
-            editUserDetail.value = response.content;
-        }
-      })
+  let payload = JSON.stringify({
+    user_id: value.id,
+  })
+  store.dispatch('getUserProfile', payload).then((response) => {
+    if (response.status) {
+      editUserDetail.value = response.content
+    }
+  })
   editModalOpen.value = true
 }
 
@@ -254,6 +289,21 @@ function deleteUser() {
   deleteModalOpen.value = false
 }
 
+function openResetModal(index) {
+  resetModalOpen.value = true
+  resetIndex.value = index
+}
+
+function closeResetModal() {
+  resetModalOpen.value = false
+  resetIndex.value = null
+}
+function resetUser() {
+  tableData.value.splice(resetIndex, 1)
+  resetModalOpen.value = false
+}
+
+
 watchEffect(() => {
   routeName.value = route.meta.title
 })
@@ -268,16 +318,21 @@ export default {
       usersList: ref([]),
       userId: [],
       searchUser: '',
+      currentCondition: '',
+      role: localStorage.getItem('userRole'),
+      total: ''
     }
   },
   watch: {
     $route: function (to, from) {
       this.getUserList(to.meta.title)
+      this.currentCondition = to.meta.title
     },
   },
   created() {
     const nav_route = useRoute().meta.title
     this.getUserList(nav_route)
+    this.currentCondition = nav_route
   },
 
   methods: {
@@ -308,22 +363,59 @@ export default {
             ? 'deleted'
             : currentRoute === 'Admin'
             ? 'admins'
-            : '',
+            : currentRoute === 'ConNegocios' || currentRoute === 'Con negocios'
+            ? 'with businesses'
+            : currentRoute === 'SinNegocios' || currentRoute === 'Sin negocios'
+            ? 'no businesses'
+            : ''
       })
       this.$store.dispatch('getUsersList', data).then((response) => {
         if (response.content) {
           this.usersList = response.content
+          this.total = response.content.length
+          console.log(response.content.length)
         }
       })
     },
     getUserByUsername() {
+      let currentRoute = this.currentCondition
+      let condition =
+        currentRoute === 'Activos'
+          ? 'active'
+          : currentRoute === 'Inactivos'
+          ? 'inactive'
+          : currentRoute === 'Bloqueados'
+          ? 'blocked'
+          : currentRoute === 'ConCompras' || currentRoute === 'Con Compras'
+          ? 'with buys'
+          : currentRoute === 'Conventas' || currentRoute === 'Con Ventas'
+          ? 'with sells'
+          : currentRoute === 'Eliminados'
+          ? 'deleted'
+          : currentRoute === 'Admin'
+          ? 'admins'
+          : currentRoute === 'ConNegocios' || currentRoute === 'Con Negocios'
+          ? 'with businesses'
+          : currentRoute === 'SinNegocios' || currentRoute === 'Sin Negocios'
+          ? 'no businesses'
+          : ''
+
+      if (!this.searchUser) {
+        this.getUserList(this.currentCondition)
+        return 0
+      }
       let data = JSON.stringify({
         username: this.searchUser,
+        condition: condition,
       })
       this.$store.dispatch('getUserByUsername', data).then((response) => {
         if (response.content) {
           let data = response.content
-          this.usersList = [data]
+          if (Object.keys(data).length > 0 || data.length > 0) {
+            this.usersList = [data]
+          } else {
+            this.usersList = []
+          }
         }
       })
     },

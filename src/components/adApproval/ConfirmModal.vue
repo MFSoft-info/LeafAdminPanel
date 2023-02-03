@@ -46,7 +46,7 @@ export default {
             text: response.content,
             icon: 'success',
           })
-          $emit('close', true)
+          this.$emit('close', true)
         } else {
           Swal.fire({
             title: 'Error!',

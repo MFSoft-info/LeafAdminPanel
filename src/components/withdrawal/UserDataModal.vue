@@ -47,7 +47,9 @@
           <span class="head">Direccion LEAL:</span>
         </b-col>
         <b-col md="7">
-          <span>{{ content.leal_direction }} </span>
+          <span style="word-break: break-all"
+            >{{ content.leal_direction }}
+          </span>
         </b-col>
       </b-row>
       <div class="mt-5 mb-4 text-center">

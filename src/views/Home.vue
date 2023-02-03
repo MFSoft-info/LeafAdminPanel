@@ -78,38 +78,38 @@ let homePage = ref(0)
 const p2pShopping = ref([
   {
     name: 'Usuarios',
-    amount: '25',
+    amount: '',
   },
   {
     name: 'Cantidad',
-    amount: '235',
+    amount: '',
   },
   {
     name: 'USDT',
-    amount: '2305',
+    amount: '',
   },
   {
     name: 'LEAL',
-    amount: '4000',
+    amount: '',
   },
 ])
 
 const p2pSelling = ref([
   {
     name: 'Usuarios',
-    amount: '25',
+    amount: '',
   },
   {
     name: 'Cantidad',
-    amount: '235',
+    amount: '',
   },
   {
     name: 'USDT',
-    amount: '2305',
+    amount: '',
   },
   {
     name: 'LEAL',
-    amount: '4000',
+    amount: '',
   },
 ])
 

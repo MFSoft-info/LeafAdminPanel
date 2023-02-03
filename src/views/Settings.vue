@@ -7,8 +7,11 @@
     </b-row>
     <b-card no-body>
       <b-tabs card>
+
         <b-tab no-body title="P2p">
-          <P2p :data="p2pSetting" />
+          <div class="loader" v-if="isLoading"></div>
+
+          <P2p :data="p2pSetting" v-if="!isLoading"/>
         </b-tab>
 
         <b-tab no-body title="CHAT">
@@ -23,7 +26,7 @@
         </b-tab>
         <b-tab no-body title="NEGOCIOS">
           <!-- Do the same for the rest of tab's content -->
-          <Negocios />
+          <Negocios :data="businessesConfig"  />
         </b-tab>
         <b-tab no-body title="ANUNCIOS">
           <b-row class="mt-5 justify-content-center">
@@ -66,7 +69,7 @@
                 />
               </div>
             </b-col>
-            <b-col md="12" lg="4" class=" "> </b-col>
+            <b-col md="12" lg="4" class=""> </b-col>
           </b-row>
           <b-row class="mt-2 justify-content-center">
             <b-col lg="4" md="12" class="d-flex">
@@ -82,7 +85,7 @@
                 />
               </div>
             </b-col>
-            <b-col md="12" lg="4" class=" "> </b-col>
+            <b-col md="12" lg="4" class=""> </b-col>
           </b-row>
           <b-row class="mt-2 justify-content-center">
             <b-col lg="4" md="12" class="d-flex flex-wrap flex-md-nowrap">
@@ -107,7 +110,7 @@
                 />
               </div>
             </b-col>
-            <b-col md="12" lg="4" class=" "> </b-col>
+            <b-col md="12" lg="4" class=""> </b-col>
 
             <div class="d-flex justify-content-end mb-4 mx-4">
               <button
@@ -178,15 +181,20 @@ const store = useStore()
 <script>
 import Swal from 'sweetalert2'
 export default {
-  name: 'Withdrawal',
+  name: 'Settings',
+  name: 'Loader',
   data: function () {
     return {
+      isLoading: false,
       p2pSetting: {
         usdt_address_penalty: '',
         rules_commissions: [],
-        packages: [],
+        // packages: [],
         rules_ads: [],
-        wthdrawal_sell_minimun_amount: '',
+        withdrawal_minimum_amount: '',
+        transfer_minimum_amount: '',
+        sell_minimum_amount: '',
+        sells_vs_buys: '',
       },
       adsConfig: {
         code: '',
@@ -200,17 +208,28 @@ export default {
         initial_split: '',
         value_compared_usdt: '',
       },
+      businessesConfig: {
+        cashback_for_customer: '',
+        leals_cashback: '',
+        earnings_by_level: [],
+        commission_businesses_gift: [],
+        businesses_types_categories: [],
+        businesses_rating: []
+      }
     }
   },
   beforeMount() {
     this.getAdsSettings()
     this.getP2PSettings()
     this.getSplitSettings()
-  },
+    this.getBusinessesConfig()
+},
   methods: {
     getP2PSettings() {
+      this.isLoading = true
       this.$store.dispatch('getP2PSettings').then((response) => {
         if (response.status) {
+          this.isLoading = false
           this.p2pSetting = response.content
         }
       })
@@ -226,6 +245,13 @@ export default {
       this.$store.dispatch('getSplitSettings').then((response) => {
         if (response.status) {
           this.splitSetting = response.content
+        }
+      })
+    },
+    getBusinessesConfig() {
+      this.$store.dispatch('getBusinessesConfig').then((response) => {
+        if (response.status) {
+          this.businessesConfig = response.content
         }
       })
     },
@@ -380,5 +406,36 @@ export default {
 
 .fs-sm {
   height: 50px;
+}
+.loader {
+  display: flex;
+  width: 64px;
+  height: 64px;
+  position: relative;
+  top: 50%;
+  margin: 0 auto;
+  // left: 57%;
+  // transform: translateX(-57%) translateY(-50%);
+  margin-top: 50px;
+  margin-bottom: 40px;
+}
+.loader:after {
+  content: ' ';
+  display: block;
+  width: 40px;
+  height: 40px;
+  margin: 8px;
+  border-radius: 50%;
+  border: 6px solid #fff;
+  border-color: #2e2e2e transparent #2e2e2e transparent;
+  animation: loader 0.7s linear infinite;
+}
+@keyframes loader {
+  0% {
+    transform: rotate(0deg);
+  }
+  100% {
+    transform: rotate(360deg);
+  }
 }
 </style>

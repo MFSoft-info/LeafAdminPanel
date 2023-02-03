@@ -7,15 +7,27 @@
     </b-row>
     <b-row class="d-flex align-items-center mt-3">
       <b-col md="6">
-        <input
-          v-model="searchTeam"
-          type="text"
-          id="search"
-          placeholder="Buscar"
-          @blur="getTeamByUserName()"
-          @keyup.enter="getTeamByUserName()"
-          class="common buscar"
-        />
+        <div class="form-group has-search d-inline-block position-relative">
+          <span style="border:1px solid #b3b0b0;border-radius: 5px;
+              padding-left: 3px;
+              position: absolute;
+              margin-top: 6px;
+              margin-left: 10px;
+              height: auto;
+              margin-bottom: 10px;
+              padding-right: 3px;"  @click="getTeamByUserName()"> 
+            <span
+            class="fa fa-search form-control-feedback1234"
+          ></span>
+          </span>
+          <input
+            v-model="searchTeam"
+            type="text"
+            class="form-control"
+            placeholder="Search"
+            @keyup.enter="getTeamByUserName()"
+          />
+        </div>
       </b-col>
       <b-col
         md="3"
@@ -29,6 +41,7 @@
     </b-row>
 
     <div class="row-team">
+
       <div class="top-levels">
         <div
           class="level"
@@ -84,7 +97,9 @@
           <p class="level-value">2</p>
         </div> -->
       </div>
-      <div class="middle-div">
+      <div class="loader" v-if="isLoading"></div>
+
+      <div class="middle-div" v-if="!isLoading">
         <div>
           <div @click="isName = !isName">
             <div v-if="teamList.children.length">
@@ -105,7 +120,10 @@
           <div v-if="isName" class="nested-team-span">
             <div v-for="(data, index) in teamList.children" :key="index">
               <!-- <div @click="isChildName = !isChildName" class="team-span"> -->
-              <div @click="isfirstChildsChild = firstChildCollap(index)" class="team-span">
+              <div
+                @click="isfirstChildsChild = firstChildCollap(index)"
+                class="team-span"
+              >
                 <div v-if="data.children.length">
                   <i class="fas fa-user-plus"></i>
                   <span class="team-span">
@@ -149,7 +167,12 @@
                       v-for="(childDataaa, index) in childData.children"
                       :key="index"
                     >
-                      <div @click="childDataaa['isChild'] = !childDataaa['isChild']" class="team-span">
+                      <div
+                        @click="
+                          childDataaa['isChild'] = !childDataaa['isChild']
+                        "
+                        class="team-span"
+                      >
                         <i
                           v-if="childDataaa.children.length"
                           class="fas fa-user-plus"
@@ -171,7 +194,13 @@
                           ) in childDataaa.children"
                           :key="index"
                         >
-                          <div @click="childDataaaaaa['isChild'] = !childDataaaaaa['isChild']" class="team-span">
+                          <div
+                            @click="
+                              childDataaaaaa['isChild'] =
+                                !childDataaaaaa['isChild']
+                            "
+                            class="team-span"
+                          >
                             <i
                               v-if="childDataaaaaa.children.length"
                               class="fas fa-user-plus"
@@ -186,7 +215,10 @@
                             ></i>
                             <i v-else class="ms-2"></i>
                           </div>
-                          <div v-if="childDataaaaaa.isChild" class="nested-team-span">
+                          <div
+                            v-if="childDataaaaaa.isChild"
+                            class="nested-team-span"
+                          >
                             <div
                               v-for="(
                                 childDatas, index
@@ -194,7 +226,9 @@
                               :key="index"
                             >
                               <div
-                                @click="childDatas['isChild'] = !childDatas['isChild']"
+                                @click="
+                                  childDatas['isChild'] = !childDatas['isChild']
+                                "
                                 class="team-span"
                               >
                                 <i
@@ -211,7 +245,10 @@
                                 ></i>
                                 <i v-else class="ms-2"></i>
                               </div>
-                              <div v-if="childDatas.isChild" class="nested-team-span">
+                              <div
+                                v-if="childDatas.isChild"
+                                class="nested-team-span"
+                              >
                                 <div
                                   v-for="(
                                     childDatasss, index
@@ -219,7 +256,10 @@
                                   :key="index"
                                 >
                                   <div
-                                    @click="childDatasss['isChild'] = !childDatasss['isChild']"
+                                    @click="
+                                      childDatasss['isChild'] =
+                                        !childDatasss['isChild']
+                                    "
                                     class="team-span"
                                   >
                                     <i
@@ -247,7 +287,10 @@
                                       :key="index"
                                     >
                                       <div
-                                        @click="isChilddddsssddddss['isChild'] = !isChilddddsssddddss['isChild']"
+                                        @click="
+                                          isChilddddsssddddss['isChild'] =
+                                            !isChilddddsssddddss['isChild']
+                                        "
                                         class="team-span"
                                       >
                                         <i
@@ -264,7 +307,9 @@
                                           }}
                                         </span>
                                         <i
-                                          v-if="isChilddddsssddddss.children.length"
+                                          v-if="
+                                            isChilddddsssddddss.children.length
+                                          "
                                           class="fas fa-greater-than ms-2"
                                         ></i>
                                         <i v-else class="ms-2"></i>
@@ -280,12 +325,20 @@
                                           :key="index"
                                         >
                                           <div
-                                            @click="isChilddddssssshhhishs['isChild'] = !isChilddddssssshhhishs['isChild']"
+                                            @click="
+                                              isChilddddssssshhhishs[
+                                                'isChild'
+                                              ] =
+                                                !isChilddddssssshhhishs[
+                                                  'isChild'
+                                                ]
+                                            "
                                             class="team-span"
                                           >
                                             <i
                                               v-if="
-                                                isChilddddssssshhhishs.children.length
+                                                isChilddddssssshhhishs.children
+                                                  .length
                                               "
                                               class="fas fa-user-plus"
                                             ></i>
@@ -297,382 +350,644 @@
                                               }}
                                             </span>
                                             <i
-                                              v-if="isChilddddssssshhhishs.children.length"
+                                              v-if="
+                                                isChilddddssssshhhishs.children
+                                                  .length
+                                              "
                                               class="fas fa-greater-than ms-2"
                                             ></i>
                                             <i v-else class="ms-2"></i>
                                           </div>
                                           <div
-                                            v-if="isChilddddssssshhhishs.isChild"
+                                            v-if="
+                                              isChilddddssssshhhishs.isChild
+                                            "
                                             class="nested-team-span"
                                           >
                                             <div
                                               v-for="(
-                                                isChilddddssssshhhishsLast, index
+                                                isChilddddssssshhhishsLast,
+                                                index
                                               ) in isChilddddssssshhhishs.children"
                                               :key="index"
                                             >
                                               <div
-                                                @click="isChilddddssssshhhishsLast['isChild'] = !isChilddddssssshhhishsLast['isChild']"
+                                                @click="
+                                                  isChilddddssssshhhishsLast[
+                                                    'isChild'
+                                                  ] =
+                                                    !isChilddddssssshhhishsLast[
+                                                      'isChild'
+                                                    ]
+                                                "
                                                 class="team-span"
                                               >
                                                 <i
                                                   v-if="
-                                                    isChilddddssssshhhishsLast.children.length
+                                                    isChilddddssssshhhishsLast
+                                                      .children.length
                                                   "
                                                   class="fas fa-user-plus"
                                                 ></i>
-                                                <i v-else class="fas fa-user"></i>
+                                                <i
+                                                  v-else
+                                                  class="fas fa-user"
+                                                ></i>
                                                 <span class="team-span-n">
                                                   {{
-                                                    isChilddddssssshhhishsLast.user
-                                                      .nombre_usuario
+                                                    isChilddddssssshhhishsLast
+                                                      .user.nombre_usuario
                                                   }}
                                                 </span>
                                                 <i
-                                                  v-if="isChilddddssssshhhishsLast.children.length"
+                                                  v-if="
+                                                    isChilddddssssshhhishsLast
+                                                      .children.length
+                                                  "
                                                   class="fas fa-greater-than ms-2"
                                                 ></i>
                                                 <i v-else class="ms-2"></i>
                                               </div>
                                               <div
-                                                v-if="isChilddddssssshhhishsLast.isChild"
+                                                v-if="
+                                                  isChilddddssssshhhishsLast.isChild
+                                                "
                                                 class="nested-team-span"
                                               >
                                                 <div
                                                   v-for="(
-                                                    isChilddddssssshhhishsssLast11, index
+                                                    isChilddddssssshhhishsssLast11,
+                                                    index
                                                   ) in isChilddddssssshhhishsLast.children"
                                                   :key="index"
                                                 >
                                                   <div
-                                                    @click="isChilddddssssshhhishsssLast11['isChild'] = !isChilddddssssshhhishsssLast11['isChild']"
+                                                    @click="
+                                                      isChilddddssssshhhishsssLast11[
+                                                        'isChild'
+                                                      ] =
+                                                        !isChilddddssssshhhishsssLast11[
+                                                          'isChild'
+                                                        ]
+                                                    "
                                                     class="team-span"
                                                   >
                                                     <i
                                                       v-if="
-                                                        isChilddddssssshhhishsssLast11.children.length
+                                                        isChilddddssssshhhishsssLast11
+                                                          .children.length
                                                       "
                                                       class="fas fa-user-plus"
                                                     ></i>
-                                                    <i v-else class="fas fa-user"></i>
+                                                    <i
+                                                      v-else
+                                                      class="fas fa-user"
+                                                    ></i>
                                                     <span class="team-span-n">
                                                       {{
-                                                        isChilddddssssshhhishsssLast11.user
-                                                          .nombre_usuario
+                                                        isChilddddssssshhhishsssLast11
+                                                          .user.nombre_usuario
                                                       }}
                                                     </span>
                                                     <i
-                                                      v-if="isChilddddssssshhhishsssLast11.children.length"
+                                                      v-if="
+                                                        isChilddddssssshhhishsssLast11
+                                                          .children.length
+                                                      "
                                                       class="fas fa-greater-than ms-2"
                                                     ></i>
                                                     <i v-else class="ms-2"></i>
                                                   </div>
                                                   <div
-                                                    v-if="isChilddddssssshhhishsssLast11.isChild"
+                                                    v-if="
+                                                      isChilddddssssshhhishsssLast11.isChild
+                                                    "
                                                     class="nested-team-span"
                                                   >
                                                     <div
                                                       v-for="(
-                                                        isChilddddssssshhhishsLast22, index
+                                                        isChilddddssssshhhishsLast22,
+                                                        index
                                                       ) in isChilddddssssshhhishsssLast11.children"
                                                       :key="index"
                                                     >
                                                       <div
-                                                        @click="isChilddddssssshhhishsLast22['isChild'] = !isChilddddssssshhhishsLast22['isChild']"
+                                                        @click="
+                                                          isChilddddssssshhhishsLast22[
+                                                            'isChild'
+                                                          ] =
+                                                            !isChilddddssssshhhishsLast22[
+                                                              'isChild'
+                                                            ]
+                                                        "
                                                         class="team-span"
                                                       >
                                                         <i
                                                           v-if="
-                                                            isChilddddssssshhhishsLast22.children.length
+                                                            isChilddddssssshhhishsLast22
+                                                              .children.length
                                                           "
                                                           class="fas fa-user-plus"
                                                         ></i>
-                                                        <i v-else class="fas fa-user"></i>
-                                                        <span class="team-span-n">
+                                                        <i
+                                                          v-else
+                                                          class="fas fa-user"
+                                                        ></i>
+                                                        <span
+                                                          class="team-span-n"
+                                                        >
                                                           {{
-                                                            isChilddddssssshhhishsLast22.user
+                                                            isChilddddssssshhhishsLast22
+                                                              .user
                                                               .nombre_usuario
                                                           }}
                                                         </span>
                                                         <i
-                                                          v-if="isChilddddssssshhhishsLast22.children.length"
+                                                          v-if="
+                                                            isChilddddssssshhhishsLast22
+                                                              .children.length
+                                                          "
                                                           class="fas fa-greater-than ms-2"
                                                         ></i>
-                                                        <i v-else class="ms-2"></i>
+                                                        <i
+                                                          v-else
+                                                          class="ms-2"
+                                                        ></i>
                                                       </div>
                                                       <div
-                                                        v-if="isChilddddssssshhhishsLast22.isChild"
+                                                        v-if="
+                                                          isChilddddssssshhhishsLast22.isChild
+                                                        "
                                                         class="nested-team-span"
                                                       >
                                                         <div
                                                           v-for="(
-                                                            isChilddddssssshhhishsLast2222, index
+                                                            isChilddddssssshhhishsLast2222,
+                                                            index
                                                           ) in isChilddddssssshhhishsLast22.children"
                                                           :key="index"
                                                         >
                                                           <div
-                                                            @click="isChilddddssssshhhishsLast2222['isChild'] = !isChilddddssssshhhishsLast2222['isChild']"
+                                                            @click="
+                                                              isChilddddssssshhhishsLast2222[
+                                                                'isChild'
+                                                              ] =
+                                                                !isChilddddssssshhhishsLast2222[
+                                                                  'isChild'
+                                                                ]
+                                                            "
                                                             class="team-span"
                                                           >
                                                             <i
-                                                            v-if="
-                                                              isChilddddssssshhhishsLast2222.children.length
-                                                            "
+                                                              v-if="
+                                                                isChilddddssssshhhishsLast2222
+                                                                  .children
+                                                                  .length
+                                                              "
                                                               class="fas fa-user-plus"
                                                             ></i>
-                                                            <i v-else class="fas fa-user"></i>
-                                                            <span class="team-span-n">
+                                                            <i
+                                                              v-else
+                                                              class="fas fa-user"
+                                                            ></i>
+                                                            <span
+                                                              class="team-span-n"
+                                                            >
                                                               {{
-                                                                isChilddddssssshhhishsLast2222.user
+                                                                isChilddddssssshhhishsLast2222
+                                                                  .user
                                                                   .nombre_usuario
                                                               }}
                                                             </span>
                                                             <i
-                                                              v-if="isChilddddssssshhhishsLast2222.children.length"
+                                                              v-if="
+                                                                isChilddddssssshhhishsLast2222
+                                                                  .children
+                                                                  .length
+                                                              "
                                                               class="fas fa-greater-than ms-2"
                                                             ></i>
-                                                            <i v-else class="ms-2"></i>
+                                                            <i
+                                                              v-else
+                                                              class="ms-2"
+                                                            ></i>
                                                           </div>
                                                           <div
-                                                            v-if="isChilddddssssshhhishsLast2222.isChild"
+                                                            v-if="
+                                                              isChilddddssssshhhishsLast2222.isChild
+                                                            "
                                                             class="nested-team-span"
                                                           >
                                                             <div
                                                               v-for="(
-                                                                isChilddddssssshhhishsLast3333, index
+                                                                isChilddddssssshhhishsLast3333,
+                                                                index
                                                               ) in isChilddddssssshhhishsLast2222.children"
                                                               :key="index"
                                                             >
                                                               <div
-                                                                @click="isChilddddssssshhhishsLast3333['isChild'] = !isChilddddssssshhhishsLast3333['isChild']"
+                                                                @click="
+                                                                  isChilddddssssshhhishsLast3333[
+                                                                    'isChild'
+                                                                  ] =
+                                                                    !isChilddddssssshhhishsLast3333[
+                                                                      'isChild'
+                                                                    ]
+                                                                "
                                                                 class="team-span"
                                                               >
                                                                 <i
-                                                                v-if="
-                                                                  isChilddddssssshhhishsLast3333.children.length
-                                                                "
+                                                                  v-if="
+                                                                    isChilddddssssshhhishsLast3333
+                                                                      .children
+                                                                      .length
+                                                                  "
                                                                   class="fas fa-user-plus"
                                                                 ></i>
-                                                                <i v-else class="fas fa-user"></i>
-                                                                <span class="team-span-n">
+                                                                <i
+                                                                  v-else
+                                                                  class="fas fa-user"
+                                                                ></i>
+                                                                <span
+                                                                  class="team-span-n"
+                                                                >
                                                                   {{
-                                                                    isChilddddssssshhhishsLast3333.user
+                                                                    isChilddddssssshhhishsLast3333
+                                                                      .user
                                                                       .nombre_usuario
                                                                   }}
                                                                 </span>
                                                                 <i
-                                                                  v-if="isChilddddssssshhhishsLast3333.children.length"
+                                                                  v-if="
+                                                                    isChilddddssssshhhishsLast3333
+                                                                      .children
+                                                                      .length
+                                                                  "
                                                                   class="fas fa-greater-than ms-2"
                                                                 ></i>
-                                                                <i v-else class="ms-2"></i>
+                                                                <i
+                                                                  v-else
+                                                                  class="ms-2"
+                                                                ></i>
                                                               </div>
                                                               <div
-                                                                v-if="isChilddddssssshhhishsLast3333.isChild"
+                                                                v-if="
+                                                                  isChilddddssssshhhishsLast3333.isChild
+                                                                "
                                                                 class="nested-team-span"
+                                                              >
+                                                                <div
+                                                                  v-for="(
+                                                                    isChilddddssssshhhishsLast555,
+                                                                    index
+                                                                  ) in isChilddddssssshhhishsLast3333.children"
+                                                                  :key="index"
                                                                 >
                                                                   <div
-                                                                    v-for="(
-                                                                      isChilddddssssshhhishsLast555, index
-                                                                    ) in isChilddddssssshhhishsLast3333.children"
-                                                                    :key="index"
+                                                                    @click="
+                                                                      isChilddddssssshhhishsLast555[
+                                                                        'isChild'
+                                                                      ] =
+                                                                        !isChilddddssssshhhishsLast555[
+                                                                          'isChild'
+                                                                        ]
+                                                                    "
+                                                                    class="team-span"
+                                                                  >
+                                                                    <i
+                                                                      v-if="
+                                                                        isChilddddssssshhhishsLast555
+                                                                          .children
+                                                                          .length
+                                                                      "
+                                                                      class="fas fa-user-plus"
+                                                                    ></i>
+                                                                    <i
+                                                                      v-else
+                                                                      class="fas fa-user"
+                                                                    ></i>
+                                                                    <span
+                                                                      class="team-span-n"
+                                                                    >
+                                                                      {{
+                                                                        isChilddddssssshhhishsLast555
+                                                                          .user
+                                                                          .nombre_usuario
+                                                                      }}
+                                                                    </span>
+                                                                    <i
+                                                                      v-if="
+                                                                        isChilddddssssshhhishsLast555
+                                                                          .children
+                                                                          .length
+                                                                      "
+                                                                      class="fas fa-greater-than ms-2"
+                                                                    ></i>
+                                                                    <i
+                                                                      v-else
+                                                                      class="ms-2"
+                                                                    ></i>
+                                                                  </div>
+                                                                  <div
+                                                                    v-if="
+                                                                      isChilddddssssshhhishsLast555.isChild
+                                                                    "
+                                                                    class="nested-team-span"
                                                                   >
                                                                     <div
-                                                                      @click="isChilddddssssshhhishsLast555['isChild'] = !isChilddddssssshhhishsLast555['isChild']"
-                                                                      class="team-span"
-                                                                    >
-                                                                      <i
-                                                                      v-if="
-                                                                        isChilddddssssshhhishsLast555.children.length
+                                                                      v-for="(
+                                                                        isChilddddssssshhhishsLast666,
+                                                                        index
+                                                                      ) in isChilddddssssshhhishsLast555.children"
+                                                                      :key="
+                                                                        index
                                                                       "
-                                                                        class="fas fa-user-plus"
-                                                                      ></i>
-                                                                      <i v-else class="fas fa-user"></i>
-                                                                      <span class="team-span-n">
-                                                                        {{
-                                                                          isChilddddssssshhhishsLast555.user
-                                                                            .nombre_usuario
-                                                                        }}
-                                                                      </span>
-                                                                      <i
-                                                                        v-if="isChilddddssssshhhishsLast555.children.length"
-                                                                        class="fas fa-greater-than ms-2"
-                                                                      ></i>
-                                                                      <i v-else class="ms-2"></i>
-                                                                    </div>
-                                                                    <div
-                                                                      v-if="isChilddddssssshhhishsLast555.isChild"
-                                                                      class="nested-team-span"
+                                                                    >
+                                                                      <div
+                                                                        @click="
+                                                                          isChilddddssssshhhishsLast666[
+                                                                            'isChild'
+                                                                          ] =
+                                                                            !isChilddddssssshhhishsLast666[
+                                                                              'isChild'
+                                                                            ]
+                                                                        "
+                                                                        class="team-span"
+                                                                      >
+                                                                        <i
+                                                                          v-if="
+                                                                            isChilddddssssshhhishsLast666
+                                                                              .children
+                                                                              .length
+                                                                          "
+                                                                          class="fas fa-user-plus"
+                                                                        ></i>
+                                                                        <i
+                                                                          v-else
+                                                                          class="fas fa-user"
+                                                                        ></i>
+                                                                        <span
+                                                                          class="team-span-n"
+                                                                        >
+                                                                          {{
+                                                                            isChilddddssssshhhishsLast666
+                                                                              .user
+                                                                              .nombre_usuario
+                                                                          }}
+                                                                        </span>
+                                                                        <i
+                                                                          v-if="
+                                                                            isChilddddssssshhhishsLast666
+                                                                              .children
+                                                                              .length
+                                                                          "
+                                                                          class="fas fa-greater-than ms-2"
+                                                                        ></i>
+                                                                        <i
+                                                                          v-else
+                                                                          class="ms-2"
+                                                                        ></i>
+                                                                      </div>
+                                                                      <div
+                                                                        v-if="
+                                                                          isChilddddssssshhhishsLast666.isChild
+                                                                        "
+                                                                        class="nested-team-span"
                                                                       >
                                                                         <div
                                                                           v-for="(
-                                                                            isChilddddssssshhhishsLast666, index
-                                                                          ) in isChilddddssssshhhishsLast555.children"
-                                                                          :key="index"
+                                                                            isChilddddssssshhhishsLast77,
+                                                                            index
+                                                                          ) in isChilddddssssshhhishsLast666.children"
+                                                                          :key="
+                                                                            index
+                                                                          "
                                                                         >
                                                                           <div
-                                                                            @click="isChilddddssssshhhishsLast666['isChild'] = !isChilddddssssshhhishsLast666['isChild']"
+                                                                            @click="
+                                                                              isChilddddssssshhhishsLast77[
+                                                                                'isChild'
+                                                                              ] =
+                                                                                !isChilddddssssshhhishsLast77[
+                                                                                  'isChild'
+                                                                                ]
+                                                                            "
                                                                             class="team-span"
                                                                           >
-                                                                          <i
-                                                                            v-if="
-                                                                              isChilddddssssshhhishsLast666.children.length
-                                                                            "
+                                                                            <i
+                                                                              v-if="
+                                                                                isChilddddssssshhhishsLast77
+                                                                                  .children
+                                                                                  .length
+                                                                              "
                                                                               class="fas fa-user-plus"
                                                                             ></i>
-                                                                            <i v-else class="fas fa-user"></i>
-                                                                            <span class="team-span-n">
+                                                                            <i
+                                                                              v-else
+                                                                              class="fas fa-user"
+                                                                            ></i>
+                                                                            <span
+                                                                              class="team-span-n"
+                                                                            >
                                                                               {{
-                                                                                isChilddddssssshhhishsLast666.user
+                                                                                isChilddddssssshhhishsLast77
+                                                                                  .user
                                                                                   .nombre_usuario
                                                                               }}
                                                                             </span>
                                                                             <i
-                                                                              v-if="isChilddddssssshhhishsLast666.children.length"
+                                                                              v-if="
+                                                                                isChilddddssssshhhishsLast77
+                                                                                  .children
+                                                                                  .length
+                                                                              "
                                                                               class="fas fa-greater-than ms-2"
                                                                             ></i>
-                                                                            <i v-else class="ms-2"></i>
+                                                                            <i
+                                                                              v-else
+                                                                              class="ms-2"
+                                                                            ></i>
                                                                           </div>
                                                                           <div
-                                                                            v-if="isChilddddssssshhhishsLast666.isChild"
+                                                                            v-if="
+                                                                              isChilddddssssshhhishsLast77.isChild
+                                                                            "
                                                                             class="nested-team-span"
+                                                                          >
+                                                                            <div
+                                                                              v-for="(
+                                                                                isChilddddssssshhhishsLast88,
+                                                                                index
+                                                                              ) in isChilddddssssshhhishsLast77.children"
+                                                                              :key="
+                                                                                index
+                                                                              "
                                                                             >
                                                                               <div
-                                                                                v-for="(
-                                                                                  isChilddddssssshhhishsLast77, index
-                                                                                ) in isChilddddssssshhhishsLast666.children"
-                                                                                :key="index"
+                                                                                @click="
+                                                                                  isChilddddssssshhhishsLast88[
+                                                                                    'isChild'
+                                                                                  ] =
+                                                                                    !isChilddddssssshhhishsLast88[
+                                                                                      'isChild'
+                                                                                    ]
+                                                                                "
+                                                                                class="team-span"
                                                                               >
-                                                                                <div
-                                                                                  @click="isChilddddssssshhhishsLast77['isChild'] = !isChilddddssssshhhishsLast77['isChild']"
-                                                                                  class="team-span"
-                                                                                >
                                                                                 <i
                                                                                   v-if="
-                                                                                    isChilddddssssshhhishsLast77.children.length
+                                                                                    isChilddddssssshhhishsLast88
+                                                                                      .children
+                                                                                      .length
                                                                                   "
-                                                                                    class="fas fa-user-plus"
-                                                                                  ></i>
-                                                                                  <i v-else class="fas fa-user"></i>
-                                                                                  <span class="team-span-n">
-                                                                                    {{
-                                                                                      isChilddddssssshhhishsLast77.user
-                                                                                        .nombre_usuario
-                                                                                    }}
-                                                                                  </span>
-                                                                                  <i
-                                                                                    v-if="isChilddddssssshhhishsLast77.children.length"
-                                                                                    class="fas fa-greater-than ms-2"
-                                                                                  ></i>
-                                                                                  <i v-else class="ms-2"></i>
-                                                                                </div>
-                                                                                <div
-                                                                                v-if="isChilddddssssshhhishsLast77.isChild"
+                                                                                  class="fas fa-user-plus"
+                                                                                ></i>
+                                                                                <i
+                                                                                  v-else
+                                                                                  class="fas fa-user"
+                                                                                ></i>
+                                                                                <span
+                                                                                  class="team-span-n"
+                                                                                >
+                                                                                  {{
+                                                                                    isChilddddssssshhhishsLast88
+                                                                                      .user
+                                                                                      .nombre_usuario
+                                                                                  }}
+                                                                                </span>
+                                                                                <i
+                                                                                  v-if="
+                                                                                    isChilddddssssshhhishsLast88
+                                                                                      .children
+                                                                                      .length
+                                                                                  "
+                                                                                  class="fas fa-greater-than ms-2"
+                                                                                ></i>
+                                                                                <i
+                                                                                  v-else
+                                                                                  class="ms-2"
+                                                                                ></i>
+                                                                              </div>
+                                                                              <div
+                                                                                v-if="
+                                                                                  isChilddddssssshhhishsLast88.isChild
+                                                                                "
                                                                                 class="nested-team-span"
+                                                                              >
+                                                                                <div
+                                                                                  v-for="(
+                                                                                    isChilddddssssshhhishsLastsss88,
+                                                                                    index
+                                                                                  ) in isChilddddssssshhhishsLast88.children"
+                                                                                  :key="
+                                                                                    index
+                                                                                  "
                                                                                 >
                                                                                   <div
-                                                                                    v-for="(
-                                                                                      isChilddddssssshhhishsLast88, index
-                                                                                    ) in isChilddddssssshhhishsLast77.children"
-                                                                                    :key="index"
+                                                                                    @click="
+                                                                                      isChilddddssssshhhishsLastsss88[
+                                                                                        'isChild'
+                                                                                      ] =
+                                                                                        !isChilddddssssshhhishsLastsss88[
+                                                                                          'isChild'
+                                                                                        ]
+                                                                                    "
+                                                                                    class="team-span"
+                                                                                  >
+                                                                                    <i
+                                                                                      v-if="
+                                                                                        isChilddddssssshhhishsLastsss88
+                                                                                          .children
+                                                                                          .length
+                                                                                      "
+                                                                                      class="fas fa-user-plus"
+                                                                                    ></i>
+                                                                                    <i
+                                                                                      v-else
+                                                                                      class="fas fa-user"
+                                                                                    ></i>
+                                                                                    <span
+                                                                                      class="team-span-n"
+                                                                                    >
+                                                                                      {{
+                                                                                        isChilddddssssshhhishsLastsss88
+                                                                                          .user
+                                                                                          .nombre_usuario
+                                                                                      }}
+                                                                                    </span>
+                                                                                    <i
+                                                                                      v-if="
+                                                                                        isChilddddssssshhhishsLastsss88
+                                                                                          .children
+                                                                                          .length
+                                                                                      "
+                                                                                      class="fas fa-greater-than ms-2"
+                                                                                    ></i>
+                                                                                    <i
+                                                                                      v-else
+                                                                                      class="ms-2"
+                                                                                    ></i>
+                                                                                  </div>
+                                                                                  <div
+                                                                                    v-if="
+                                                                                      isChilddddssssshhhishsLastsss88.isChild
+                                                                                    "
+                                                                                    class="nested-team-span"
                                                                                   >
                                                                                     <div
-                                                                                      @click="isChilddddssssshhhishsLast88['isChild'] = !isChilddddssssshhhishsLast88['isChild']"
-                                                                                      class="team-span"
+                                                                                      v-for="(
+                                                                                        isChilddddssssshhhishsLastsss00,
+                                                                                        index
+                                                                                      ) in isChilddddssssshhhishsLastsss88.children"
+                                                                                      :key="
+                                                                                        index
+                                                                                      "
                                                                                     >
                                                                                       <i
-                                                                                      v-if="
-                                                                                        isChilddddssssshhhishsLast88.children.length
-                                                                                      "
+                                                                                        v-if="
+                                                                                          isChilddddssssshhhishsLastsss00
+                                                                                            .children
+                                                                                            .length
+                                                                                        "
                                                                                         class="fas fa-user-plus"
                                                                                       ></i>
-                                                                                      <i v-else class="fas fa-user"></i>
-                                                                                      <span class="team-span-n">
+                                                                                      <i
+                                                                                        v-else
+                                                                                        class="fas fa-user"
+                                                                                      ></i>
+                                                                                      <span
+                                                                                        class="team-span-n"
+                                                                                      >
                                                                                         {{
-                                                                                          isChilddddssssshhhishsLast88.user
+                                                                                          isChilddddssssshhhishsLastsss00
+                                                                                            .user
                                                                                             .nombre_usuario
                                                                                         }}
                                                                                       </span>
                                                                                       <i
-                                                                                        v-if="isChilddddssssshhhishsLast88.children.length"
+                                                                                        v-if="
+                                                                                          isChilddddssssshhhishsLastsss00
+                                                                                            .children
+                                                                                            .length
+                                                                                        "
                                                                                         class="fas fa-greater-than ms-2"
                                                                                       ></i>
-                                                                                      <i v-else class="ms-2"></i>
-                                                                                    </div>
-                                                                                    <div
-                                                                                    v-if="isChilddddssssshhhishsLast88.isChild"
-                                                                                    class="nested-team-span"
-                                                                                    >
-                                                                                      <div
-                                                                                        v-for="(
-                                                                                          isChilddddssssshhhishsLastsss88, index
-                                                                                        ) in isChilddddssssshhhishsLast88.children"
-                                                                                        :key="index"
-                                                                                      >
-                                                                                        <div
-                                                                                          @click="isChilddddssssshhhishsLastsss88['isChild'] = !isChilddddssssshhhishsLastsss88['isChild']"
-                                                                                          class="team-span"
-                                                                                        >
-                                                                                          <i
-                                                                                          v-if="
-                                                                                            isChilddddssssshhhishsLastsss88.children.length
-                                                                                          "
-                                                                                            class="fas fa-user-plus"
-                                                                                          ></i>
-                                                                                          <i v-else class="fas fa-user"></i>
-                                                                                          <span class="team-span-n">
-                                                                                            {{
-                                                                                              isChilddddssssshhhishsLastsss88.user
-                                                                                                .nombre_usuario
-                                                                                            }}
-                                                                                          </span>
-                                                                                          <i
-                                                                                            v-if="isChilddddssssshhhishsLastsss88.children.length"
-                                                                                            class="fas fa-greater-than ms-2"
-                                                                                          ></i>
-                                                                                          <i v-else class="ms-2"></i>
-                                                                                        </div>
-                                                                                        <div
-                                                                                          v-if="isChilddddssssshhhishsLastsss88.isChild"
-                                                                                          class="nested-team-span"
-                                                                                          >
-                                                                                            <div
-                                                                                              v-for="(
-                                                                                                isChilddddssssshhhishsLastsss00, index
-                                                                                              ) in isChilddddssssshhhishsLastsss88.children"
-                                                                                              :key="index"
-                                                                                            >
-                                                                                              <i
-                                                                                              v-if="
-                                                                                                isChilddddssssshhhishsLastsss00.children.length
-                                                                                              "
-                                                                                                class="fas fa-user-plus"
-                                                                                              ></i>
-                                                                                              <i v-else class="fas fa-user"></i>
-                                                                                              <span class="team-span-n">
-                                                                                                {{
-                                                                                                  isChilddddssssshhhishsLastsss00.user
-                                                                                                    .nombre_usuario
-                                                                                                }}
-                                                                                              </span>
-                                                                                              <i
-                                                                                                v-if="isChilddddssssshhhishsLastsss00.children.length"
-                                                                                                class="fas fa-greater-than ms-2"
-                                                                                              ></i>
-                                                                                              <i v-else class="ms-2"></i>
-                                                                                            </div>
-                                                                                        </div>
-                                                                                      </div>
+                                                                                      <i
+                                                                                        v-else
+                                                                                        class="ms-2"
+                                                                                      ></i>
                                                                                     </div>
                                                                                   </div>
                                                                                 </div>
                                                                               </div>
+                                                                            </div>
                                                                           </div>
                                                                         </div>
+                                                                      </div>
                                                                     </div>
                                                                   </div>
+                                                                </div>
                                                               </div>
-
                                                             </div>
                                                           </div>
                                                         </div>
@@ -705,10 +1020,15 @@
   </div>
 </template>
 <script>
+
+import Swal from 'sweetalert2'
+
 export default {
   name: 'Team',
+  name: 'Loader',
   data() {
     return {
+      isLoading: false,
       isName: false,
       isChildName: false,
       isChildNameee: false,
@@ -735,28 +1055,38 @@ export default {
     getTeam() {
       this.$store.dispatch('getTeam').then((response) => {
         if (response.status) {
-          this.teamList = response.content;
-
+          this.teamList = response.content
           this.childs_count = response.childs_count
           this.direct_users = response.direct_users
           this.indirect_users = response.indirect_users
         }
       })
     },
-    firstChildCollap(index){
-          this.teamList.children[index]['isChild']  = !this.teamList.children[index]['isChild'] ;
-          console.log("HERE IS DATA-->>",index,this.teamList.children )
-          return this.teamList.children[index]['isChild'];
+    firstChildCollap(index) {
+      this.teamList.children[index]['isChild'] =
+        !this.teamList.children[index]['isChild']
+      console.log('HERE IS DATA-->>', index, this.teamList.children)
+      return this.teamList.children[index]['isChild']
     },
     getTeamByUserName() {
       let payload = JSON.stringify({
         text: this.searchTeam,
       })
-      if(this.searchTeam){
+      if (this.searchTeam) {
+        this.isLoading = true
         this.$store.dispatch('getTeamByUserName', payload).then((response) => {
-          if (response.status) {
-            this.teamList = response.content
-            this.childs_count = response.childs_count
+          if (response && response.status == true) {
+              this.isLoading = false
+              this.teamList = response.content
+              // this.childs_count = response.childs_count
+          } else {
+            this.isLoading = false
+            Swal.fire({
+              title: 'Error!',
+              text: response.content,
+              icon: 'error',
+            })
+           this.getTeam();
           }
         })
       }
@@ -875,6 +1205,36 @@ export default {
   }
   .team-span-n {
     font-size: 14px !important;
+  }
+}
+.loader {
+  display: inline-block;
+  width: 64px;
+  height: 64px;
+  position: relative;
+  top: 50%;
+  // left: 57%;
+  // transform: translateX(-57%) translateY(-50%);
+  margin-top: 50px;
+  margin-bottom: 40px;
+}
+.loader:after {
+  content: ' ';
+  display: block;
+  width: 40px;
+  height: 40px;
+  margin: 8px;
+  border-radius: 50%;
+  border: 6px solid #fff;
+  border-color: #2e2e2e transparent #2e2e2e transparent;
+  animation: loader 0.7s linear infinite;
+}
+@keyframes loader {
+  0% {
+    transform: rotate(0deg);
+  }
+  100% {
+    transform: rotate(360deg);
   }
 }
 </style>

@@ -8,68 +8,35 @@
     <div class="d-inline-flex flex-wrap">
       <div class="m-p2p">
         <span class="d-block span-psp">Para el consumidor</span>
-        <input value="30%" class="btn btn-outline-primary mb-4" />
+        <input v-model="data.cashback_for_customer" class="btn btn-outline-primary mb-4" />
       </div>
       <div class="m-p2p">
         <span class="d-block span-psp">Para leals</span>
-        <input value="20%" class="btn btn-outline-primary mb-4" />
+        <input v-model="data.leals_cashback" class="btn btn-outline-primary mb-4" />
       </div>
-      <div class="m-p2p">
-        <span class="d-block span-psp">n1</span>
-        <input value="20%" class="btn btn-outline-primary mb-4" />
-      </div>
-      <div class="m-p2p">
-        <span class="d-block span-psp">n2</span>
-        <input value="8%" class="btn btn-outline-primary mb-4" />
-      </div>
-      <div class="m-p2p">
-        <span class="d-block span-psp">n3</span>
-        <input value="6%" class="btn btn-outline-primary mb-4" />
-      </div>
-      <div class="m-p2p">
-        <span class="d-block span-psp">n4</span>
-        <input value="4%" class="btn btn-outline-primary mb-4" />
-      </div>
-      <div class="m-p2p">
-        <span class="d-block span-psp">n5</span>
-        <input value="2%" class="btn btn-outline-primary mb-4" />
-      </div>
-      <div class="m-p2p">
-        <span class="d-block span-psp">n6</span>
-        <input value="2%" class="btn btn-outline-primary mb-4" />
-      </div>
-      <div class="m-p2p">
-        <span class="d-block span-psp">n7</span>
-        <input value="2%" class="btn btn-outline-primary mb-4" />
-      </div>
-      <div class="m-p2p">
-        <span class="d-block span-psp">n8</span>
-        <input value="2%" class="btn btn-outline-primary mb-4" />
-      </div>
-      <div class="m-p2p">
-        <span class="d-block span-psp">n9</span>
-        <input value="2%" class="btn btn-outline-primary mb-4" />
-      </div>
-      <div class="m-p2p">
-        <span class="d-block span-psp">n10</span>
-        <input value="2%" class="btn btn-outline-primary mb-4" />
+      <div class="d-flex">
+        <div class="m-p2p" v-for="(earn, i) in data.earnings_by_level" :key="i">
+          <span class="d-block span-psp">n {{ earn.level }}</span>
+          <input v-model="earn.percentage_earnings" class="btn btn-outline-primary mb-4" />
+        </div>
       </div>
     </div>
 
-    <Commissions />
+    <Commissions :dataa="data" />
 
-    <BusinessTypes :businessTypes="businessTypes" />
+    <BusinessTypes :dataa="data" />
 
-    <BusinessCategories :businessTypes="businessTypes" />
+    <BusinessCategories :dataa="data" />
 
-    <BusinessRanking />
+    <BusinessRanking :dataa="data" />
 
-    <MaximunAllowed />
+    <MaximunAllowed :dataa="data" />
 
     <div class="d-flex justify-content-end mb-4 mx-4">
       <button
         class="btn btn-primary"
         style="margin-right: 30px; margin-top: 40px"
+        @click="submitBusinessesConfig"
       >
         Guardar cambios
       </button>
@@ -86,28 +53,73 @@ import Commissions from './Commissions.vue'
 
 import { ref } from 'vue'
 
-const businessTypes = ref([
-  {
-    name: 'Local',
-    categories: ['Peluquería', 'Barbería'],
+// const businessTypes = ref([
+//   {
+//     name: 'Local',
+//     categories: ['Peluquería', 'Barbería'],
+//   },
+//   {
+//     name: 'Profesional',
+//     categories: ['', ''],
+//   },
+//   {
+//     name: 'Freelancers',
+//     categories: ['', ''],
+//   },
+//   {
+//     name: 'Mobility',
+//     categories: ['', ''],
+//   },
+//   {
+//     name: 'Buy/sell',
+//     categories: ['', ''],
+//   },
+// ])
+</script>
+
+<script>
+import Swal from 'sweetalert2'
+import { mapGetters } from 'vuex'
+export default {
+  name: 'Businesses Config',
+  props: ['data'],
+  computed: {},
+  methods: {
+    submitBusinessesConfig() { 
+      console.log(this.data);
+      this.data.businesses_types_categories =  this.data.businesses_types_categories.filter (i =>{
+        if(i.isNew){
+          delete i.isNew;
+          return i;
+        }
+        return i;
+      } );
+      const data = JSON.stringify({
+        cashback_for_customer: this.data.cashback_for_customer,
+        leals_cashback: this.data.leals_cashback,
+        earnings_by_level: this.data.earnings_by_level,
+        commission_businesses_gift: this.data.commission_businesses_gift,
+        businesses_types_categories: this.data.businesses_types_categories,
+        businesses_rating: this.data.businesses_rating,
+      })
+      this.$store.dispatch('updateBusinessesConfig', data).then((response) => {
+        if (response.status == true) {
+          Swal.fire({
+            title: 'Success!',
+            text: 'Successfully updated',
+            icon: 'success',
+          })
+        } else {
+          Swal.fire({
+            title: 'Error!',
+            text: response.content,
+            icon: 'error',
+          })
+        }
+      })
+    },    
   },
-  {
-    name: 'Profesional',
-    categories: ['', ''],
-  },
-  {
-    name: 'Freelancers',
-    categories: ['', ''],
-  },
-  {
-    name: 'Mobility',
-    categories: ['', ''],
-  },
-  {
-    name: 'Buy/sell',
-    categories: ['', ''],
-  },
-])
+}
 </script>
 
 <style lang="scss">

@@ -1,8 +1,23 @@
 <template>
   <div class="left-wrapper">
-    <div class="app-log">
-      <i class="fas fa-user logo"></i>
+    <div>
+      <div class="app-log">
+        <span v-if="!userProfileImg">
+          <i class="fas fa-user logo"></i>
+        </span>
+        <span v-else>
+          <img
+            :src="userProfileImg"
+            alt="profile"
+            style="height: 80px; width: 80px; border-radius: 50%"
+          />
+        </span>
+      </div>
+      <div v-if="userProfileName" class="text-center text-capitalize">
+        <strong>{{ userProfileName }}</strong>
+      </div>
     </div>
+
     <ul class="nav-list">
       <li @click="checkTheRoute" class="s-nav">
         <router-link tag="li" to="/" class="s-nav-link" exact>
@@ -73,7 +88,7 @@
           Equipo
         </router-link>
       </li>
-      <li @click="checkTheRoute" class="s-nav">
+      <li @click="checkTheRoute" class="s-nav" v-if="role == 'superadmin'">
         <router-link tag="li" to="/settings" class="s-nav-link">
           Configuración
         </router-link>
@@ -105,12 +120,21 @@
   </div>
 </template>
 <script>
+import { mapGetters } from 'vuex'
+
 export default {
   name: 'Sidebar',
   data() {
     return {
       collaspe: false,
+      userProfileImg: localStorage.getItem('userProfileImg'),
+      role: localStorage.getItem('userRole'),
+      userProfileName: localStorage.getItem('userProfileName'),
+      userDeleted: localStorage.getItem('userDeleted'),
     }
+  },
+  computed: {
+    // ...mapGetters(['getUserProfileImg']),
   },
   mounted() {
     const header = document.querySelector('.header-wrapper')

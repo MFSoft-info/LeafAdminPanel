@@ -13,7 +13,16 @@
         no-caret
       >
         <template #button-content>
-          <i class="fas fa-user header-user-icon"></i>
+          <span v-if="!userProfileImg">
+            <i class="fas fa-user header-user-icon"></i>
+          </span>
+          <span v-else>
+            <img
+              :src="userProfileImg"
+              alt="profile"
+              style="height: 45px; width: 45px; border-radius: 50%"
+            />
+          </span>
         </template>
         <b-dropdown-item href="#" class="dropdown-c">
           <router-link tag="li" to="/profile" class="s-nav-link">
@@ -21,7 +30,7 @@
             <span class="w-75 mll-4">Profile</span>
           </router-link>
         </b-dropdown-item>
-        <b-dropdown-item href="#" class="dropdown-c">
+        <!-- <b-dropdown-item href="#" class="dropdown-c">
           <router-link tag="li" to="/notifications" class="s-nav-link">
             <i class="fas fa-wallet w-25"></i>
             <span class="w-75 mll-4">Account</span>
@@ -32,7 +41,7 @@
             <i class="fas fa-inbox w-25"></i>
             <span class="w-75 mll-4">Inbox</span>
           </router-link>
-        </b-dropdown-item>
+        </b-dropdown-item> -->
         <b-dropdown-item href="#">
           <router-link
             @click="location.reload()"
@@ -49,11 +58,14 @@
   </div>
 </template>
 <script>
+import { mapGetters } from 'vuex'
+
 export default {
   name: 'Header',
   data() {
     return {
       isShow: true,
+      userProfileImg: localStorage.getItem('userProfileImg'),
     }
   },
   methods: {

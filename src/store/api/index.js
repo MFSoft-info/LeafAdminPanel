@@ -32,12 +32,27 @@ import {
   GET_SPLIT_SETTINGS,
   UPDATE_SPLIT_SETTINGS,
   UPDATE_LEAL_VALUE,
-  UPDATE_SELL_WITHDRAWAL_MIN_AMOUNT,
+  UPDATE_MIN_AMOUNT,
   UPDATE_SENDING_TIME_HASH,
   UPDATE_EARNINGS_STOP,
   GET_HOME_PAGE,
   UPDATE_COMMISSION_RULE,
   UPDATE_RULES_ADS,
+  GET_BUSINESSES_LIST,
+  GET_BUSINESS_BY_REQUESTER,
+  GET_BUSINESS_INFO,
+  BUSINESS_APPROVE,
+  BUSINESS_DENY,
+  GET_PACKAGES_LIST,
+  CREATE_PACKAGES,
+  UPDATE_PACKAGES,
+  DELETE_PACKAGES,
+  UPDATE_SELLS_VS_BUYS,
+  UPDATE_P2P_SELLS_FEE,
+  DELETE_ADMIN,
+  GET_BUSINESSES_CONFIG,
+  UPDATE_BUSINESSES_CONFIG,
+  UPDATE_BUSINESS_TYPE_NAME
 } from '../../../constants'
 export default {
   state: {
@@ -48,6 +63,8 @@ export default {
     name: null,
     route: null,
     userId: null,
+    userProfileImg: null,
+    userProfileName: null,
     isAuthenticated: !!JwtService.getToken(),
   },
   getters: {
@@ -56,6 +73,12 @@ export default {
     },
     getUserInfo(state) {
       return state.userInfo
+    },
+    getUserProfileImg(state) {
+      return state.userProfileImg
+    },
+    getUserProfileName(state) {
+      return state.userProfileName
     },
     getAdvertiseInfo(state) {
       return state.advertiseInfo
@@ -68,6 +91,15 @@ export default {
     },
     getWithdrawlsRoute(state) {
       return state.withdrawlsRoute
+    },
+    getBusinessesList(state) {
+      return state.businessesList
+    },
+    getBusinessInfo(state) {
+      return state.businessInfo
+    },
+    getBusinessRoute(state) {
+      return state.businessRoute
     },
     isUserAuthenticated(state) {
       return state.isAuthenticated
@@ -84,6 +116,11 @@ export default {
         .then((response) => {
           commit('setSignInUsers', response.data)
           commit('setUserId', response.data.iduser)
+          commit('setUserRole', response.data.role)
+          commit('setUserProfileImg', response.data.avatar)
+          commit('setUserProfileName', response.data.username)
+          commit('setUserDeleted', response.data.is_user_deleted)
+
           return response.data
         })
         .catch((error) => {
@@ -569,9 +606,9 @@ export default {
           }
         })
     },
-    async updateSellWithdrawalMinAmount({ commit }, data) {
+    async updateMinAmount({ commit }, data) {
       return await axios
-        .put(`${BASE_API_URL}${UPDATE_SELL_WITHDRAWAL_MIN_AMOUNT}`, data, {
+        .put(`${BASE_API_URL}${UPDATE_MIN_AMOUNT}`, data, {
           headers: {
             'Content-Type': 'application/json',
             Authorization: `Bearer ${JwtService.getToken()}`,
@@ -688,8 +725,269 @@ export default {
           }
         })
     },
+    async getBusinessesList({ commit }, data) {
+      return await axios
+        .post(`${BASE_API_URL}${GET_BUSINESSES_LIST}`, data, {
+          headers: {
+            'Content-Type': 'application/json',
+            Authorization: `Bearer ${JwtService.getToken()}`,
+          },
+        })
+        .then((response) => {
+          commit('setBusinessesList', response.data)
+          return response.data
+        })
+        .catch((error) => {
+          if (error.response) {
+            return error.response.data
+          }
+        })
+    },
+    async getBusinessByRequester({ commit }, data) {
+      return await axios
+        .post(`${BASE_API_URL}${GET_BUSINESS_BY_REQUESTER}`, data, {
+          headers: {
+            'Content-Type': 'application/json',
+            Authorization: `Bearer ${JwtService.getToken()}`,
+          },
+        })
+        .then((response) => {
+          return response.data
+        })
+        .catch((error) => {
+          if (error.response) {
+            return error.response.data
+          }
+        })
+    },
+    async getBusinessInfo({ commit }, data) {
+      return await axios
+        .post(`${BASE_API_URL}${GET_BUSINESS_INFO}`, data, {
+          headers: {
+            'Content-Type': 'application/json',
+            Authorization: `Bearer ${JwtService.getToken()}`,
+          },
+        })
+        .then((response) => {
+          commit('setBusinessInfo', response.data)
+          return response.data
+        })
+        .catch((error) => {
+          if (error.response) {
+            return error.response.data
+          }
+        })
+    },
+    async setBusinessModalRoute({ commit }, data) {
+      await commit('setBusinessRoute', data)
+    },
+    async approveBusiness({ commit }, data) {
+      return await axios
+        .put(`${BASE_API_URL}${BUSINESS_APPROVE}`, data, {
+          headers: {
+            'Content-Type': 'application/json',
+            Authorization: `Bearer ${JwtService.getToken()}`,
+          },
+        })
+        .then((response) => {
+          return response.data
+        })
+        .catch((error) => {
+          if (error.response) {
+            return error.response.data
+          }
+        })
+    },
+    async denyBusiness({ commit }, data) {
+      return await axios
+        .put(`${BASE_API_URL}${BUSINESS_DENY}`, data, {
+          headers: {
+            'Content-Type': 'application/json',
+            Authorization: `Bearer ${JwtService.getToken()}`,
+          },
+        })
+        .then((response) => {
+          return response.data
+        })
+        .catch((error) => {
+          if (error.response) {
+            return error.response.data
+          }
+        })
+    },
+    async getPackagesList({ commit }, data) {
+      return await axios
+        .get(`${BASE_API_URL}${GET_PACKAGES_LIST}`, {
+          headers: {
+            'Content-Type': 'application/json',
+            Authorization: `Bearer ${JwtService.getToken()}`,
+          },
+        })
+        .then((response) => {
+          return response.data
+        })
+        .catch((error) => {
+          if (error.response) {
+            return error.response.data
+          }
+        })
+    },
+    async createPackage({ commit }, data) {
+      return await axios
+        .post(`${BASE_API_URL}${CREATE_PACKAGES}`, data, {
+          headers: {
+            'Content-Type': 'application/json',
+            Authorization: `Bearer ${JwtService.getToken()}`,
+          },
+        })
+        .then((response) => {
+          return response.data
+        })
+        .catch((error) => {
+          if (error.response) {
+            return error.response.data
+          }
+        })
+    },
+    async updatePackages({ commit }, data) {
+      return await axios
+        .put(`${BASE_API_URL}${UPDATE_PACKAGES}`, data, {
+          headers: {
+            'Content-Type': 'application/json',
+            Authorization: `Bearer ${JwtService.getToken()}`,
+          },
+        })
+        .then((response) => {
+          return response.data
+        })
+        .catch((error) => {
+          if (error.response) {
+            return error.response.data
+          }
+        })
+    },
+    async deletePackage({ commit }, data) {
+      return await axios
+        .post(`${BASE_API_URL}${DELETE_PACKAGES}`, data, {
+          headers: {
+            'Content-Type': 'application/json',
+            Authorization: `Bearer ${JwtService.getToken()}`,
+          },
+        })
+        .then((response) => {
+          return response.data
+        })
+        .catch((error) => {
+          if (error.response) {
+            return error.response.data
+          }
+        })
+    },
+    async updateSellsVsBuys({ commit }, data) {
+      return await axios
+        .put(`${BASE_API_URL}${UPDATE_SELLS_VS_BUYS}`, data, {
+          headers: {
+            'Content-Type': 'application/json',
+            Authorization: `Bearer ${JwtService.getToken()}`,
+          },
+        })
+        .then((response) => {
+          return response.data
+        })
+        .catch((error) => {
+          if (error.response) {
+            return error.response.data
+          }
+        })
+    },
+    async updateP2PSellsFee({ commit }, data) {
+      return await axios
+        .put(`${BASE_API_URL}${UPDATE_P2P_SELLS_FEE}`, data, {
+          headers: {
+            'Content-Type': 'application/json',
+            Authorization: `Bearer ${JwtService.getToken()}`,
+          },
+        })
+        .then((response) => {
+          return response.data
+        })
+        .catch((error) => {
+          if (error.response) {
+            return error.response.data
+          }
+        })
+    },
+    async deleteAdmin({ commit }, data) {
+      return await axios
+        .post(`${BASE_API_URL}${DELETE_ADMIN}`, data, {
+          headers: {
+            'Content-Type': 'application/json',
+            Authorization: `Bearer ${JwtService.getToken()}`,
+          },
+        })
+        .then((response) => {
+          return response.data
+        })
+        .catch((error) => {
+          if (error.response) {
+            return error.response.data
+          }
+        })
+    },
+    async getBusinessesConfig({ commit }, data) {
+      return await axios
+        .get(`${BASE_API_URL}${GET_BUSINESSES_CONFIG}`, {
+          headers: {
+            'Content-Type': 'application/json',
+            Authorization: `Bearer ${JwtService.getToken()}`,
+          },
+        })
+        .then((response) => {
+          return response.data
+        })
+        .catch((error) => {
+          if (error.response) {
+            return error.response.data
+          }
+        })
+    },
+    async updateBusinessesConfig({ commit }, data) {
+      return await axios
+        .put(`${BASE_API_URL}${UPDATE_BUSINESSES_CONFIG}`, data, {
+          headers: {
+            'Content-Type': 'application/json',
+            Authorization: `Bearer ${JwtService.getToken()}`,
+          },
+        })
+        .then((response) => {
+          return response.data
+        })
+        .catch((error) => {
+          if (error.response) {
+            return error.response.data
+          }
+        })
+    },
+    async updateBusinessTypeName({ commit }, data) {
+      return await axios
+        .put(`${BASE_API_URL}${UPDATE_BUSINESS_TYPE_NAME}`, data, {
+          headers: {
+            'Content-Type': 'application/json',
+            Authorization: `Bearer ${JwtService.getToken()}`,
+          },
+        })
+        .then((response) => {
+          return response.data
+        })
+        .catch((error) => {
+          if (error.response) {
+            return error.response.data
+          }
+        })
+    },
     async logOut({ commit }) {
       await commit('resetStateOnLogOut')
+      localStorage.clear()
     },
     routes({ commit }, payload) {
       commit('setroutes', payload)
@@ -705,8 +1003,24 @@ export default {
       localStorage.setItem('userId', payload)
       state.userId = payload
     },
+    setUserRole(state, payload) {
+      localStorage.setItem('userRole', payload)
+      state.userRole = payload
+    },
+    setUserDeleted(state, payload) {
+      localStorage.setItem('userDeleted', payload)
+      state.userDeleted = payload
+    },
     setUserInfo(state, payload) {
       state.userInfo = payload
+    },
+    setUserProfileImg(state, payload) {
+      localStorage.setItem('userProfileImg', payload)
+      state.userProfileImg = payload
+    },
+    setUserProfileName(state, payload) {
+      localStorage.setItem('userProfileName', payload)
+      state.userProfileName = payload
     },
     setAdevertiseInfo(state, payload) {
       state.advertiseInfo = payload
@@ -734,6 +1048,15 @@ export default {
     },
     setWithdrawlsRoute(state, payload) {
       state.withdrawlsRoute = payload
+    },
+    setBusinessesList(state, payload) {
+      state.businessesList = payload
+    },
+    setBusinessInfo(state, payload) {
+      state.businessInfo = payload
+    },
+    setBusinessRoute(state, payload) {
+      state.businessRoute = payload
     },
     resetStateOnLogOut(state) {
       JwtService.destroyToken()
